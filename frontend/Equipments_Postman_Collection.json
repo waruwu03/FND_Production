@@ -1,0 +1,143 @@
+{
+	"info": {
+		"_postman_id": "ab123456-cd78-90ef-gh12-34567890ijkl",
+		"name": "FND Production - Equipments API (Next.js)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345678"
+	},
+	"item": [
+		{
+			"name": "Equipments",
+			"item": [
+				{
+					"name": "Get All Equipments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/equipments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"equipments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Equipment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"ParLED 54x3W\",\n    \"description\": \"Lampu ParLED RGBW\",\n    \"category\": \"Lighting\",\n    \"image_url\": \"\",\n    \"total_stock\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/equipments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"equipments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Equipment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/equipments/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"equipments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Equipment",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"total_stock\": 15,\n    \"available_stock\": 15\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/equipments/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"equipments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Equipment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/equipments/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"equipments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}

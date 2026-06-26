@@ -53,6 +53,30 @@ export const eventSchema = z.object({
   }),
 })
 
+// Partial update schema — all fields optional (for PUT /events/:id from mobile)
+export const updateEventSchema = z.object({
+  body: z.object({
+    name: z.string().trim().min(3).max(180).optional(),
+    type: z.string().trim().min(2).max(80).optional(),
+    eventDate: z.string().trim().min(8).optional(),
+    location: z.string().trim().min(2).max(180).optional(),
+    notes: z.string().trim().max(2000).optional().or(z.literal('')),
+    status: z.string().trim().optional(),
+    clientId: z.coerce.number().int().positive().optional(),
+    totalAmount: z.coerce.number().nonnegative().optional(),
+    dpAmount: z.coerce.number().nonnegative().optional(),
+    referenceImages: z.array(z.string()).max(10).optional(),
+    equipment: z.array(z.object({
+      equipmentId: z.coerce.number().int().positive(),
+      quantity: z.coerce.number().int().positive(),
+    })).optional(),
+    crew: z.array(z.object({
+      crewId: z.coerce.number().int().positive(),
+      task: z.string().trim().max(120).optional(),
+    })).optional(),
+  }),
+})
+
 export const paymentSchema = z.object({
   body: z.object({
     eventId: z.coerce.number().int().positive(),

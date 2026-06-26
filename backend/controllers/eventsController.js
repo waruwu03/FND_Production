@@ -33,6 +33,7 @@ export async function fetchEvents(req, res) {
   query += ' ORDER BY e.event_date DESC LIMIT 100'
   try {
     const [events] = await pool.query(query, params)
+    console.log(`fetchEvents called by user ${req.user.id} (${req.user.role}). Returning ${events.length} events.`)
     res.json({ success: true, data: events })
   } catch (error) {
     console.error('fetchEvents error:', error)
@@ -178,6 +179,7 @@ export async function createEvent(req, res) {
     }
 
     await connection.commit()
+    console.log(`createEvent: Event ${eventId} created successfully for client ${clientId}`)
     res.status(201).json({ success: true, data: { eventId }, message: 'Event created' })
   } catch (error) {
     await connection.rollback()
@@ -241,10 +243,25 @@ export async function updateEvent(req, res) {
 export async function deleteEvent(req, res) {
   try {
     const eventId = Number(req.params.id)
-    const [rows] = await pool.query('SELECT status FROM events WHERE id = ?', [eventId])
-    if (!rows[0]) {
+    const [rows] = await pool.query('SELECT status, client_id FROM events WHERE id = ?', [eventId])
+    const event = rows[0]
+    
+    if (!event) {
       return res.status(404).json({ success: false, error: 'Event not found' })
     }
+
+    if (req.user.role === 'client') {
+      if (Number(event.client_id) !== Number(req.user.id)) {
+        return res.status(403).json({ success: false, error: 'Forbidden: Ini bukan event Anda' })
+      }
+      if (event.status === 'cancel') {
+        return res.json({ success: true, message: 'Event sudah dibatalkan' })
+      }
+      if (event.status !== 'pending' && event.status !== 'survey') {
+        return res.status(400).json({ success: false, error: 'Booking yang sudah diproses tidak dapat dibatalkan, silakan hubungi admin.' })
+      }
+    }
+
     await pool.query('UPDATE events SET status = ? WHERE id = ?', ['cancel', eventId])
     if (!['cancel', 'selesai'].includes(rows[0].status)) {
       await returnEquipmentAndCrew(eventId)

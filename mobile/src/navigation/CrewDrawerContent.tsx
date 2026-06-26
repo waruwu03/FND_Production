@@ -110,7 +110,8 @@ export const CrewDrawerContent = (props: any) => {
             return (
               <TouchableOpacity
                 key={item.name}
-                className={`mb-1 flex-row items-center rounded-xl px-4 py-3 ${active ? 'bg-crewAccent shadow-md shadow-crewAccent/25' : ''}`}
+                className="mb-1 flex-row items-center rounded-xl px-4 py-3"
+                style={active ? { backgroundColor: '#F97316', shadowColor: '#F97316', shadowOpacity: 0.25, shadowRadius: 4, shadowOffset: { width: 0, height: 2 }, elevation: 4 } : {}}
                 onPress={() => navigateToTab(item.tab, item.params)}
               >
                 <Ionicons name={item.icon as any} size={20} color={active ? '#FFFFFF' : '#94A3B8'} />

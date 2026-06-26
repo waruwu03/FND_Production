@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, ScrollView, TouchableOpacity, RefreshControl, Alert, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -47,9 +48,11 @@ export const TugasSayaScreen = ({ navigation }: any) => {
     }
   };
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchTasks();
+    }, [])
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -167,10 +170,10 @@ export const TugasSayaScreen = ({ navigation }: any) => {
 
                   {/* Progress tracker widget */}
                   <View className="mb-4 mt-2">
-                    <div className="mb-2 flex-row justify-between items-center" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <View className="mb-2 flex-row justify-between items-center" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Text className="text-[10px] font-bold text-slate-400">Progress</Text>
                       <Text className="text-[10px] font-black text-crewAccent">{completedSteps}/{totalSteps}</Text>
-                    </div>
+                    </View>
                     <ProgressBar progress={status.progress} color="#F97316" />
                   </View>
 

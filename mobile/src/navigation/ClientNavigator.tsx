@@ -54,23 +54,23 @@ export const ClientNavigator = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarActiveTintColor: '#0B1241',
+        tabBarActiveTintColor: '#F97316',   // accent orange — mengikuti warna aksen crew app
         tabBarInactiveTintColor: '#94A3B8',
         tabBarStyle: {
           backgroundColor: '#FFFFFF',
           borderTopWidth: 1,
           borderTopColor: '#F1F5F9',
-          paddingBottom: 8,
+          paddingBottom: 10,
           paddingTop: 8,
           height: 72,
-          shadowColor: '#000',
+          shadowColor: '#0D1B5E',
           shadowOffset: { width: 0, height: -4 },
-          shadowOpacity: 0.06,
-          shadowRadius: 12,
-          elevation: 10,
+          shadowOpacity: 0.08,
+          shadowRadius: 16,
+          elevation: 12,
         },
         tabBarLabelStyle: {
-          fontSize: 11,
+          fontSize: 10,
           fontWeight: '600',
           marginTop: 2,
         },

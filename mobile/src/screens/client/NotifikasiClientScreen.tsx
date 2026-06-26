@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { api } from '../../services/api';
@@ -17,9 +18,11 @@ export const NotifikasiClientScreen = ({ navigation }: any) => {
     if (response.data?.success) setEvents(response.data.data || []);
   };
 
-  useEffect(() => {
-    fetchEvents().catch(() => null);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchEvents().catch(() => null);
+    }, [])
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -37,8 +40,8 @@ export const NotifikasiClientScreen = ({ navigation }: any) => {
         desc: `${event.name} berstatus ${status.clientLabel}.`,
         time: formatDate(event.updated_at || event.event_date),
         icon: 'calendar',
-        iconBg: 'bg-blue-100',
-        iconColor: '#2563EB',
+        iconBg: 'bg-orange-100',
+        iconColor: '#F97316',
         eventId: event.id,
       };
     });
@@ -98,7 +101,7 @@ export const NotifikasiClientScreen = ({ navigation }: any) => {
         className="flex-1"
         contentContainerStyle={{ paddingBottom: 104 }}
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#2563EB" />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#F97316" />}
       >
         {filtered.length === 0 ? (
           <View className="px-5 pt-6">

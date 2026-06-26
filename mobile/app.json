@@ -34,7 +34,8 @@
           "locationAlwaysAndWhenInUsePermission": "FND Production perlu mengakses lokasi Anda untuk fitur Check-In GPS."
         }
       ],
-      "expo-font"
+      "expo-font",
+      "@react-native-community/datetimepicker"
     ]
   }
 }

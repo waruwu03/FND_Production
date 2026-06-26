@@ -14,7 +14,7 @@ import {
   checkOutEvent
 } from '../controllers/eventsController.js'
 import { validate } from '../middlewares/validate.js'
-import { eventSchema, statusSchema } from '../utils/schemas.js'
+import { eventSchema, updateEventSchema, statusSchema } from '../utils/schemas.js'
 import { imageUpload } from '../middlewares/upload.js'
 
 const router = express.Router()
@@ -28,8 +28,8 @@ router.get('/', fetchEvents)
 router.get('/:id', getEvent)
 router.post('/:id/documentation', authorize('admin','crew'), imageUpload.array('images', 10), uploadEventDocumentation)
 router.post('/', authorize('admin','client'), validate(eventSchema), createEvent)
-router.put('/:id', authorize('admin','client'), validate(eventSchema), updateEvent)
-router.delete('/:id', authorize('admin'), deleteEvent)
+router.put('/:id', authorize('admin','client'), validate(updateEventSchema), updateEvent)
+router.delete('/:id', authorize('admin','client'), deleteEvent)
 router.put('/:id/status', authorize('admin'), validate(statusSchema), updateStatus)
 
 export default router

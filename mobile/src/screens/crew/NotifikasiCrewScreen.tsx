@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, ScrollView, TouchableOpacity, RefreshControl, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -20,9 +21,11 @@ export const NotifikasiCrewScreen = ({ navigation }: any) => {
     if (response.data?.success) setTasks(response.data.data || []);
   };
 
-  useEffect(() => {
-    fetchTasks().catch(() => null);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchTasks().catch(() => null);
+    }, [])
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -134,11 +137,11 @@ export const NotifikasiCrewScreen = ({ navigation }: any) => {
               return (
                 <TouchableOpacity
                   key={notif.id}
-                  className={`mx-4 mb-2 flex-row items-center rounded-2xl border border-slate-50 bg-white p-3 ${!notif.isRead ? 'bg-orange-50/10' : ''}`}
-                  style={{ elevation: 1 }}
+                  className="mx-4 mb-2 flex-row items-center rounded-2xl border border-slate-50 p-3"
+                  style={!notif.isRead ? { backgroundColor: 'rgba(255, 237, 213, 0.5)', elevation: 1 } : { backgroundColor: '#FFFFFF', elevation: 1 }}
                   onPress={() => notif.event && navigation.navigate('DetailTugas', { taskId: notif.event.id, event: notif.event })}
                 >
-                  <View className={`mr-3.5 h-9 w-9 items-center justify-center rounded-xl bg-slate-50 border border-slate-100`}>
+                  <View className="mr-3.5 h-9 w-9 items-center justify-center rounded-xl bg-slate-50 border border-slate-100">
                     <Ionicons name={notif.icon === 'briefcase' ? 'briefcase-outline' : notif.icon === 'calendar' ? 'calendar-outline' : 'megaphone-outline'} size={16} color={priorityColor} />
                   </View>
                   <View className="flex-1">
@@ -166,8 +169,8 @@ export const NotifikasiCrewScreen = ({ navigation }: any) => {
             {filtered.slice(3).map((notif: any) => (
               <TouchableOpacity
                 key={notif.id}
-                className={`mx-4 mb-2 flex-row items-center rounded-2xl border border-slate-50 bg-white p-3 ${!notif.isRead ? 'bg-orange-50/10' : ''}`}
-                style={{ elevation: 1 }}
+                className="mx-4 mb-2 flex-row items-center rounded-2xl border border-slate-50 p-3"
+                style={!notif.isRead ? { backgroundColor: 'rgba(255, 237, 213, 0.5)', elevation: 1 } : { backgroundColor: '#FFFFFF', elevation: 1 }}
                 onPress={() => notif.event && navigation.navigate('DetailTugas', { taskId: notif.event.id, event: notif.event })}
               >
                 <View className="mr-3.5 h-9 w-9 items-center justify-center rounded-xl bg-slate-50 border border-slate-100">

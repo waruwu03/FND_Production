@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, RefreshControl, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
-import { DrawerActions, useNavigation } from '@react-navigation/native';
+import { DrawerActions, useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RootState } from '../../store';
@@ -61,9 +61,11 @@ export const CrewDashboardScreen = () => {
     }
   };
 
-  useEffect(() => {
-    fetchTasks().catch(() => null);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchTasks().catch(() => null);
+    }, [])
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -243,7 +245,7 @@ export const CrewDashboardScreen = () => {
 
           {/* Upcoming Event Promo Card */}
           <View 
-            className="mb-4 flex-row rounded-[24px] border border-orange-100 bg-orange-50/40 p-4"
+            className="mb-4 flex-row rounded-[24px] border border-orange-100 bg-orange-50 p-4"
             style={{ 
               elevation: 1, 
               shadowColor: '#F97316', 

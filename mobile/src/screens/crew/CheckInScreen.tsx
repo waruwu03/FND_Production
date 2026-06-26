@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { api } from '../../services/api';
+import { api, getAssetUrl } from '../../services/api';
 import { EmptyState, InfoRow } from '../../components/FndUi';
 import { getEventStatusMeta, getLocationParts } from '../../utils/fnd';
 

@@ -110,7 +110,7 @@ export const InvoiceScreen = ({ navigation }: any) => {
   if (loading) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="large" color="#2563EB" />
+        <ActivityIndicator size="large" color="#F97316" />
       </View>
     );
   }
@@ -124,7 +124,7 @@ export const InvoiceScreen = ({ navigation }: any) => {
           <TouchableOpacity
             key={tab}
             onPress={() => setActiveTab(tab)}
-            className={`mx-1 flex-1 items-center rounded-md py-3 ${activeTab === tab ? 'bg-primary' : 'bg-slate-50'}`}
+            className={`mr-2 flex-1 items-center rounded-full py-3 ${activeTab === tab ? 'bg-primary' : 'bg-slate-50'}`}
           >
             <Text className={`text-xs font-bold ${activeTab === tab ? 'text-white' : 'text-slate-500'}`}>{tab}</Text>
           </TouchableOpacity>
@@ -135,7 +135,7 @@ export const InvoiceScreen = ({ navigation }: any) => {
         className="flex-1 px-5"
         contentContainerStyle={{ paddingBottom: 104 }}
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#2563EB" />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#F97316" />}
       >
         {invoices.length === 0 ? (
           <EmptyState icon="receipt-outline" title="Tidak ada invoice" description="Invoice akan muncul setelah ada event booking." />
@@ -145,8 +145,8 @@ export const InvoiceScreen = ({ navigation }: any) => {
             return (
               <View
                 key={invoice.id}
-                className="mb-4 rounded-xl border border-slate-100 bg-white p-4"
-                style={{ elevation: 2, shadowColor: '#0F172A', shadowOpacity: 0.06, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }}
+                className="mb-4 rounded-[24px] border border-slate-100 bg-white p-4"
+                style={{ elevation: 2, shadowColor: '#0F172A', shadowOpacity: 0.03, shadowRadius: 8, shadowOffset: { width: 0, height: 3 } }}
               >
                 <View className="mb-3 flex-row items-start justify-between">
                   <View className="flex-1">

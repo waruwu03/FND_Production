@@ -131,7 +131,7 @@ export const ProfileClientScreen = ({ navigation }: any) => {
               { value: completedEvents, label: 'Selesai' },
               { value: '4.9', label: 'Rating Layanan' },
             ].map((item, index) => (
-              <View key={item.label} className={`flex-1 items-center rounded-lg bg-blue-50 py-3 ${index < 2 ? 'mr-2' : ''}`}>
+              <View key={item.label} className={`flex-1 items-center rounded-xl bg-orange-50 py-3 ${index < 2 ? 'mr-2' : ''}`}>
                 <Text className="text-sm font-black text-primary">{item.value}</Text>
                 <Text className="mt-1 text-[10px] text-slate-500">{item.label}</Text>
               </View>

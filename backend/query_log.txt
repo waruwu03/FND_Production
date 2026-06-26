@@ -943,3 +943,1393 @@ Params: ["75784ebc4e3210a81d05cb1e566b7c1047e65bd430008c64455467d3b9e5f723"]
 Result: [[],[]]
 Error: None
 -----------------------------------
+[2026-06-15T13:01:18.691Z] SQL: SELECT rt.id AS refresh_token_id, rt.user_id, rt.token_hash, rt.user_agent, rt.ip_address, rt.expires_at, rt.revoked_at, rt.created_at, u.id, u.name, u.email, u.role, u.phone, u.avatar_url FROM refresh_tokens rt JOIN users u ON u.id = rt.user_id WHERE rt.token_hash = ? AND rt.revoked_at IS NULL AND rt.expires_at > CURRENT_TIMESTAMP LIMIT 1
+Params: ["75784ebc4e3210a81d05cb1e566b7c1047e65bd430008c64455467d3b9e5f723"]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:01:24.087Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["client@fnd.com"]
+Result: [[{"id":2,"name":"Client One","email":"client@fnd.com","password":"$2a$12$YWRYXWo/ormIvx6RpSIVpeBV3GXMHKGyN9d.0r0TzXo7/ngej.DuC","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-15T12:58:41.909Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:01:24.555Z] SQL: SELECT rt.id AS refresh_token_id, rt.user_id, rt.token_hash, rt.user_agent, rt.ip_address, rt.expires_at, rt.revoked_at, rt.created_at, u.id, u.name, u.email, u.role, u.phone, u.avatar_url FROM refresh_tokens rt JOIN users u ON u.id = rt.user_id WHERE rt.token_hash = ? AND rt.revoked_at IS NULL AND rt.expires_at > CURRENT_TIMESTAMP LIMIT 1
+Params: ["75784ebc4e3210a81d05cb1e566b7c1047e65bd430008c64455467d3b9e5f723"]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:15.758Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["admin@fnd.com"]
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","password":"$2a$12$mWwiBxYTGd6aCNBls04qCeoI8g4xr/7ApkCvYLw.mlDfsMSZWRWB6","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:16.300Z] SQL: SELECT rt.id AS refresh_token_id, rt.user_id, rt.token_hash, rt.user_agent, rt.ip_address, rt.expires_at, rt.revoked_at, rt.created_at, u.id, u.name, u.email, u.role, u.phone, u.avatar_url FROM refresh_tokens rt JOIN users u ON u.id = rt.user_id WHERE rt.token_hash = ? AND rt.revoked_at IS NULL AND rt.expires_at > CURRENT_TIMESTAMP LIMIT 1
+Params: ["75784ebc4e3210a81d05cb1e566b7c1047e65bd430008c64455467d3b9e5f723"]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:26.369Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["admin@fnd.com"]
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","password":"$2a$12$mWwiBxYTGd6aCNBls04qCeoI8g4xr/7ApkCvYLw.mlDfsMSZWRWB6","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:26.871Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [1,"92f97b80086aa9c4e9e2af64a50600c6e5b99c4076ae1ed1d3c40e81b96a86c8","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36","127.0.0.1","2026-07-15T13:17:26.870Z"]
+Result: [{"insertId":200},[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:27.419Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [1]
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","password":"$2a$12$mWwiBxYTGd6aCNBls04qCeoI8g4xr/7ApkCvYLw.mlDfsMSZWRWB6","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:27.653Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [1]
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","password":"$2a$12$mWwiBxYTGd6aCNBls04qCeoI8g4xr/7ApkCvYLw.mlDfsMSZWRWB6","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:27.709Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [1]
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","password":"$2a$12$mWwiBxYTGd6aCNBls04qCeoI8g4xr/7ApkCvYLw.mlDfsMSZWRWB6","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:27.730Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [1]
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","password":"$2a$12$mWwiBxYTGd6aCNBls04qCeoI8g4xr/7ApkCvYLw.mlDfsMSZWRWB6","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:27.851Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id ORDER BY e.event_date DESC LIMIT 100
+Params: []
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:27.868Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:27.886Z] SQL: SELECT * FROM crew ORDER BY status, id DESC
+Params: []
+Result: [[{"id":1,"user_id":3,"name":"Rian Setiawan","role":"Technician","phone":"082222222222","status":"available","created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"user_id":4,"name":"Maya Putri","role":"Operator","phone":"083333333333","status":"on_job","created_at":"2026-06-15T12:58:43.123Z"},{"id":3,"user_id":5,"name":"Anton Pratama","role":"Assistant","phone":"084444444444","status":"available","created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:28.018Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id ORDER BY e.event_date DESC LIMIT 100
+Params: []
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:28.038Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:28.070Z] SQL: SELECT * FROM crew ORDER BY status, id DESC
+Params: []
+Result: [[{"id":1,"user_id":3,"name":"Rian Setiawan","role":"Technician","phone":"082222222222","status":"available","created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"user_id":4,"name":"Maya Putri","role":"Operator","phone":"083333333333","status":"on_job","created_at":"2026-06-15T12:58:43.123Z"},{"id":3,"user_id":5,"name":"Anton Pratama","role":"Assistant","phone":"084444444444","status":"available","created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:35.000Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [1]
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","password":"$2a$12$mWwiBxYTGd6aCNBls04qCeoI8g4xr/7ApkCvYLw.mlDfsMSZWRWB6","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:35.026Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [1]
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","password":"$2a$12$mWwiBxYTGd6aCNBls04qCeoI8g4xr/7ApkCvYLw.mlDfsMSZWRWB6","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:35.051Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id ORDER BY e.event_date DESC LIMIT 100
+Params: []
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:35.054Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:35.068Z] SQL: SELECT * FROM crew ORDER BY status, id DESC
+Params: []
+Result: [[{"id":1,"user_id":3,"name":"Rian Setiawan","role":"Technician","phone":"082222222222","status":"available","created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"user_id":4,"name":"Maya Putri","role":"Operator","phone":"083333333333","status":"on_job","created_at":"2026-06-15T12:58:43.123Z"},{"id":3,"user_id":5,"name":"Anton Pratama","role":"Assistant","phone":"084444444444","status":"available","created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:39.883Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id ORDER BY e.event_date DESC LIMIT 100
+Params: []
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:39.886Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id ORDER BY e.event_date DESC LIMIT 100
+Params: []
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:42.359Z] SQL: SELECT id, name AS full_name, name, email, role, phone, avatar_url FROM users ORDER BY name ASC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z","full_name":"Admin User"},{"id":2,"name":"Client One","email":"client@fnd.com","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-15T12:58:41.909Z","full_name":"Client One"},{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-15T12:58:42.314Z","full_name":"Rian Setiawan"},{"id":4,"name":"Maya Putri","email":"maya@fnd.com","role":"crew","phone":"083333333333","avatar_url":null,"created_at":"2026-06-15T12:58:42.703Z","full_name":"Maya Putri"},{"id":5,"name":"Anton Pratama","email":"anton@fnd.com","role":"crew","phone":"084444444444","avatar_url":null,"created_at":"2026-06-15T12:58:43.123Z","full_name":"Anton Pratama"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:42.376Z] SQL: SELECT id, name AS full_name, name, email, role, phone, avatar_url FROM users ORDER BY name ASC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z","full_name":"Admin User"},{"id":2,"name":"Client One","email":"client@fnd.com","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-15T12:58:41.909Z","full_name":"Client One"},{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-15T12:58:42.314Z","full_name":"Rian Setiawan"},{"id":4,"name":"Maya Putri","email":"maya@fnd.com","role":"crew","phone":"083333333333","avatar_url":null,"created_at":"2026-06-15T12:58:42.703Z","full_name":"Maya Putri"},{"id":5,"name":"Anton Pratama","email":"anton@fnd.com","role":"crew","phone":"084444444444","avatar_url":null,"created_at":"2026-06-15T12:58:43.123Z","full_name":"Anton Pratama"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:43.159Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.status = ? ORDER BY e.event_date DESC LIMIT 100
+Params: ["pending"]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:43.172Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.status = ? ORDER BY e.event_date DESC LIMIT 100
+Params: ["pending"]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:43.971Z] SQL: SELECT id, name AS full_name, name, email, role, phone, avatar_url FROM users ORDER BY name ASC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z","full_name":"Admin User"},{"id":2,"name":"Client One","email":"client@fnd.com","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-15T12:58:41.909Z","full_name":"Client One"},{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-15T12:58:42.314Z","full_name":"Rian Setiawan"},{"id":4,"name":"Maya Putri","email":"maya@fnd.com","role":"crew","phone":"083333333333","avatar_url":null,"created_at":"2026-06-15T12:58:42.703Z","full_name":"Maya Putri"},{"id":5,"name":"Anton Pratama","email":"anton@fnd.com","role":"crew","phone":"084444444444","avatar_url":null,"created_at":"2026-06-15T12:58:43.123Z","full_name":"Anton Pratama"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:43.993Z] SQL: SELECT id, name AS full_name, name, email, role, phone, avatar_url FROM users ORDER BY name ASC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z","full_name":"Admin User"},{"id":2,"name":"Client One","email":"client@fnd.com","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-15T12:58:41.909Z","full_name":"Client One"},{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-15T12:58:42.314Z","full_name":"Rian Setiawan"},{"id":4,"name":"Maya Putri","email":"maya@fnd.com","role":"crew","phone":"083333333333","avatar_url":null,"created_at":"2026-06-15T12:58:42.703Z","full_name":"Maya Putri"},{"id":5,"name":"Anton Pratama","email":"anton@fnd.com","role":"crew","phone":"084444444444","avatar_url":null,"created_at":"2026-06-15T12:58:43.123Z","full_name":"Anton Pratama"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:44.999Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id ORDER BY e.event_date DESC LIMIT 100
+Params: []
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:45.008Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id ORDER BY e.event_date DESC LIMIT 100
+Params: []
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:45.504Z] SQL: SELECT * FROM crew ORDER BY status, id DESC
+Params: []
+Result: [[{"id":1,"user_id":3,"name":"Rian Setiawan","role":"Technician","phone":"082222222222","status":"available","created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"user_id":4,"name":"Maya Putri","role":"Operator","phone":"083333333333","status":"on_job","created_at":"2026-06-15T12:58:43.123Z"},{"id":3,"user_id":5,"name":"Anton Pratama","role":"Assistant","phone":"084444444444","status":"available","created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:17:45.517Z] SQL: SELECT * FROM crew ORDER BY status, id DESC
+Params: []
+Result: [[{"id":1,"user_id":3,"name":"Rian Setiawan","role":"Technician","phone":"082222222222","status":"available","created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"user_id":4,"name":"Maya Putri","role":"Operator","phone":"083333333333","status":"on_job","created_at":"2026-06-15T12:58:43.123Z"},{"id":3,"user_id":5,"name":"Anton Pratama","role":"Assistant","phone":"084444444444","status":"available","created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:43.696Z] SQL: SELECT rt.id AS refresh_token_id, rt.user_id, rt.token_hash, rt.user_agent, rt.ip_address, rt.expires_at, rt.revoked_at, rt.created_at, u.id, u.name, u.email, u.role, u.phone, u.avatar_url FROM refresh_tokens rt JOIN users u ON u.id = rt.user_id WHERE rt.token_hash = ? AND rt.revoked_at IS NULL AND rt.expires_at > CURRENT_TIMESTAMP LIMIT 1
+Params: ["92f97b80086aa9c4e9e2af64a50600c6e5b99c4076ae1ed1d3c40e81b96a86c8"]
+Result: [[{"id":1,"user_id":1,"token_hash":"92f97b80086aa9c4e9e2af64a50600c6e5b99c4076ae1ed1d3c40e81b96a86c8","user_agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36","ip_address":"127.0.0.1","expires_at":"2026-07-15T13:17:26.870Z","revoked_at":null,"created_at":"2026-06-15T12:58:41.373Z","name":"Admin User","email":"admin@fnd.com","password":"$2a$12$mWwiBxYTGd6aCNBls04qCeoI8g4xr/7ApkCvYLw.mlDfsMSZWRWB6","role":"admin","phone":"081234567890","avatar_url":null}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:43.705Z] SQL: UPDATE refresh_tokens SET revoked_at = CURRENT_TIMESTAMP WHERE token_hash = ? AND revoked_at IS NULL
+Params: ["92f97b80086aa9c4e9e2af64a50600c6e5b99c4076ae1ed1d3c40e81b96a86c8"]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:43.711Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [1,"304a240d5d60e681981be8835a0dcabfa5e93792b9cb9624f32119ccb43dab62","node","127.0.0.1","2026-07-15T13:37:43.711Z"]
+Result: [{"insertId":201},[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:45.320Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [1]
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","password":"$2a$12$mWwiBxYTGd6aCNBls04qCeoI8g4xr/7ApkCvYLw.mlDfsMSZWRWB6","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:45.360Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [1]
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","password":"$2a$12$mWwiBxYTGd6aCNBls04qCeoI8g4xr/7ApkCvYLw.mlDfsMSZWRWB6","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:45.372Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:45.386Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id ORDER BY e.event_date DESC LIMIT 100
+Params: []
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:45.399Z] SQL: SELECT * FROM crew ORDER BY status, id DESC
+Params: []
+Result: [[{"id":1,"user_id":3,"name":"Rian Setiawan","role":"Technician","phone":"082222222222","status":"available","created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"user_id":4,"name":"Maya Putri","role":"Operator","phone":"083333333333","status":"on_job","created_at":"2026-06-15T12:58:43.123Z"},{"id":3,"user_id":5,"name":"Anton Pratama","role":"Assistant","phone":"084444444444","status":"available","created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:48.288Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id ORDER BY e.event_date DESC LIMIT 100
+Params: []
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:48.305Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id ORDER BY e.event_date DESC LIMIT 100
+Params: []
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:48.848Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.status = ? ORDER BY e.event_date DESC LIMIT 100
+Params: ["pending"]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:48.860Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.status = ? ORDER BY e.event_date DESC LIMIT 100
+Params: ["pending"]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:49.583Z] SQL: SELECT id, name AS full_name, name, email, role, phone, avatar_url FROM users ORDER BY name ASC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z","full_name":"Admin User"},{"id":2,"name":"Client One","email":"client@fnd.com","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-15T12:58:41.909Z","full_name":"Client One"},{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-15T12:58:42.314Z","full_name":"Rian Setiawan"},{"id":4,"name":"Maya Putri","email":"maya@fnd.com","role":"crew","phone":"083333333333","avatar_url":null,"created_at":"2026-06-15T12:58:42.703Z","full_name":"Maya Putri"},{"id":5,"name":"Anton Pratama","email":"anton@fnd.com","role":"crew","phone":"084444444444","avatar_url":null,"created_at":"2026-06-15T12:58:43.123Z","full_name":"Anton Pratama"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:49.595Z] SQL: SELECT id, name AS full_name, name, email, role, phone, avatar_url FROM users ORDER BY name ASC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-15T12:58:41.373Z","full_name":"Admin User"},{"id":2,"name":"Client One","email":"client@fnd.com","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-15T12:58:41.909Z","full_name":"Client One"},{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-15T12:58:42.314Z","full_name":"Rian Setiawan"},{"id":4,"name":"Maya Putri","email":"maya@fnd.com","role":"crew","phone":"083333333333","avatar_url":null,"created_at":"2026-06-15T12:58:42.703Z","full_name":"Maya Putri"},{"id":5,"name":"Anton Pratama","email":"anton@fnd.com","role":"crew","phone":"084444444444","avatar_url":null,"created_at":"2026-06-15T12:58:43.123Z","full_name":"Anton Pratama"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:50.162Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id ORDER BY e.event_date DESC LIMIT 100
+Params: []
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:50.176Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id ORDER BY e.event_date DESC LIMIT 100
+Params: []
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:51.492Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:51.505Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:52.157Z] SQL: SELECT * FROM crew ORDER BY status, id DESC
+Params: []
+Result: [[{"id":1,"user_id":3,"name":"Rian Setiawan","role":"Technician","phone":"082222222222","status":"available","created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"user_id":4,"name":"Maya Putri","role":"Operator","phone":"083333333333","status":"on_job","created_at":"2026-06-15T12:58:43.123Z"},{"id":3,"user_id":5,"name":"Anton Pratama","role":"Assistant","phone":"084444444444","status":"available","created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:52.167Z] SQL: SELECT * FROM crew ORDER BY status, id DESC
+Params: []
+Result: [[{"id":1,"user_id":3,"name":"Rian Setiawan","role":"Technician","phone":"082222222222","status":"available","created_at":"2026-06-15T12:58:43.123Z"},{"id":2,"user_id":4,"name":"Maya Putri","role":"Operator","phone":"083333333333","status":"on_job","created_at":"2026-06-15T12:58:43.123Z"},{"id":3,"user_id":5,"name":"Anton Pratama","role":"Assistant","phone":"084444444444","status":"available","created_at":"2026-06-15T12:58:43.123Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:54.063Z] SQL:  SELECT p.*, e.name AS event_name, e.status AS event_status, u.name AS client_name FROM payments p JOIN events e ON p.event_id = e.id JOIN users u ON e.client_id = u.id ORDER BY p.created_at DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"event_id":2,"amount":5000000,"payment_type":"dp","status":"paid","proof_url":null,"created_at":"2026-06-15T12:58:43.123Z","event_name":"Corporate Event","event_status":"running","client_name":"Client One"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:37:54.074Z] SQL:  SELECT p.*, e.name AS event_name, e.status AS event_status, u.name AS client_name FROM payments p JOIN events e ON p.event_id = e.id JOIN users u ON e.client_id = u.id ORDER BY p.created_at DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"event_id":2,"amount":5000000,"payment_type":"dp","status":"paid","proof_url":null,"created_at":"2026-06-15T12:58:43.123Z","event_name":"Corporate Event","event_status":"running","client_name":"Client One"}],[]]
+Error: None
+-----------------------------------
+[2026-06-15T13:58:49.551Z] SQL: SELECT DATABASE() AS db, CURRENT_USER() as user
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:01:42.344Z] SQL: SELECT rt.id AS refresh_token_id, rt.user_id, rt.token_hash, rt.user_agent, rt.ip_address, rt.expires_at, rt.revoked_at, rt.created_at, u.id, u.name, u.email, u.role, u.phone, u.avatar_url FROM refresh_tokens rt JOIN users u ON u.id = rt.user_id WHERE rt.token_hash = ? AND rt.revoked_at IS NULL AND rt.expires_at > CURRENT_TIMESTAMP LIMIT 1
+Params: ["f1544fbdf85e2a7a689d7a5aab04da58ce5d97d72217de7bd49325314e959869"]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:02:54.241Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["client@fnd.com"]
+Result: [[{"id":2,"name":"Client One","email":"client@fnd.com","password":"$2a$12$s0iynP.J2qQf3pTNAWgcW.6OvztwMEsvqtjtb85mSVgQKs68ieykW","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-19T14:58:32.276Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:02:54.675Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [2,"f74c717354d563c42f74abef1ac90b33f9d8ddb05c12db38818a870a046ce5f1","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36","127.0.0.1","2026-07-19T15:02:54.675Z"]
+Result: [{"insertId":200},[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:02:54.763Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:02:54.770Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Client One","email":"client@fnd.com","password":"$2a$12$s0iynP.J2qQf3pTNAWgcW.6OvztwMEsvqtjtb85mSVgQKs68ieykW","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-19T14:58:32.276Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:03:19.099Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["client@fnd.com"]
+Result: [[{"id":2,"name":"Client One","email":"client@fnd.com","password":"$2a$12$s0iynP.J2qQf3pTNAWgcW.6OvztwMEsvqtjtb85mSVgQKs68ieykW","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-19T14:58:32.276Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:03:19.451Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [2,"a0682d5dd312cbd0fa3668c432a70730b039f93e1d295a2052d054d76e6d63ff","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) AntigravityIDE/1.107.0 Chrome/142.0.7444.175 Electron/39.2.3 Safari/537.36","127.0.0.1","2026-07-19T15:03:19.451Z"]
+Result: [{"insertId":201},[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:03:19.561Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:03:19.563Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Client One","email":"client@fnd.com","password":"$2a$12$s0iynP.J2qQf3pTNAWgcW.6OvztwMEsvqtjtb85mSVgQKs68ieykW","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-19T14:58:32.276Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:03:25.043Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-19T14:58:33.397Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-19T14:58:33.397Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-19T14:58:33.397Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:03:25.719Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:06:06.416Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:06:06.424Z] SQL: SELECT e.*, u.name AS client_name, u.email AS client_email FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:06:06.425Z] SQL: SELECT eq.id, eq.name, ee.quantity FROM event_equipment ee JOIN equipment eq ON ee.equipment_id = eq.id WHERE ee.event_id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Sound System","quantity":2,"equipment_id":2}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:06:06.426Z] SQL: SELECT c.id, c.name, c.role, c.status, ec.task FROM event_crew ec JOIN crew c ON ec.crew_id = c.id WHERE ec.event_id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Maya Putri","role":"Operator","status":"on_job","task":"Operate sound"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:06:06.426Z] SQL: SELECT * FROM payments WHERE event_id = ? ORDER BY created_at DESC
+Params: [2]
+Result: [[{"id":1,"event_id":2,"amount":5000000,"payment_type":"dp","status":"paid","proof_url":null,"created_at":"2026-06-19T14:58:33.397Z","event_name":"Corporate Event","event_status":"running","client_name":"Client One"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:06:06.427Z] SQL: SELECT ci.*, u.name AS crew_name, u.email AS crew_email FROM event_checkins ci JOIN users u ON ci.crew_user_id = u.id WHERE ci.event_id = ? ORDER BY ci.updated_at DESC
+Params: [2]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-19T15:06:07.311Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:11:47.465Z] SQL: UPDATE refresh_tokens SET revoked_at = CURRENT_TIMESTAMP WHERE token_hash = ? AND revoked_at IS NULL
+Params: ["a0682d5dd312cbd0fa3668c432a70730b039f93e1d295a2052d054d76e6d63ff"]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:11:55.832Z] SQL: SELECT rt.id AS refresh_token_id, rt.user_id, rt.token_hash, rt.user_agent, rt.ip_address, rt.expires_at, rt.revoked_at, rt.created_at, u.id, u.name, u.email, u.role, u.phone, u.avatar_url FROM refresh_tokens rt JOIN users u ON u.id = rt.user_id WHERE rt.token_hash = ? AND rt.revoked_at IS NULL AND rt.expires_at > CURRENT_TIMESTAMP LIMIT 1
+Params: ["f74c717354d563c42f74abef1ac90b33f9d8ddb05c12db38818a870a046ce5f1"]
+Result: [[{"id":2,"user_id":2,"token_hash":"f74c717354d563c42f74abef1ac90b33f9d8ddb05c12db38818a870a046ce5f1","user_agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36","ip_address":"127.0.0.1","expires_at":"2026-07-19T15:02:54.675Z","revoked_at":null,"created_at":"2026-06-19T14:58:32.276Z","name":"Client One","email":"client@fnd.com","password":"$2a$12$s0iynP.J2qQf3pTNAWgcW.6OvztwMEsvqtjtb85mSVgQKs68ieykW","role":"client","phone":"081234567891","avatar_url":null}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:11:55.833Z] SQL: UPDATE refresh_tokens SET revoked_at = CURRENT_TIMESTAMP WHERE token_hash = ? AND revoked_at IS NULL
+Params: ["f74c717354d563c42f74abef1ac90b33f9d8ddb05c12db38818a870a046ce5f1"]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:11:55.836Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [2,"63ff22f3bca924d23f938bffbc8274277954c62c4f44fc48706be6d388813ce1","Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Mobile Safari/537.36","127.0.0.1","2026-07-19T16:11:55.836Z"]
+Result: [{"insertId":202},[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:11:55.891Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:11:55.896Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Client One","email":"client@fnd.com","password":"$2a$12$s0iynP.J2qQf3pTNAWgcW.6OvztwMEsvqtjtb85mSVgQKs68ieykW","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-19T14:58:32.276Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:11:57.289Z] SQL: UPDATE refresh_tokens SET revoked_at = CURRENT_TIMESTAMP WHERE token_hash = ? AND revoked_at IS NULL
+Params: ["63ff22f3bca924d23f938bffbc8274277954c62c4f44fc48706be6d388813ce1"]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:12:08.423Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["crew@fnd.com"]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$p5rHgAMsMnA3zqKfIhWJXuZDjGmmL3dUPCIgn1GIhiy9352p5xbmu","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-19T14:58:32.641Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:12:08.863Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [3,"c156937d573afa51b54cbd5168b6944b45ebe06809d3d6b27af414a21fdaf8c9","Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Mobile Safari/537.36","127.0.0.1","2026-07-19T16:12:08.863Z"]
+Result: [{"insertId":203},[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:12:09.089Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:12:09.101Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$p5rHgAMsMnA3zqKfIhWJXuZDjGmmL3dUPCIgn1GIhiy9352p5xbmu","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-19T14:58:32.641Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:12:10.494Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:12:10.851Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:12:10.899Z] SQL: SELECT ec.id FROM event_crew ec JOIN crew c ON ec.crew_id = c.id WHERE ec.event_id = ? AND c.user_id = ? LIMIT 1
+Params: [1,3]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:12:11.658Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:12:12.065Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:12:19.883Z] SQL: UPDATE refresh_tokens SET revoked_at = CURRENT_TIMESTAMP WHERE token_hash = ? AND revoked_at IS NULL
+Params: ["c156937d573afa51b54cbd5168b6944b45ebe06809d3d6b27af414a21fdaf8c9"]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:13:21.387Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["crew@fnd.com"]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$p5rHgAMsMnA3zqKfIhWJXuZDjGmmL3dUPCIgn1GIhiy9352p5xbmu","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-19T14:58:32.641Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:13:21.771Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [3,"642f0b0b60868cc20cc61083a6bd6ac8d4f7829b49790e20c232c223b8e116dc","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) AntigravityIDE/1.107.0 Chrome/142.0.7444.175 Electron/39.2.3 Safari/537.36","127.0.0.1","2026-07-19T16:13:21.771Z"]
+Result: [{"insertId":204},[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:13:21.893Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:13:21.895Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$p5rHgAMsMnA3zqKfIhWJXuZDjGmmL3dUPCIgn1GIhiy9352p5xbmu","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-19T14:58:32.641Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:13:23.377Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:13:23.941Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:13:23.966Z] SQL: SELECT ec.id FROM event_crew ec JOIN crew c ON ec.crew_id = c.id WHERE ec.event_id = ? AND c.user_id = ? LIMIT 1
+Params: [1,3]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:13:24.499Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:13:25.416Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:13:35.730Z] SQL: SELECT avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$p5rHgAMsMnA3zqKfIhWJXuZDjGmmL3dUPCIgn1GIhiy9352p5xbmu","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-19T14:58:32.641Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:13:35.731Z] SQL: UPDATE users SET avatar_url = ? WHERE id = ?
+Params: ["/uploads/avatars/avatar-u3-1781885615726.jpg",3]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:13:35.732Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$p5rHgAMsMnA3zqKfIhWJXuZDjGmmL3dUPCIgn1GIhiy9352p5xbmu","role":"crew","phone":"082222222222","avatar_url":"/uploads/avatars/avatar-u3-1781885615726.jpg","created_at":"2026-06-19T14:58:32.641Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:14:05.761Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["crew@fnd.com"]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$p5rHgAMsMnA3zqKfIhWJXuZDjGmmL3dUPCIgn1GIhiy9352p5xbmu","role":"crew","phone":"082222222222","avatar_url":"/uploads/avatars/avatar-u3-1781885615726.jpg","created_at":"2026-06-19T14:58:32.641Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:14:07.547Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["crew@fnd.com"]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$p5rHgAMsMnA3zqKfIhWJXuZDjGmmL3dUPCIgn1GIhiy9352p5xbmu","role":"crew","phone":"082222222222","avatar_url":"/uploads/avatars/avatar-u3-1781885615726.jpg","created_at":"2026-06-19T14:58:32.641Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:14:18.217Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["crew@fnd.com"]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$p5rHgAMsMnA3zqKfIhWJXuZDjGmmL3dUPCIgn1GIhiy9352p5xbmu","role":"crew","phone":"082222222222","avatar_url":"/uploads/avatars/avatar-u3-1781885615726.jpg","created_at":"2026-06-19T14:58:32.641Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:14:18.583Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [3,"a96833b23db823c1001c5f04b1b2727ceaecb55307cf365dc45fbb63d1203e60","Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Mobile Safari/537.36","127.0.0.1","2026-07-19T16:14:18.583Z"]
+Result: [{"insertId":205},[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:14:18.806Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:14:18.818Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$p5rHgAMsMnA3zqKfIhWJXuZDjGmmL3dUPCIgn1GIhiy9352p5xbmu","role":"crew","phone":"082222222222","avatar_url":"/uploads/avatars/avatar-u3-1781885615726.jpg","created_at":"2026-06-19T14:58:32.641Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:14:22.735Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:14:39.243Z] SQL: UPDATE users SET name = COALESCE(NULLIF(?, ""), name), phone = ? WHERE id = ?
+Params: ["Edisyah Putra waruwu","082222222222",3]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:14:39.245Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Edisyah Putra waruwu","email":"crew@fnd.com","password":"$2a$12$p5rHgAMsMnA3zqKfIhWJXuZDjGmmL3dUPCIgn1GIhiy9352p5xbmu","role":"crew","phone":"082222222222","avatar_url":"/uploads/avatars/avatar-u3-1781885615726.jpg","created_at":"2026-06-19T14:58:32.641Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:14:49.193Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:14:49.195Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Edisyah Putra waruwu","email":"crew@fnd.com","password":"$2a$12$p5rHgAMsMnA3zqKfIhWJXuZDjGmmL3dUPCIgn1GIhiy9352p5xbmu","role":"crew","phone":"082222222222","avatar_url":"/uploads/avatars/avatar-u3-1781885615726.jpg","created_at":"2026-06-19T14:58:32.641Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:14:55.376Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:14:56.774Z] SQL: UPDATE refresh_tokens SET revoked_at = CURRENT_TIMESTAMP WHERE token_hash = ? AND revoked_at IS NULL
+Params: ["642f0b0b60868cc20cc61083a6bd6ac8d4f7829b49790e20c232c223b8e116dc"]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:15:01.429Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:15:01.437Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Edisyah Putra waruwu","email":"crew@fnd.com","password":"$2a$12$p5rHgAMsMnA3zqKfIhWJXuZDjGmmL3dUPCIgn1GIhiy9352p5xbmu","role":"crew","phone":"082222222222","avatar_url":"/uploads/avatars/avatar-u3-1781885615726.jpg","created_at":"2026-06-19T14:58:32.641Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:15:27.691Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["client@fnd.com"]
+Result: [[{"id":2,"name":"Client One","email":"client@fnd.com","password":"$2a$12$s0iynP.J2qQf3pTNAWgcW.6OvztwMEsvqtjtb85mSVgQKs68ieykW","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-19T14:58:32.276Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:15:28.047Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [2,"8ad5740d567f00a53339670833d48a10c039aeeeccd28fd5ad4200b0b190b408","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) AntigravityIDE/1.107.0 Chrome/142.0.7444.175 Electron/39.2.3 Safari/537.36","127.0.0.1","2026-07-19T16:15:28.047Z"]
+Result: [{"insertId":206},[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:15:28.114Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-19T14:58:33.397Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-19T16:15:28.117Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Client One","email":"client@fnd.com","password":"$2a$12$s0iynP.J2qQf3pTNAWgcW.6OvztwMEsvqtjtb85mSVgQKs68ieykW","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-19T14:58:32.276Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:41:18.512Z] SQL: SELECT DATABASE() AS db, CURRENT_USER() as user
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:43:12.379Z] SQL: SELECT DATABASE() AS db, CURRENT_USER() as user
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:49:45.416Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["crew@fnd.com"]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$AvHH4rnkTDcjBPFFFEBfseJVJl6B.Ydd6V1u1fxkNO6b0J3NbR3wq","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-24T16:12:28.221Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:49:45.850Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [3,"914d1f8795e0b5c8989e5db25c79e77d113406b43df331d3d3dff860a4ef4f94","okhttp/4.12.0","192.168.18.24","2026-07-24T16:49:45.850Z"]
+Result: [{"insertId":200},[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:49:46.944Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:49:46.948Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$AvHH4rnkTDcjBPFFFEBfseJVJl6B.Ydd6V1u1fxkNO6b0J3NbR3wq","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-24T16:12:28.221Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:51:04.788Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:51:04.792Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$AvHH4rnkTDcjBPFFFEBfseJVJl6B.Ydd6V1u1fxkNO6b0J3NbR3wq","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-24T16:12:28.221Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:51:16.427Z] SQL: SELECT rt.id AS refresh_token_id, rt.user_id, rt.token_hash, rt.user_agent, rt.ip_address, rt.expires_at, rt.revoked_at, rt.created_at, u.id, u.name, u.email, u.role, u.phone, u.avatar_url FROM refresh_tokens rt JOIN users u ON u.id = rt.user_id WHERE rt.token_hash = ? AND rt.revoked_at IS NULL AND rt.expires_at > CURRENT_TIMESTAMP LIMIT 1
+Params: ["a96833b23db823c1001c5f04b1b2727ceaecb55307cf365dc45fbb63d1203e60"]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:51:36.188Z] SQL: SELECT rt.id AS refresh_token_id, rt.user_id, rt.token_hash, rt.user_agent, rt.ip_address, rt.expires_at, rt.revoked_at, rt.created_at, u.id, u.name, u.email, u.role, u.phone, u.avatar_url FROM refresh_tokens rt JOIN users u ON u.id = rt.user_id WHERE rt.token_hash = ? AND rt.revoked_at IS NULL AND rt.expires_at > CURRENT_TIMESTAMP LIMIT 1
+Params: ["8c953af0aeaac3b0e4140214cb201f45be32d8556e550b4047695c4d95a82a7f"]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:51:52.441Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["crew@fnd.com"]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$AvHH4rnkTDcjBPFFFEBfseJVJl6B.Ydd6V1u1fxkNO6b0J3NbR3wq","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-24T16:12:28.221Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:51:52.815Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [3,"b272fbaba773d7b41d7b0908ac938301740ad8a5059365d3b010910a2d3e674c","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36","192.168.18.17","2026-07-24T16:51:52.815Z"]
+Result: [{"insertId":201},[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:51:52.890Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:51:52.893Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$AvHH4rnkTDcjBPFFFEBfseJVJl6B.Ydd6V1u1fxkNO6b0J3NbR3wq","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-24T16:12:28.221Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:52:05.091Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:52:05.893Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:52:05.955Z] SQL: SELECT ec.id FROM event_crew ec JOIN crew c ON ec.crew_id = c.id WHERE ec.event_id = ? AND c.user_id = ? LIMIT 1
+Params: [1,3]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:52:06.946Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:52:07.619Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:52:24.935Z] SQL: SELECT avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$AvHH4rnkTDcjBPFFFEBfseJVJl6B.Ydd6V1u1fxkNO6b0J3NbR3wq","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-24T16:12:28.221Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:52:24.936Z] SQL: UPDATE users SET avatar_url = ? WHERE id = ?
+Params: ["/uploads/avatars/avatar-u3-1782319944934.jpg",3]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:52:24.936Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$AvHH4rnkTDcjBPFFFEBfseJVJl6B.Ydd6V1u1fxkNO6b0J3NbR3wq","role":"crew","phone":"082222222222","avatar_url":"/uploads/avatars/avatar-u3-1782319944934.jpg","created_at":"2026-06-24T16:12:28.221Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:52:41.612Z] SQL: UPDATE users SET name = COALESCE(NULLIF(?, ""), name), phone = ? WHERE id = ?
+Params: ["Marviel David","082222222222",3]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:52:41.612Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Marviel David","email":"crew@fnd.com","password":"$2a$12$AvHH4rnkTDcjBPFFFEBfseJVJl6B.Ydd6V1u1fxkNO6b0J3NbR3wq","role":"crew","phone":"082222222222","avatar_url":"/uploads/avatars/avatar-u3-1782319944934.jpg","created_at":"2026-06-24T16:12:28.221Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:01.727Z] SQL: UPDATE refresh_tokens SET revoked_at = CURRENT_TIMESTAMP WHERE token_hash = ? AND revoked_at IS NULL
+Params: ["b272fbaba773d7b41d7b0908ac938301740ad8a5059365d3b010910a2d3e674c"]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:22.476Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["crew@fnd.com"]
+Result: [[{"id":3,"name":"Marviel David","email":"crew@fnd.com","password":"$2a$12$AvHH4rnkTDcjBPFFFEBfseJVJl6B.Ydd6V1u1fxkNO6b0J3NbR3wq","role":"crew","phone":"082222222222","avatar_url":"/uploads/avatars/avatar-u3-1782319944934.jpg","created_at":"2026-06-24T16:12:28.221Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:22.854Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [3,"6724d5e733fc924e7ceef16c091b4bad83dadf38a7e7bd7f6d12731461873bf0","Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Mobile Safari/537.36","192.168.18.17","2026-07-24T16:53:22.854Z"]
+Result: [{"insertId":202},[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:23.027Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:23.031Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Marviel David","email":"crew@fnd.com","password":"$2a$12$AvHH4rnkTDcjBPFFFEBfseJVJl6B.Ydd6V1u1fxkNO6b0J3NbR3wq","role":"crew","phone":"082222222222","avatar_url":"/uploads/avatars/avatar-u3-1782319944934.jpg","created_at":"2026-06-24T16:12:28.221Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:24.998Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:26.303Z] SQL: UPDATE refresh_tokens SET revoked_at = CURRENT_TIMESTAMP WHERE token_hash = ? AND revoked_at IS NULL
+Params: ["6724d5e733fc924e7ceef16c091b4bad83dadf38a7e7bd7f6d12731461873bf0"]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:41.461Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["client@fnd.com"]
+Result: [[{"id":2,"name":"Client One","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-24T16:12:27.862Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:41.839Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [2,"e433dc7c5eeae252599b21a9d3e301537aad07b283f0611c6f0586380cb34861","Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Mobile Safari/537.36","192.168.18.17","2026-07-24T16:53:41.839Z"]
+Result: [{"insertId":203},[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:41.972Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:41.975Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Client One","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-24T16:12:27.862Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:46.912Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:53.894Z] SQL: SELECT avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Client One","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-24T16:12:27.862Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:53.895Z] SQL: UPDATE users SET avatar_url = ? WHERE id = ?
+Params: ["/uploads/avatars/avatar-u2-1782320033873.jpg",2]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:53:53.897Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Client One","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":"/uploads/avatars/avatar-u2-1782320033873.jpg","created_at":"2026-06-24T16:12:27.862Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:54:14.429Z] SQL: UPDATE users SET name = COALESCE(NULLIF(?, ""), name), phone = ? WHERE id = ?
+Params: ["Edisyah Putra Waruwu","081234567891",2]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:54:14.429Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Edisyah Putra Waruwu","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":"/uploads/avatars/avatar-u2-1782320033873.jpg","created_at":"2026-06-24T16:12:27.862Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:54:27.859Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:54:46.185Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:54:47.156Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:54:47.169Z] SQL: SELECT e.*, u.name AS client_name, u.email AS client_email FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:54:47.170Z] SQL: SELECT eq.id, eq.name, ee.quantity FROM event_equipment ee JOIN equipment eq ON ee.equipment_id = eq.id WHERE ee.event_id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Sound System","quantity":2,"equipment_id":2}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:54:47.170Z] SQL: SELECT c.id, c.name, c.role, c.status, ec.task FROM event_crew ec JOIN crew c ON ec.crew_id = c.id WHERE ec.event_id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Maya Putri","role":"Operator","status":"on_job","task":"Operate sound"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:54:47.171Z] SQL: SELECT * FROM payments WHERE event_id = ? ORDER BY created_at DESC
+Params: [2]
+Result: [[{"id":1,"event_id":2,"amount":5000000,"payment_type":"dp","status":"paid","proof_url":null,"created_at":"2026-06-24T16:12:28.943Z","event_name":"Corporate Event","event_status":"running","client_name":"Client One"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:54:47.171Z] SQL: SELECT ci.*, u.name AS crew_name, u.email AS crew_email FROM event_checkins ci JOIN users u ON ci.crew_user_id = u.id WHERE ci.event_id = ? ORDER BY ci.updated_at DESC
+Params: [2]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:55:26.119Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:56:27.432Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:56:27.435Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Marviel David","email":"crew@fnd.com","password":"$2a$12$AvHH4rnkTDcjBPFFFEBfseJVJl6B.Ydd6V1u1fxkNO6b0J3NbR3wq","role":"crew","phone":"082222222222","avatar_url":"/uploads/avatars/avatar-u3-1782319944934.jpg","created_at":"2026-06-24T16:12:28.221Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:56:32.849Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:56:32.896Z] SQL: SELECT ec.id FROM event_crew ec JOIN crew c ON ec.crew_id = c.id WHERE ec.event_id = ? AND c.user_id = ? LIMIT 1
+Params: [1,3]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:56:37.329Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:58:41.896Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:59:33.962Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [3]
+Result: [[{"id":3,"name":"Marviel David","email":"crew@fnd.com","password":"$2a$12$AvHH4rnkTDcjBPFFFEBfseJVJl6B.Ydd6V1u1fxkNO6b0J3NbR3wq","role":"crew","phone":"082222222222","avatar_url":"/uploads/avatars/avatar-u3-1782319944934.jpg","created_at":"2026-06-24T16:12:28.221Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:59:33.966Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:59:38.457Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:59:40.327Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:59:40.427Z] SQL: SELECT ec.id FROM event_crew ec JOIN crew c ON ec.crew_id = c.id WHERE ec.event_id = ? AND c.user_id = ? LIMIT 1
+Params: [1,3]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:59:42.452Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T16:59:48.421Z] SQL:  SELECT e.*, ec.task FROM events e JOIN event_crew ec ON e.id = ec.event_id JOIN crew c ON ec.crew_id = c.id WHERE c.user_id = ? ORDER BY e.event_date ASC 
+Params: [3]
+Result: [[{"id":1,"name":"Wedding Event","type":"Wedding","event_date":"2026-06-15","location":"Jakarta","notes":"Classic warm lighting","status":"pending","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":5000000,"dp_amount":1000000,"paid_amount":0,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z","task":"Setup lighting"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:00:00.034Z] SQL: UPDATE refresh_tokens SET revoked_at = CURRENT_TIMESTAMP WHERE token_hash = ? AND revoked_at IS NULL
+Params: ["914d1f8795e0b5c8989e5db25c79e77d113406b43df331d3d3dff860a4ef4f94"]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:00:22.201Z] SQL: SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1
+Params: ["client@fnd.com"]
+Result: [[{"id":2,"name":"Edisyah Putra Waruwu","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":"/uploads/avatars/avatar-u2-1782320033873.jpg","created_at":"2026-06-24T16:12:27.862Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:00:22.546Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [2,"05c82761dd38054bd11558ccb2c2111622a31742a0f341b4909d8c8e9929f4c8","okhttp/4.12.0","192.168.18.24","2026-07-24T17:00:22.546Z"]
+Result: [{"insertId":204},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:00:23.236Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:00:23.330Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Edisyah Putra Waruwu","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":"/uploads/avatars/avatar-u2-1782320033873.jpg","created_at":"2026-06-24T16:12:27.862Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:00:26.538Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:00:27.841Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:00:29.052Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:00:29.072Z] SQL: SELECT e.*, u.name AS client_name, u.email AS client_email FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:00:29.073Z] SQL: SELECT eq.id, eq.name, ee.quantity FROM event_equipment ee JOIN equipment eq ON ee.equipment_id = eq.id WHERE ee.event_id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Sound System","quantity":2,"equipment_id":2}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:00:29.073Z] SQL: SELECT c.id, c.name, c.role, c.status, ec.task FROM event_crew ec JOIN crew c ON ec.crew_id = c.id WHERE ec.event_id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Maya Putri","role":"Operator","status":"on_job","task":"Operate sound"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:00:29.074Z] SQL: SELECT * FROM payments WHERE event_id = ? ORDER BY created_at DESC
+Params: [2]
+Result: [[{"id":1,"event_id":2,"amount":5000000,"payment_type":"dp","status":"paid","proof_url":null,"created_at":"2026-06-24T16:12:28.943Z","event_name":"Corporate Event","event_status":"running","client_name":"Client One"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:00:29.074Z] SQL: SELECT ci.*, u.name AS crew_name, u.email AS crew_email FROM event_checkins ci JOIN users u ON ci.crew_user_id = u.id WHERE ci.event_id = ? ORDER BY ci.updated_at DESC
+Params: [2]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:00:30.557Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:03:54.580Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:04:01.729Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:04:20.596Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:07:57.040Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:08:00.270Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:08:03.407Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:10:39.924Z] SQL: SELECT name, available_stock FROM equipment WHERE id = ?
+Params: [1]
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:10:39.925Z] SQL: INSERT INTO events (name, type, event_date, location, notes, client_id, total_amount, dp_amount, paid_amount, reference_images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Params: ["Consert","Lighting","2026-06-26","Gedung sekolah","Estimasi tamu: 600\nLayanan dipilih: Lighting Rig 1 x2\nJam mulai: 08.00",2,4000000,0,0,"[]"]
+Result: [{"insertId":205},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:10:39.926Z] SQL: INSERT INTO event_equipment (event_id, equipment_id, quantity) VALUES (?, ?, ?)
+Params: [205,1,2]
+Result: [{"insertId":206},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:10:39.926Z] SQL: UPDATE equipment SET available_stock = GREATEST(available_stock - ?, 0) WHERE id = ?
+Params: [2,1]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:10:51.367Z] SQL: SELECT e.*, u.name AS client_name, u.email AS client_email FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:10:51.368Z] SQL: SELECT eq.id, eq.name, ee.quantity FROM event_equipment ee JOIN equipment eq ON ee.equipment_id = eq.id WHERE ee.event_id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Sound System","quantity":2,"equipment_id":2}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:10:51.368Z] SQL: SELECT c.id, c.name, c.role, c.status, ec.task FROM event_crew ec JOIN crew c ON ec.crew_id = c.id WHERE ec.event_id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Maya Putri","role":"Operator","status":"on_job","task":"Operate sound"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:10:51.369Z] SQL: SELECT * FROM payments WHERE event_id = ? ORDER BY created_at DESC
+Params: [2]
+Result: [[{"id":1,"event_id":2,"amount":5000000,"payment_type":"dp","status":"paid","proof_url":null,"created_at":"2026-06-24T16:12:28.943Z","event_name":"Corporate Event","event_status":"running","client_name":"Client One"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:10:51.370Z] SQL: SELECT ci.*, u.name AS crew_name, u.email AS crew_email FROM event_checkins ci JOIN users u ON ci.crew_user_id = u.id WHERE ci.event_id = ? ORDER BY ci.updated_at DESC
+Params: [2]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:21:34.575Z] SQL: SELECT rt.id AS refresh_token_id, rt.user_id, rt.token_hash, rt.user_agent, rt.ip_address, rt.expires_at, rt.revoked_at, rt.created_at, u.id, u.name, u.email, u.role, u.phone, u.avatar_url FROM refresh_tokens rt JOIN users u ON u.id = rt.user_id WHERE rt.token_hash = ? AND rt.revoked_at IS NULL AND rt.expires_at > CURRENT_TIMESTAMP LIMIT 1
+Params: ["05c82761dd38054bd11558ccb2c2111622a31742a0f341b4909d8c8e9929f4c8"]
+Result: [[{"id":2,"user_id":2,"token_hash":"05c82761dd38054bd11558ccb2c2111622a31742a0f341b4909d8c8e9929f4c8","user_agent":"okhttp/4.12.0","ip_address":"192.168.18.24","expires_at":"2026-07-24T17:00:22.546Z","revoked_at":null,"created_at":"2026-06-24T16:12:27.862Z","name":"Edisyah Putra Waruwu","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":"/uploads/avatars/avatar-u2-1782320033873.jpg"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:21:34.576Z] SQL: UPDATE refresh_tokens SET revoked_at = CURRENT_TIMESTAMP WHERE token_hash = ? AND revoked_at IS NULL
+Params: ["05c82761dd38054bd11558ccb2c2111622a31742a0f341b4909d8c8e9929f4c8"]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:21:34.577Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [2,"2a1cc018e7f4a7a0355583565059fc3811a1c0679ddb38b7c36d20765551ae2e","okhttp/4.12.0","192.168.18.24","2026-07-24T17:21:34.577Z"]
+Result: [{"insertId":207},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:21:34.677Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:21:34.679Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Edisyah Putra Waruwu","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":"/uploads/avatars/avatar-u2-1782320033873.jpg","created_at":"2026-06-24T16:12:27.862Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:21:34.687Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Edisyah Putra Waruwu","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":"/uploads/avatars/avatar-u2-1782320033873.jpg","created_at":"2026-06-24T16:12:27.862Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:21:48.165Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:21:48.168Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Edisyah Putra Waruwu","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":"/uploads/avatars/avatar-u2-1782320033873.jpg","created_at":"2026-06-24T16:12:27.862Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:21:51.023Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:23:16.725Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:23:20.349Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:23:20.922Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:23:20.943Z] SQL: SELECT e.*, u.name AS client_name, u.email AS client_email FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:23:20.944Z] SQL: SELECT eq.id, eq.name, ee.quantity FROM event_equipment ee JOIN equipment eq ON ee.equipment_id = eq.id WHERE ee.event_id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Sound System","quantity":2,"equipment_id":2}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:23:20.945Z] SQL: SELECT c.id, c.name, c.role, c.status, ec.task FROM event_crew ec JOIN crew c ON ec.crew_id = c.id WHERE ec.event_id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Maya Putri","role":"Operator","status":"on_job","task":"Operate sound"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:23:20.946Z] SQL: SELECT * FROM payments WHERE event_id = ? ORDER BY created_at DESC
+Params: [2]
+Result: [[{"id":1,"event_id":2,"amount":5000000,"payment_type":"dp","status":"paid","proof_url":null,"created_at":"2026-06-24T16:12:28.943Z","event_name":"Corporate Event","event_status":"running","client_name":"Client One"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:23:20.946Z] SQL: SELECT ci.*, u.name AS crew_name, u.email AS crew_email FROM event_checkins ci JOIN users u ON ci.crew_user_id = u.id WHERE ci.event_id = ? ORDER BY ci.updated_at DESC
+Params: [2]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:23:22.829Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:24:22.814Z] SQL: SELECT name, available_stock FROM equipment WHERE id = ?
+Params: [1]
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:24:22.814Z] SQL: INSERT INTO events (name, type, event_date, location, notes, client_id, total_amount, dp_amount, paid_amount, reference_images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Params: ["Bssjsnbsbsd","Lighting","2026-06-27","Nsnndnd","Estimasi tamu: 5000\nLayanan dipilih: Lighting Rig 1 x1\nJam mulai: 08.00",2,2000000,0,0,"[]"]
+Result: [{"insertId":208},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:24:22.815Z] SQL: INSERT INTO event_equipment (event_id, equipment_id, quantity) VALUES (?, ?, ?)
+Params: [208,1,1]
+Result: [{"insertId":209},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:24:22.815Z] SQL: UPDATE equipment SET available_stock = GREATEST(available_stock - ?, 0) WHERE id = ?
+Params: [1,1]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:24:24.568Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:24:27.595Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:24:33.980Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:24:50.864Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:24:50.866Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Edisyah Putra Waruwu","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":"/uploads/avatars/avatar-u2-1782320033873.jpg","created_at":"2026-06-24T16:12:27.862Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:24:53.025Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:25:44.456Z] SQL: SELECT name, available_stock FROM equipment WHERE id = ?
+Params: [1]
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:25:44.456Z] SQL: INSERT INTO events (name, type, event_date, location, notes, client_id, total_amount, dp_amount, paid_amount, reference_images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Params: ["Jdjjjdjdjd","Lighting","2026-06-28","Jsjndnd","Estimasi tamu: 60000\nLayanan dipilih: Lighting Rig 1 x1\nJam mulai: 08.00",2,2000000,0,0,"[]"]
+Result: [{"insertId":210},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:25:44.457Z] SQL: INSERT INTO event_equipment (event_id, equipment_id, quantity) VALUES (?, ?, ?)
+Params: [210,1,1]
+Result: [{"insertId":211},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:25:44.457Z] SQL: UPDATE equipment SET available_stock = GREATEST(available_stock - ?, 0) WHERE id = ?
+Params: [1,1]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:25:46.453Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:26:39.993Z] SQL: SELECT rt.id AS refresh_token_id, rt.user_id, rt.token_hash, rt.user_agent, rt.ip_address, rt.expires_at, rt.revoked_at, rt.created_at, u.id, u.name, u.email, u.role, u.phone, u.avatar_url FROM refresh_tokens rt JOIN users u ON u.id = rt.user_id WHERE rt.token_hash = ? AND rt.revoked_at IS NULL AND rt.expires_at > CURRENT_TIMESTAMP LIMIT 1
+Params: ["e433dc7c5eeae252599b21a9d3e301537aad07b283f0611c6f0586380cb34861"]
+Result: [[{"id":2,"user_id":2,"token_hash":"e433dc7c5eeae252599b21a9d3e301537aad07b283f0611c6f0586380cb34861","user_agent":"Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Mobile Safari/537.36","ip_address":"192.168.18.17","expires_at":"2026-07-24T16:53:41.839Z","revoked_at":null,"created_at":"2026-06-24T16:12:27.862Z","name":"Edisyah Putra Waruwu","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":"/uploads/avatars/avatar-u2-1782320033873.jpg"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:26:39.993Z] SQL: UPDATE refresh_tokens SET revoked_at = CURRENT_TIMESTAMP WHERE token_hash = ? AND revoked_at IS NULL
+Params: ["e433dc7c5eeae252599b21a9d3e301537aad07b283f0611c6f0586380cb34861"]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:26:39.995Z] SQL: INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)
+Params: [2,"401040d0cbc35f18f3ef4d0af526cae87756b01adec95e3638aeab9b746c7f04","Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Mobile Safari/537.36","192.168.18.17","2026-07-24T17:26:39.995Z"]
+Result: [{"insertId":212},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:26:40.772Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Edisyah Putra Waruwu","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":"/uploads/avatars/avatar-u2-1782320033873.jpg","created_at":"2026-06-24T16:12:27.862Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:26:40.777Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:26:40.781Z] SQL: SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1
+Params: [2]
+Result: [[{"id":2,"name":"Edisyah Putra Waruwu","email":"client@fnd.com","password":"$2a$12$sghT35cvwVG7k8t5z4z8r.6cgdCHBxoeTiWipvTpCeO/a7Mg8mTO6","role":"client","phone":"081234567891","avatar_url":"/uploads/avatars/avatar-u2-1782320033873.jpg","created_at":"2026-06-24T16:12:27.862Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:26:42.515Z] SQL: SELECT * FROM equipment ORDER BY id DESC LIMIT 200
+Params: []
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":2,"name":"Sound System","description":"FOH and monitor package","category":"Audio","total_stock":5,"available_stock":3,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"},{"id":3,"name":"LED Screen","description":"Indoor LED panel","category":"Display","total_stock":3,"available_stock":2,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:12.703Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:17.404Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:19.649Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:25.720Z] SQL: SELECT name, available_stock FROM equipment WHERE id = ?
+Params: [1]
+Result: [[{"id":1,"name":"Lighting Rig 1","description":"Main rig package","category":"Lighting","total_stock":10,"available_stock":7,"image_url":null,"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:25.720Z] SQL: INSERT INTO events (name, type, event_date, location, notes, client_id, total_amount, dp_amount, paid_amount, reference_images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Params: ["rttyrtyry","Lighting","2026-06-28","iiuiyiy","iyiyiyi\nEstimasi tamu: 5000\nLayanan dipilih: Lighting Rig 1 x1\nJam mulai: 08.00",2,2000000,0,0,"[]"]
+Result: [{"insertId":213},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:25.721Z] SQL: INSERT INTO event_equipment (event_id, equipment_id, quantity) VALUES (?, ?, ?)
+Params: [213,1,1]
+Result: [{"insertId":214},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:25.721Z] SQL: UPDATE equipment SET available_stock = GREATEST(available_stock - ?, 0) WHERE id = ?
+Params: [1,1]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:27.707Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:30.567Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:33.322Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:42.126Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:43.584Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:46.907Z] SQL: SELECT e.*, u.name AS client_name, u.email AS client_email FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:46.908Z] SQL: SELECT eq.id, eq.name, ee.quantity FROM event_equipment ee JOIN equipment eq ON ee.equipment_id = eq.id WHERE ee.event_id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Sound System","quantity":2,"equipment_id":2}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:46.909Z] SQL: SELECT c.id, c.name, c.role, c.status, ec.task FROM event_crew ec JOIN crew c ON ec.crew_id = c.id WHERE ec.event_id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Maya Putri","role":"Operator","status":"on_job","task":"Operate sound"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:46.909Z] SQL: SELECT * FROM payments WHERE event_id = ? ORDER BY created_at DESC
+Params: [2]
+Result: [[{"id":1,"event_id":2,"amount":5000000,"payment_type":"dp","status":"paid","proof_url":null,"created_at":"2026-06-24T16:12:28.943Z","event_name":"Corporate Event","event_status":"running","client_name":"Client One"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:27:46.910Z] SQL: SELECT ci.*, u.name AS crew_name, u.email AS crew_email FROM event_checkins ci JOIN users u ON ci.crew_user_id = u.id WHERE ci.event_id = ? ORDER BY ci.updated_at DESC
+Params: [2]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:28:13.232Z] SQL: SELECT e.*, u.name AS client_name, u.phone AS client_phone FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.client_id = ? ORDER BY e.event_date DESC LIMIT 100
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:28:13.249Z] SQL: SELECT e.*, u.name AS client_name, u.email AS client_email FROM events e LEFT JOIN users u ON e.client_id = u.id WHERE e.id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Corporate Event","type":"Corporate Event","event_date":"2026-06-20","location":"Bandung","notes":"Stage lighting and LED wall","status":"running","client_id":2,"client_name":"Client One","client_phone":"081234567891","total_amount":10000000,"dp_amount":5000000,"paid_amount":5000000,"reference_images":[],"created_at":"2026-06-24T16:12:28.943Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:28:13.250Z] SQL: SELECT eq.id, eq.name, ee.quantity FROM event_equipment ee JOIN equipment eq ON ee.equipment_id = eq.id WHERE ee.event_id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Sound System","quantity":2,"equipment_id":2}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:28:13.250Z] SQL: SELECT c.id, c.name, c.role, c.status, ec.task FROM event_crew ec JOIN crew c ON ec.crew_id = c.id WHERE ec.event_id = ?
+Params: [2]
+Result: [[{"id":2,"name":"Maya Putri","role":"Operator","status":"on_job","task":"Operate sound"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:28:13.251Z] SQL: SELECT * FROM payments WHERE event_id = ? ORDER BY created_at DESC
+Params: [2]
+Result: [[{"id":1,"event_id":2,"amount":5000000,"payment_type":"dp","status":"paid","proof_url":null,"created_at":"2026-06-24T16:12:28.943Z","event_name":"Corporate Event","event_status":"running","client_name":"Client One"}],[]]
+Error: None
+-----------------------------------
+[2026-06-24T17:28:13.252Z] SQL: SELECT ci.*, u.name AS crew_name, u.email AS crew_email FROM event_checkins ci JOIN users u ON ci.crew_user_id = u.id WHERE ci.event_id = ? ORDER BY ci.updated_at DESC
+Params: [2]
+Result: [[],[]]
+Error: None
+-----------------------------------

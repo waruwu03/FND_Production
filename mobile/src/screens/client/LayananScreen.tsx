@@ -74,27 +74,29 @@ export const LayananScreen = ({ navigation }: any) => {
 
       {loading ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#2563EB" />
+          <ActivityIndicator size="large" color="#F97316" />
         </View>
       ) : (
-        <View className="flex-1 flex-row">
-          <ScrollView className="w-28 bg-white" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 104 }}>
-            {categories.map((category) => (
-              <TouchableOpacity
-                key={category}
-                onPress={() => setActiveCategory(category)}
-                className={`mx-3 mb-2 rounded-md px-2 py-3 ${activeCategory === category ? 'bg-primary' : 'bg-white'}`}
-              >
-                <Text className={`text-center text-xs font-semibold leading-4 ${activeCategory === category ? 'text-white' : 'text-primary'}`}>
-                  {category}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+        <View className="flex-1">
+          <View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-4 px-5">
+              {categories.map((category) => (
+                <TouchableOpacity
+                  key={category}
+                  onPress={() => setActiveCategory(category)}
+                  className={`mr-2 rounded-full px-5 py-2.5 ${activeCategory === category ? 'bg-primary' : 'bg-slate-100'}`}
+                >
+                  <Text className={`text-xs font-bold ${activeCategory === category ? 'text-white' : 'text-primary'}`}>
+                    {category}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
 
           <ScrollView
-            className="flex-1 border-l border-slate-100 px-4 pt-1"
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#2563EB" />}
+            className="flex-1 px-5"
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#F97316" />}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 104 }}
           >
@@ -104,17 +106,18 @@ export const LayananScreen = ({ navigation }: any) => {
               filtered.map((service) => (
                 <TouchableOpacity
                   key={service.id}
-                  className="mb-3 flex-row rounded-xl border border-slate-100 bg-white p-3"
-                  style={{ elevation: 2, shadowColor: '#0F172A', shadowOpacity: 0.05, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }}
+                  className="mb-4 flex-row rounded-[24px] border border-slate-100 bg-white p-3"
+                  style={{ elevation: 2, shadowColor: '#0F172A', shadowOpacity: 0.04, shadowRadius: 8, shadowOffset: { width: 0, height: 4 } }}
                   onPress={() => selectService(service)}
                 >
-                  <Image source={{ uri: getAssetUrl(service.image) || service.image }} className="mr-3 h-20 w-20 rounded-lg" resizeMode="cover" />
-                  <View className="flex-1 justify-center">
-                    <Text className="font-bold text-primary" numberOfLines={1}>{service.name}</Text>
+                  <Image source={{ uri: getAssetUrl(service.image) || service.image }} className="mr-4 h-24 w-24 rounded-2xl" resizeMode="cover" />
+                  <View className="flex-1 justify-center py-1">
+                    <Text className="text-base font-black text-primary" numberOfLines={1}>{service.name}</Text>
                     <Text className="mt-1 text-xs leading-4 text-slate-500" numberOfLines={2}>{service.description}</Text>
-                    <Text className="mt-2 text-xs font-black text-primary">Mulai dari</Text>
-                    <Text className="text-xs font-black text-primary">{formatCurrency(service.price)}</Text>
-                    {service.stock !== undefined ? <Text className="mt-1 text-[10px] text-slate-400">Stok tersedia: {service.stock}</Text> : null}
+                    <View className="mt-auto pt-2">
+                      <Text className="text-[10px] font-bold text-slate-400">Mulai dari</Text>
+                      <Text className="text-sm font-black text-accent">{formatCurrency(service.price)}</Text>
+                    </View>
                   </View>
                 </TouchableOpacity>
               ))

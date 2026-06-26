@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, ScrollView, TouchableOpacity, Image, RefreshControl } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
@@ -27,9 +28,11 @@ export const ClientDashboardScreen = ({ navigation }: any) => {
     if (response.data?.success) setEvents(response.data.data || []);
   };
 
-  useEffect(() => {
-    fetchEvents().catch(() => null);
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchEvents().catch(() => null);
+    }, [])
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -50,46 +53,49 @@ export const ClientDashboardScreen = ({ navigation }: any) => {
   };
 
   return (
-    <View className="flex-1 bg-white">
-      <View style={{ paddingTop: insets.top + 12 }} className="px-5 pb-4">
+    <View className="flex-1 bg-primary">
+      {/* Header section with Dark Navy background - sama seperti Crew App */}
+      <View style={{ paddingTop: insets.top + 10 }} className="px-5 pb-7">
         <View className="mb-6 flex-row items-center justify-between">
-          <TouchableOpacity className="h-10 w-10 items-center justify-center rounded-full">
-            <Ionicons name="menu-outline" size={25} color="#0B1241" />
+          <TouchableOpacity className="h-9 w-9 items-center justify-center rounded-full bg-white/10">
+            <Ionicons name="menu-outline" size={22} color="#FFFFFF" />
           </TouchableOpacity>
-          <View className="flex-1 pl-2">
-            <Text className="font-black tracking-wider text-primary">FND PRODUCTION</Text>
-            <Text className="text-[10px] font-semibold text-slate-400">Creative Event Solution</Text>
+          <View className="items-center">
+            <Text className="text-xs font-black tracking-widest text-white">FND PRODUCTION</Text>
+            <Text className="text-[8px] font-semibold tracking-widest text-slate-400">CLIENT APP</Text>
           </View>
-          <TouchableOpacity className="relative h-10 w-10 items-center justify-center rounded-full" onPress={() => navigation.navigate('Notifikasi')}>
-            <Ionicons name="notifications-outline" size={23} color="#0B1241" />
-            <View className="absolute right-1 top-1 h-4 w-4 items-center justify-center rounded-full bg-danger">
-              <Text className="text-[9px] font-bold text-white">3</Text>
+          <TouchableOpacity className="relative h-9 w-9 items-center justify-center rounded-full bg-white/10" onPress={() => navigation.navigate('Notifikasi')}>
+            <Ionicons name="notifications-outline" size={20} color="#FFFFFF" />
+            <View className="absolute -right-1 -top-1 h-4 w-4 items-center justify-center rounded-full bg-danger">
+              <Text className="text-[8px] font-bold text-white">3</Text>
             </View>
           </TouchableOpacity>
         </View>
 
         <View className="flex-row items-center">
           {avatarUrl ? (
-            <Image source={{ uri: avatarUrl }} className="h-11 w-11 rounded-full" />
+            <Image source={{ uri: avatarUrl }} className="h-11 w-11 rounded-full border border-white/20 bg-slate-800" />
           ) : (
-            <View className="h-11 w-11 items-center justify-center rounded-full bg-slate-100">
-              <Text className="font-bold text-primary">{initials(user?.name)}</Text>
+            <View className="h-11 w-11 items-center justify-center rounded-full bg-white/10 border border-white/20">
+              <Text className="font-bold text-white text-xs">{initials(user?.name)}</Text>
             </View>
           )}
-          <View className="ml-3">
-            <Text className="text-base font-bold text-primary">Halo, {user?.name || 'Client'}</Text>
-            <Text className="text-xs text-slate-500">Selamat datang kembali!</Text>
+          <View className="ml-3.5 flex-1">
+            <Text className="text-base font-extrabold text-white" numberOfLines={1}>Halo, {user?.name || 'Client'}</Text>
+            <Text className="text-[10px] text-slate-400">{user?.email || 'client@fnd.com'}</Text>
           </View>
         </View>
       </View>
 
+      {/* Main body with light off-white background - sama seperti Crew App */}
+      <View className="-mt-4 flex-1 rounded-t-[24px] bg-crewBg">
       <ScrollView
         className="flex-1"
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#2563EB" />}
-        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 104 }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#F97316" />}
+        contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 20, paddingBottom: 110 }}
       >
-        <View className="mb-5 overflow-hidden rounded-xl bg-primary" style={{ elevation: 4, shadowColor: '#0F172A', shadowOpacity: 0.12, shadowRadius: 12, shadowOffset: { width: 0, height: 6 } }}>
+        <View className="mb-5 overflow-hidden rounded-[24px] border border-slate-100 bg-primary" style={{ elevation: 4, shadowColor: '#0F172A', shadowOpacity: 0.12, shadowRadius: 12, shadowOffset: { width: 0, height: 6 } }}>
           <Image source={{ uri: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=900&q=80' }} className="absolute h-full w-full opacity-55" resizeMode="cover" />
           <View className="min-h-[150px] justify-between p-5">
             <View>
@@ -102,17 +108,17 @@ export const ClientDashboardScreen = ({ navigation }: any) => {
           </View>
         </View>
 
-        <View className="mb-6 flex-row justify-center">
+        <View className="mb-5 flex-row justify-center">
           {[0, 1, 2, 3, 4].map((item) => (
             <View key={item} className={`mx-1 h-1.5 rounded-full ${item === 1 ? 'w-5 bg-primary' : 'w-1.5 bg-slate-300'}`} />
           ))}
         </View>
 
-        <View className="mb-6 flex-row justify-between">
+        <View className="mb-5 flex-row justify-between">
           {QUICK_MENU.map((item) => (
             <TouchableOpacity key={item.label} className="items-center" onPress={() => goTo(item.screen)}>
-              <View className="mb-2 h-14 w-14 items-center justify-center rounded-xl border border-slate-100 bg-white" style={{ elevation: 2 }}>
-                <Ionicons name={item.icon as any} size={24} color="#2563EB" />
+              <View className="mb-2 h-14 w-14 items-center justify-center rounded-xl border border-slate-100 bg-white" style={{ elevation: 2, shadowColor: '#0F172A', shadowOpacity: 0.04, shadowRadius: 8, shadowOffset: { width: 0, height: 2 } }}>
+                <Ionicons name={item.icon as any} size={24} color="#F97316" />
               </View>
               <Text className="w-16 text-center text-[10px] font-semibold text-primary">{item.label}</Text>
             </TouchableOpacity>
@@ -120,22 +126,22 @@ export const ClientDashboardScreen = ({ navigation }: any) => {
         </View>
 
         <View className="mb-3 flex-row items-center justify-between">
-          <Text className="font-bold text-primary">Event Saya</Text>
+          <Text className="text-xs font-black text-primary">Event Saya</Text>
           <TouchableOpacity onPress={() => goTo('EventSaya')}>
-            <Text className="text-xs font-bold text-accent">Lihat Semua</Text>
+            <Text className="text-[10px] font-extrabold text-accent">Lihat Semua</Text>
           </TouchableOpacity>
         </View>
 
         {latestEvent && latestStatus && latestLocation ? (
           <TouchableOpacity
-            className="mb-6 flex-row rounded-xl border border-slate-100 bg-white p-3"
-            style={{ elevation: 2, shadowColor: '#0F172A', shadowOpacity: 0.06, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }}
+            className="mb-5 flex-row rounded-[24px] border border-slate-100 bg-white p-4"
+            style={{ elevation: 2, shadowColor: '#0F172A', shadowOpacity: 0.03, shadowRadius: 8, shadowOffset: { width: 0, height: 3 } }}
             onPress={() => navigation.getParent()?.navigate('EventSaya', { screen: 'DetailEventClient', params: { eventId: latestEvent.id } })}
           >
-            <Image source={{ uri: getAssetUrl(getEventImage(latestEvent)) || getEventImage(latestEvent) }} className="mr-3 h-20 w-20 rounded-lg" resizeMode="cover" />
+            <Image source={{ uri: getAssetUrl(getEventImage(latestEvent)) || getEventImage(latestEvent) }} className="mr-3 h-20 w-20 rounded-xl" resizeMode="cover" />
             <View className="flex-1">
-              <View className="mb-2 flex-row items-start justify-between">
-                <Text className="mr-2 flex-1 font-bold text-primary" numberOfLines={1}>{latestEvent.name}</Text>
+              <View className="mb-2.5 flex-row items-start justify-between">
+                <Text className="mr-3 flex-1 text-sm font-extrabold text-primary" numberOfLines={1}>{latestEvent.name}</Text>
                 <StatusBadge label={latestStatus.clientLabel} bg={latestStatus.bg} text={latestStatus.text} />
               </View>
               <View className="mb-1 flex-row items-center">
@@ -155,24 +161,33 @@ export const ClientDashboardScreen = ({ navigation }: any) => {
             </View>
           </TouchableOpacity>
         ) : (
-          <View className="mb-6">
+          <View className="mb-5">
             <EmptyState icon="calendar-outline" title="Belum ada event" description="Booking event akan langsung masuk ke request dashboard admin." />
           </View>
         )}
 
         <View className="mb-3 flex-row items-center justify-between">
-          <Text className="font-bold text-primary">Penawaran Spesial</Text>
-          <Text className="text-xs font-bold text-accent">Lihat Semua</Text>
+          <Text className="text-xs font-black text-primary">Penawaran Spesial</Text>
+          <Text className="text-[10px] font-extrabold text-accent">Lihat Semua</Text>
         </View>
-        <View className="mb-5 overflow-hidden rounded-xl bg-slate-100">
-          <Image source={{ uri: 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=900&q=80' }} className="absolute h-full w-full opacity-70" resizeMode="cover" />
-          <View className="min-h-[132px] justify-center p-5">
-            <Text className="text-xs font-black text-primary">PAKET WEDDING</Text>
-            <Text className="mt-1 text-xs text-primary">Diskon hingga</Text>
-            <Text className="text-4xl font-black text-primary">15%</Text>
+        <View
+          className="mb-5 flex-row rounded-[24px] border border-orange-100 bg-orange-50 p-4"
+          style={{ elevation: 1, shadowColor: '#F97316', shadowOpacity: 0.05, shadowRadius: 6, shadowOffset: { width: 0, height: 2 } }}
+        >
+          <View className="mr-3.5 h-10 w-10 items-center justify-center rounded-xl bg-orange-100">
+            <Ionicons name="pricetag-outline" size={20} color="#F97316" />
+          </View>
+          <View className="flex-1">
+            <Text className="text-[8px] font-bold tracking-wider text-slate-400 mb-0.5">PENAWARAN SPESIAL</Text>
+            <Text className="text-sm font-extrabold text-primary">Paket Wedding</Text>
+            <View className="mt-1.5 flex-row items-center gap-2">
+              <StatusBadge label="Diskon 15%" bg="bg-orange-100" text="text-accent" />
+              <Text className="text-[10px] text-slate-400">Bulan Juni 2026</Text>
+            </View>
           </View>
         </View>
       </ScrollView>
+      </View>
     </View>
   );
 };
