@@ -43,13 +43,13 @@ app.use(helmet({
 }))
 app.use(morgan('dev'))
 app.use(cors({
-  origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
-      return callback(null, true)
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin) || (origin && origin.endsWith('.vercel.app'))) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
     }
-    return callback(new Error('Not allowed by CORS'))
-  },
-  credentials: true,
+  },credentials: true,
 }))
 app.use(express.json({ limit: '8mb' }))
 app.use(express.urlencoded({ extended: true, limit: '8mb' }))
