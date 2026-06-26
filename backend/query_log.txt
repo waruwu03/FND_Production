@@ -2333,3 +2333,278 @@ Params: [2]
 Result: [[],[]]
 Error: None
 -----------------------------------
+[2026-06-26T17:08:32.480Z] SQL: CREATE DATABASE IF NOT EXISTS event_lighting
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.481Z] SQL: USE event_lighting
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.482Z] SQL: CREATE TABLE IF NOT EXISTS users ( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(120) NOT NULL, email VARCHAR(180) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL, role ENUM('admin','client','crew') NOT NULL DEFAULT 'client', phone VARCHAR(20), avatar_url VARCHAR(255), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP )
+Params: []
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.483Z] SQL: CREATE TABLE IF NOT EXISTS refresh_tokens ( id BIGINT AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, token_hash CHAR(64) NOT NULL UNIQUE, user_agent VARCHAR(255), ip_address VARCHAR(64), expires_at DATETIME NOT NULL, revoked_at DATETIME NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE, INDEX idx_refresh_tokens_user (user_id), INDEX idx_refresh_tokens_expires (expires_at) )
+Params: []
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.483Z] SQL: CREATE TABLE IF NOT EXISTS crew ( id INT AUTO_INCREMENT PRIMARY KEY, user_id INT NULL, name VARCHAR(120) NOT NULL, role VARCHAR(80) NOT NULL, phone VARCHAR(40), status ENUM('available','on_job') NOT NULL DEFAULT 'available', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL, INDEX idx_crew_status (status), INDEX idx_crew_user (user_id) )
+Params: []
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.483Z] SQL: CREATE TABLE IF NOT EXISTS equipment ( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(140) NOT NULL, description TEXT, category VARCHAR(80), image_url VARCHAR(255), total_stock INT NOT NULL DEFAULT 0, available_stock INT NOT NULL DEFAULT 0, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, CHECK (total_stock >= 0), CHECK (available_stock >= 0), INDEX idx_equipment_name (name) )
+Params: []
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.484Z] SQL: CREATE TABLE IF NOT EXISTS events ( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(180) NOT NULL, type VARCHAR(80) NOT NULL, event_date DATE NOT NULL, location VARCHAR(180) NOT NULL, notes TEXT, status ENUM('pending','survey','deal','running','selesai','cancel') NOT NULL DEFAULT 'pending', client_id INT NOT NULL, total_amount DECIMAL(10,2) NOT NULL DEFAULT 0, dp_amount DECIMAL(10,2) NOT NULL DEFAULT 0, paid_amount DECIMAL(10,2) NOT NULL DEFAULT 0, reference_images JSON, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE, INDEX idx_events_status (status), INDEX idx_events_client (client_id) )
+Params: []
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.485Z] SQL: CREATE TABLE IF NOT EXISTS event_equipment ( id INT AUTO_INCREMENT PRIMARY KEY, event_id INT NOT NULL, equipment_id INT NOT NULL, quantity INT NOT NULL, FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE, FOREIGN KEY (equipment_id) REFERENCES equipment(id) ON DELETE CASCADE )
+Params: []
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.485Z] SQL: CREATE TABLE IF NOT EXISTS event_crew ( id INT AUTO_INCREMENT PRIMARY KEY, event_id INT NOT NULL, crew_id INT NOT NULL, task VARCHAR(120), FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE, FOREIGN KEY (crew_id) REFERENCES crew(id) ON DELETE CASCADE )
+Params: []
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.485Z] SQL: CREATE TABLE IF NOT EXISTS payments ( id INT AUTO_INCREMENT PRIMARY KEY, event_id INT NOT NULL, amount DECIMAL(10,2) NOT NULL, payment_type ENUM('dp','full') NOT NULL, status ENUM('paid','unpaid') NOT NULL DEFAULT 'unpaid', proof_url VARCHAR(255), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE, INDEX idx_payments_status (status) )
+Params: []
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.486Z] SQL: CREATE TABLE IF NOT EXISTS event_checkins ( id BIGINT AUTO_INCREMENT PRIMARY KEY, event_id INT NOT NULL, crew_user_id INT NOT NULL, check_in_at DATETIME NULL, check_out_at DATETIME NULL, latitude DECIMAL(10,7) NULL, longitude DECIMAL(10,7) NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE, FOREIGN KEY (crew_user_id) REFERENCES users(id) ON DELETE CASCADE, UNIQUE KEY uniq_event_checkin_crew (event_id, crew_user_id), INDEX idx_event_checkins_event (event_id) )
+Params: []
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.486Z] SQL: CREATE TABLE IF NOT EXISTS notifications ( id INT AUTO_INCREMENT PRIMARY KEY, title VARCHAR(255) NOT NULL, message TEXT NOT NULL, type VARCHAR(50) DEFAULT 'info', is_read BOOLEAN DEFAULT FALSE, link VARCHAR(255) NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP )
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.487Z] SQL: SET FOREIGN_KEY_CHECKS = 0
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.487Z] SQL: TRUNCATE TABLE refresh_tokens
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.488Z] SQL: TRUNCATE TABLE payments
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.488Z] SQL: TRUNCATE TABLE event_equipment
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.488Z] SQL: TRUNCATE TABLE event_crew
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.489Z] SQL: TRUNCATE TABLE events
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.489Z] SQL: TRUNCATE TABLE equipment
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.489Z] SQL: TRUNCATE TABLE crew
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.490Z] SQL: SET FOREIGN_KEY_CHECKS = 1
+Params: []
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.490Z] SQL: SELECT id FROM users WHERE email = ?
+Params: ["admin@fnd.com"]
+Result: [[{"id":1,"name":"Admin User","email":"admin@fnd.com","password":"$2a$12$HVpcm/TDlJ9ccXca2BGn9utUH4vDq7SxWfQXCPT.vEnhgG4GA5tHq","role":"admin","phone":"081234567890","avatar_url":null,"created_at":"2026-06-26T17:08:31.051Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.588Z] SQL: UPDATE users SET password = ?, role = ?, name = ? WHERE email = ?
+Params: ["$2a$10$f9pPIKe0OQOB.B8m4u3k9OaPnBNd89EXkKwa7Q47LKfpP11EkOz/G","admin","Admin Name","admin@fnd.com"]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.589Z] SQL: SELECT id FROM users WHERE email = ?
+Params: ["client@fnd.com"]
+Result: [[{"id":2,"name":"Client One","email":"client@fnd.com","password":"$2a$12$zVTj7aYtazHJDBQjh145jO4Ta1pii3zhXvPCi6lKaMrhmEhQ61kSW","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-26T17:08:31.411Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.694Z] SQL: UPDATE users SET password = ?, role = ?, name = ? WHERE email = ?
+Params: ["$2a$10$YkbFUM51GggEq8CfTUD6E.uQS6OzfSPuwexhGPShcsqcadHT6altC","client","Client One","client@fnd.com"]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.695Z] SQL: SELECT id FROM users WHERE email = ?
+Params: ["crew@fnd.com"]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$MOJwrfSwYXNBNaJaelq7LO84nmm4NXOR0RHjk8SihsJUjWBmTMaym","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-26T17:08:31.761Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.780Z] SQL: UPDATE users SET password = ?, role = ?, name = ? WHERE email = ?
+Params: ["$2a$10$dx5JNEiI/E5U4nutPwxu2.qEdhspmi3GH7CsAFL.j/4gym4TbouUO","crew","Rian Setiawan","crew@fnd.com"]
+Result: [{"affectedRows":1},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.780Z] SQL: SELECT id FROM users WHERE email = ?
+Params: ["crew@fnd.com"]
+Result: [[{"id":3,"name":"Rian Setiawan","email":"crew@fnd.com","password":"$2a$12$MOJwrfSwYXNBNaJaelq7LO84nmm4NXOR0RHjk8SihsJUjWBmTMaym","role":"crew","phone":"082222222222","avatar_url":null,"created_at":"2026-06-26T17:08:31.761Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.781Z] SQL: INSERT IGNORE INTO crew (name, role, phone, user_id) VALUES (?, ?, ?, ?)
+Params: ["Rian Setiawan","Technician","081234567890",3]
+Result: [{"insertId":200},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.781Z] SQL: INSERT IGNORE INTO crew (name, role, phone, user_id) VALUES (?, ?, ?, ?)
+Params: ["Maya Putri","Operator","081234567891",null]
+Result: [{"insertId":201},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.782Z] SQL: INSERT IGNORE INTO crew (name, role, phone, user_id) VALUES (?, ?, ?, ?)
+Params: ["Anton Pratama","Rigger","081234567892",null]
+Result: [{"insertId":202},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.782Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["Moving Head Beam",24,24]
+Result: [{"insertId":203},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.783Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["Par Light LED",48,48]
+Result: [{"insertId":204},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.783Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["Fresnel LED",12,12]
+Result: [{"insertId":205},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.784Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["Follow Spotlight",4,4]
+Result: [{"insertId":206},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.784Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["Moving Head Big Eye",8,8]
+Result: [{"insertId":207},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.784Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["Minibrute",16,16]
+Result: [{"insertId":208},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.785Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["Wall Washer",12,12]
+Result: [{"insertId":209},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.785Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["Stromy / Strobo Light",6,6]
+Result: [{"insertId":210},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.786Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["Mesin Laser RGB",4,4]
+Result: [{"insertId":211},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.786Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["Mixer Light GrandMA2",2,2]
+Result: [{"insertId":212},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.786Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["Mesin Dry Ice",4,4]
+Result: [{"insertId":213},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.787Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["Mesin Haze / Smoke",6,6]
+Result: [{"insertId":214},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.787Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["LED Par Light",30,30]
+Result: [{"insertId":215},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.788Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["Moving Head",12,12]
+Result: [{"insertId":216},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.788Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["Smoke Machine",8,8]
+Result: [{"insertId":217},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.789Z] SQL: INSERT INTO equipment (name, total_stock, available_stock) VALUES (?, ?, ?)
+Params: ["DJ Board",5,5]
+Result: [{"insertId":218},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.789Z] SQL: SELECT id FROM users WHERE email = ?
+Params: ["client@fnd.com"]
+Result: [[{"id":2,"name":"Client One","email":"client@fnd.com","password":"$2a$12$zVTj7aYtazHJDBQjh145jO4Ta1pii3zhXvPCi6lKaMrhmEhQ61kSW","role":"client","phone":"081234567891","avatar_url":null,"created_at":"2026-06-26T17:08:31.411Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.789Z] SQL: INSERT INTO events (name, type, event_date, location, notes, status, client_id, total_amount, dp_amount, paid_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Params: ["Wedding Lighting Package","wedding","2026-06-20","Grand Ballroom Jakarta","Classic warm lighting","deal",2,12500,5000,5000]
+Result: [{"insertId":219},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.790Z] SQL: SELECT id FROM equipment WHERE name = ?
+Params: ["LED Par Light"]
+Result: [[],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.790Z] SQL: SELECT id FROM crew LIMIT 1
+Params: []
+Result: [[{"id":1,"user_id":3,"name":"Rian Setiawan","role":"Technician","phone":"082222222222","status":"available","created_at":"2026-06-26T17:08:32.441Z"},{"id":2,"user_id":4,"name":"Maya Putri","role":"Operator","phone":"083333333333","status":"on_job","created_at":"2026-06-26T17:08:32.441Z"},{"id":3,"user_id":5,"name":"Anton Pratama","role":"Assistant","phone":"084444444444","status":"available","created_at":"2026-06-26T17:08:32.441Z"},{"id":200,"user_id":null,"name":"Rian Setiawan","role":"Technician","phone":"081234567890","status":"available","created_at":"2026-06-26T17:08:32.781Z"},{"id":201,"user_id":null,"name":"Maya Putri","role":"Operator","phone":"081234567891","status":"available","created_at":"2026-06-26T17:08:32.781Z"},{"id":202,"user_id":null,"name":"Anton Pratama","role":"Rigger","phone":"081234567892","status":"available","created_at":"2026-06-26T17:08:32.782Z"}],[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.791Z] SQL: INSERT INTO event_equipment (event_id, equipment_id, quantity) VALUES (?, ?, ?)
+Params: [219,1,8]
+Result: [{"insertId":220},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.791Z] SQL: INSERT INTO event_crew (event_id, crew_id, task) VALUES (?, ?, ?)
+Params: [219,1,"Setup"]
+Result: [{"insertId":221},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:08:32.791Z] SQL: INSERT INTO payments (event_id, amount, payment_type, status, proof_url) VALUES (?, ?, ?, ?, ?)
+Params: [219,5000,"dp","paid","https://example.com/proof-dp.jpg"]
+Result: [{"insertId":222},[]]
+Error: None
+-----------------------------------
+[2026-06-26T17:17:25.777Z] SQL: SELECT rt.id AS refresh_token_id, rt.user_id, rt.token_hash, rt.user_agent, rt.ip_address, rt.expires_at, rt.revoked_at, rt.created_at, u.id, u.name, u.email, u.role, u.phone, u.avatar_url FROM refresh_tokens rt JOIN users u ON u.id = rt.user_id WHERE rt.token_hash = ? AND rt.revoked_at IS NULL AND rt.expires_at > CURRENT_TIMESTAMP LIMIT 1
+Params: ["6b77a6c3cf204a96346949c8f7d096a261741db9b3dd76661d989e9b2e1dc669"]
+Result: [[],[]]
+Error: None
+-----------------------------------

@@ -1,5 +1,4 @@
-CREATE DATABASE IF NOT EXISTS event_lighting;
-USE event_lighting;
+
 
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,

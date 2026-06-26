@@ -16,12 +16,14 @@ async function createDatabasePool() {
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'event_lighting',
+    ssl: process.env.DB_HOST && process.env.DB_HOST.includes('aivencloud.com') ? { rejectUnauthorized: false } : undefined,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
-    connectTimeout: Number(process.env.DB_CONNECT_TIMEOUT_MS || 5000),
+    connectTimeout: Number(process.env.DB_CONNECT_TIMEOUT_MS || 10000),
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 10000,
   })
-
   candidate.on('error', (err) => {
     console.warn('MySQL pool error:', err.message)
   })
