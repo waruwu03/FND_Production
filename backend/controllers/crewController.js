@@ -5,15 +5,15 @@ import { revokeUserRefreshTokens } from '../utils/authTokens.js'
 export async function fetchCrew(req, res) {
   try {
     const status = req.query.status === 'tersedia' ? 'available' : req.query.status
-    let query = 'SELECT * FROM crew'
+    let query = 'SELECT c.*, u.avatar_url FROM crew c LEFT JOIN users u ON c.user_id = u.id'
     const params = []
 
     if (status) {
-      query += ' WHERE status = ?'
+      query += ' WHERE c.status = ?'
       params.push(status)
     }
 
-    query += ' ORDER BY status, id DESC'
+    query += ' ORDER BY c.status, c.id DESC'
     const [rows] = await pool.query(query, params)
     res.json({ success: true, data: rows })
   } catch (error) {
@@ -24,7 +24,10 @@ export async function fetchCrew(req, res) {
 
 export async function getCrew(req, res) {
   try {
-    const [rows] = await pool.query('SELECT * FROM crew WHERE id = ?', [Number(req.params.id)])
+    const [rows] = await pool.query(
+      'SELECT c.*, u.avatar_url FROM crew c LEFT JOIN users u ON c.user_id = u.id WHERE c.id = ?', 
+      [Number(req.params.id)]
+    )
     const item = rows[0]
     if (!item) {
       return res.status(404).json({ success: false, error: 'Crew not found' })

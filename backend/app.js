@@ -12,6 +12,8 @@ import crewRoutes from './routes/crew.js'
 import paymentsRoutes from './routes/payments.js'
 import reportsRoutes from './routes/reports.js'
 import uploadsRoutes from './routes/uploads.js'
+import notificationsRoutes from './routes/notifications.js'
+import searchRoutes from './routes/search.js'
 import { runMigrations } from '../database/migrate.js'
 
 import os from 'os';
@@ -107,6 +109,8 @@ app.use('/api/crew', crewRoutes)
 app.use('/api/payments', paymentsRoutes)
 app.use('/api/reports', reportsRoutes)
 app.use('/api/uploads', uploadsRoutes)
+app.use('/api/notifications', notificationsRoutes)
+app.use('/api/search', searchRoutes)
 
 app.get('/', (req, res) => {
   res.json({ success: true, message: 'FND Production Backend is running' })

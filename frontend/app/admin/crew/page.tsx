@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { fetchAPI } from "@/lib/api"
+import { fetchAPI, getAssetUrl } from "@/lib/api"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -13,6 +13,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
 import {
   Select,
@@ -47,6 +58,10 @@ export default function CrewPage() {
   const [editingItem, setEditingItem] = useState<Profile | null>(null)
   const [addError, setAddError] = useState("")
   const [addLoading, setAddLoading] = useState(false)
+
+  // State for delete confirmation modal
+  const [crewToDelete, setCrewToDelete] = useState<Profile | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const [formData, setFormData] = useState({
     full_name: "",
@@ -155,28 +170,26 @@ export default function CrewPage() {
     }
   }
 
-  async function handleDeleteCrew(id: string) {
-    toast("Apakah Anda yakin ingin menghapus crew ini?", {
-      action: {
-        label: "Hapus",
-        onClick: async () => {
-          const toastId = toast.loading("Menghapus data crew...")
-          try {
-            const res = await fetchAPI(`/crew/${id}`, { method: 'DELETE' })
-            if (res.success) {
-              toast.success("Crew berhasil dihapus!", { id: toastId })
-              fetchCrew()
-            }
-          } catch (error: any) {
-            toast.error(error.message || "Gagal menghapus crew", { id: toastId })
-          }
-        }
-      },
-      cancel: {
-        label: "Batal",
-        onClick: () => {}
+  function confirmDelete(member: Profile) {
+    setCrewToDelete(member)
+  }
+
+  async function handleDeleteCrew() {
+    if (!crewToDelete) return
+    setIsDeleting(true)
+    const toastId = toast.loading(`Menghapus crew ${crewToDelete.full_name}...`)
+    try {
+      const res = await fetchAPI(`/crew/${crewToDelete.id}`, { method: 'DELETE' })
+      if (res.success) {
+        toast.success(`Crew ${crewToDelete.full_name} berhasil dihapus!`, { id: toastId })
+        fetchCrew()
       }
-    })
+    } catch (error: any) {
+      toast.error(error.message || "Gagal menghapus crew", { id: toastId })
+    } finally {
+      setIsDeleting(false)
+      setCrewToDelete(null)
+    }
   }
 
   async function updateAvailability(id: string, availability: CrewAvailability) {
@@ -537,9 +550,12 @@ export default function CrewPage() {
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
-                          <User className="h-6 w-6 text-muted-foreground" />
-                        </div>
+                        <Avatar className="h-12 w-12 border shadow-sm">
+                          <AvatarImage src={getAssetUrl(member.avatar_url)} />
+                          <AvatarFallback className="bg-primary/10 text-primary font-medium">
+                            {member.full_name?.charAt(0)?.toUpperCase() || "C"}
+                          </AvatarFallback>
+                        </Avatar>
                         <div>
                           <h3 className="font-medium">{member.full_name}</h3>
                           <p className="text-sm text-muted-foreground">{member.position}</p>
@@ -558,7 +574,7 @@ export default function CrewPage() {
                           variant="ghost"
                           size="icon"
                           className="h-8 w-8 text-destructive hover:text-destructive"
-                          onClick={() => handleDeleteCrew(member.id)}
+                          onClick={() => confirmDelete(member)}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -585,6 +601,31 @@ export default function CrewPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Premium Delete Confirmation Modal */}
+      <AlertDialog open={!!crewToDelete} onOpenChange={(open) => !open && setCrewToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hapus Crew?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tindakan ini tidak dapat dibatalkan. Anggota crew <b>{crewToDelete?.full_name}</b> akan dihapus secara permanen dari sistem.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Batal</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={(e) => {
+                e.preventDefault();
+                handleDeleteCrew();
+              }}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Menghapus..." : "Ya, Hapus Permanen"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

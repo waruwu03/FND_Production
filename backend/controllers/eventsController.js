@@ -260,16 +260,34 @@ export async function deleteEvent(req, res) {
       if (event.status !== 'pending' && event.status !== 'survey') {
         return res.status(400).json({ success: false, error: 'Booking yang sudah diproses tidak dapat dibatalkan, silakan hubungi admin.' })
       }
+      
+      // Client hanya bisa membatalkan (soft delete / status cancel)
+      await pool.query('UPDATE events SET status = ? WHERE id = ?', ['cancel', eventId])
+      if (!['cancel', 'selesai'].includes(rows[0].status)) {
+        await returnEquipmentAndCrew(eventId)
+      }
+      return res.json({ success: true, message: 'Event cancelled' })
     }
 
-    await pool.query('UPDATE events SET status = ? WHERE id = ?', ['cancel', eventId])
-    if (!['cancel', 'selesai'].includes(rows[0].status)) {
+    // Jika ADMIN, lakukan HARD DELETE (hapus permanen dari database)
+    // 1. Kembalikan stok equipment & crew jika belum selesai/cancel
+    if (!['cancel', 'selesai'].includes(event.status)) {
       await returnEquipmentAndCrew(eventId)
     }
-    res.json({ success: true, message: 'Event cancelled' })
+    
+    // 2. Hapus data terkait terlebih dahulu (mencegah foreign key error)
+    await pool.query('DELETE FROM event_equipment WHERE event_id = ?', [eventId]);
+    await pool.query('DELETE FROM event_crew WHERE event_id = ?', [eventId]);
+    await pool.query('DELETE FROM payments WHERE event_id = ?', [eventId]);
+    await pool.query('DELETE FROM event_checkins WHERE event_id = ?', [eventId]);
+    
+    // 3. Hapus event utama
+    await pool.query('DELETE FROM events WHERE id = ?', [eventId]);
+    
+    res.json({ success: true, message: 'Event berhasil dihapus secara permanen' })
   } catch (error) {
     console.error('deleteEvent error:', error)
-    res.status(500).json({ success: false, error: 'Gagal membatalkan event' })
+    res.status(500).json({ success: false, error: 'Gagal membatalkan/menghapus event' })
   }
 }
 

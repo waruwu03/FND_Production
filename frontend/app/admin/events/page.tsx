@@ -28,6 +28,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import Link from "next/link"
 import type { Event, EventStatus } from "@/lib/types"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -67,6 +77,10 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
+  
+  // State for delete confirmation modal
+  const [eventToDelete, setEventToDelete] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     fetchEvents()
@@ -97,28 +111,28 @@ export default function EventsPage() {
     }
   }
 
-  async function handleDelete(id: string) {
-    toast("Apakah Anda yakin ingin membatalkan event ini?", {
-      action: {
-        label: "Batalkan Event",
-        onClick: async () => {
-          const toastId = toast.loading("Membatalkan event...")
-          try {
-            const res = await fetchAPI(`/events/${id}`, { method: "DELETE" })
-            if (res.success) {
-              toast.success("Event berhasil dibatalkan!", { id: toastId })
-              fetchEvents()
-            }
-          } catch (error: any) {
-            toast.error(error.message || "Gagal membatalkan event", { id: toastId })
-          }
-        }
-      },
-      cancel: {
-        label: "Batal",
-        onClick: () => {}
+  function confirmDelete(id: string) {
+    setEventToDelete(id)
+  }
+
+  async function handleDelete() {
+    if (!eventToDelete) return
+    setIsDeleting(true)
+    const toastId = toast.loading("Menghapus event...")
+    try {
+      const res = await fetchAPI(`/events/${eventToDelete}`, { method: "DELETE" })
+      if (res.success) {
+        toast.success("Event berhasil dihapus secara permanen!", { id: toastId })
+        fetchEvents()
+      } else {
+        toast.error(res.error || "Gagal menghapus event", { id: toastId })
       }
-    })
+    } catch (error: any) {
+      toast.error(error.message || "Terjadi kesalahan", { id: toastId })
+    } finally {
+      setIsDeleting(false)
+      setEventToDelete(null)
+    }
   }
 
   const filteredEvents = events.filter(
@@ -274,7 +288,7 @@ export default function EventsPage() {
                                 Edit
                               </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(event.id)}>
+                            <DropdownMenuItem className="text-destructive cursor-pointer" onClick={() => confirmDelete(event.id)}>
                               <Trash2 className="mr-2 h-4 w-4" />
                               Hapus
                             </DropdownMenuItem>
@@ -289,6 +303,31 @@ export default function EventsPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Premium Delete Confirmation Modal */}
+      <AlertDialog open={!!eventToDelete} onOpenChange={(open) => !open && setEventToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tindakan ini tidak dapat dibatalkan. Event yang dipilih akan dihapus secara permanen dari sistem beserta seluruh data terkait (jadwal crew, equipment, pembayaran, dll).
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Batal</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Menghapus..." : "Ya, Hapus Permanen"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

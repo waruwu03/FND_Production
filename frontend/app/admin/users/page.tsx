@@ -12,6 +12,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -66,6 +76,10 @@ export default function UsersPage() {
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null)
   const [saving, setSaving] = useState(false)
   const [formData, setFormData] = useState(emptyForm)
+
+  // State for delete confirmation modal
+  const [userToDelete, setUserToDelete] = useState<AdminUser | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     loadUsers()
@@ -154,27 +168,25 @@ export default function UsersPage() {
     }
   }
 
-  async function handleDelete(user: AdminUser) {
-    const name = user.name || user.full_name || user.email
-    toast(`Apakah Anda yakin ingin menghapus user ${name}?`, {
-      action: {
-        label: "Hapus",
-        onClick: async () => {
-          const toastId = toast.loading("Menghapus user...")
-          try {
-            await fetchAPI(`/auth/users/${user.id}`, { method: "DELETE" })
-            toast.success("User berhasil dihapus!", { id: toastId })
-            loadUsers()
-          } catch (err: any) {
-            toast.error(err.message || "Gagal menghapus user", { id: toastId })
-          }
-        }
-      },
-      cancel: {
-        label: "Batal",
-        onClick: () => {}
-      }
-    })
+  function confirmDelete(user: AdminUser) {
+    setUserToDelete(user)
+  }
+
+  async function handleDelete() {
+    if (!userToDelete) return
+    setIsDeleting(true)
+    const name = userToDelete.name || userToDelete.full_name || userToDelete.email
+    const toastId = toast.loading(`Menghapus user ${name}...`)
+    try {
+      await fetchAPI(`/auth/users/${userToDelete.id}`, { method: "DELETE" })
+      toast.success(`User ${name} berhasil dihapus!`, { id: toastId })
+      loadUsers()
+    } catch (err: any) {
+      toast.error(err.message || "Gagal menghapus user", { id: toastId })
+    } finally {
+      setIsDeleting(false)
+      setUserToDelete(null)
+    }
   }
 
   return (
@@ -278,7 +290,7 @@ export default function UsersPage() {
                               <Button variant="ghost" size="icon" onClick={() => openEditDialog(user)}>
                                 <Edit className="h-4 w-4" />
                               </Button>
-                              <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDelete(user)}>
+                              <Button variant="ghost" size="icon" className="text-destructive" onClick={() => confirmDelete(user)}>
                                 <Trash2 className="h-4 w-4" />
                               </Button>
                             </div>
@@ -343,6 +355,31 @@ export default function UsersPage() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Premium Delete Confirmation Modal */}
+      <AlertDialog open={!!userToDelete} onOpenChange={(open) => !open && setUserToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hapus User?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tindakan ini tidak dapat dibatalkan. Akun <b>{userToDelete?.name || userToDelete?.full_name || userToDelete?.email}</b> akan dihapus secara permanen dari sistem.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Batal</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Menghapus..." : "Ya, Hapus Permanen"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

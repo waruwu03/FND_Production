@@ -122,3 +122,14 @@ CREATE TABLE IF NOT EXISTS event_checkins (
   UNIQUE KEY uniq_event_checkin_crew (event_id, crew_user_id),
   INDEX idx_event_checkins_event (event_id)
 );
+
+CREATE TABLE IF NOT EXISTS notifications (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  message TEXT NOT NULL,
+  type VARCHAR(50) DEFAULT 'info',
+  is_read BOOLEAN DEFAULT FALSE,
+  link VARCHAR(255) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
