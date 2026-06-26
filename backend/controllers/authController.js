@@ -181,12 +181,13 @@ export async function updateProfile(req, res) {
 
   try {
     await pool.query(
-      'UPDATE users SET name = COALESCE(NULLIF(?, ""), name), phone = ? WHERE id = ?',
+      'UPDATE users SET name = COALESCE(NULLIF(?, \'\'), name), phone = ? WHERE id = ?',
       [name ?? '', phone ?? null, req.user.id],
     )
     const user = await findUserById(req.user.id)
     res.json({ success: true, data: publicUser(user) })
   } catch (error) {
+    console.error('updateProfile error:', error)
     res.status(500).json({ success: false, error: 'Failed to update profile' })
   }
 }

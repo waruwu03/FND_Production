@@ -7,7 +7,8 @@
     "dev": "nodemon app.js",
     "start": "node app.js",
     "migrate": "node ../database/migrate.js",
-    "seed": "node ../database/seed.js"
+    "seed": "node ../database/seed.js",
+    "build": "echo \"No build step required\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
