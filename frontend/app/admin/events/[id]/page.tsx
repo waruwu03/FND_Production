@@ -72,6 +72,15 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
   const [assignFormData, setAssignFormData] = useState({ crewId: "", task: "" })
   const [assignLoading, setAssignLoading] = useState(false)
 
+  // Payment State
+  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false)
+  const [paymentFormData, setPaymentFormData] = useState({
+    amount: "",
+    paymentType: "dp",
+    status: "belum_lunas",
+  })
+  const [paymentLoading, setPaymentLoading] = useState(false)
+
   useEffect(() => {
     fetchEventDetails()
     fetchAllCrew()
@@ -139,6 +148,37 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
     } catch (error: any) {
       console.error("Error unassigning crew:", error)
       toast.error(error.message || "Gagal melepas tugas crew", { id: toastId })
+    }
+  }
+
+  async function handleCreatePayment(e: React.FormEvent) {
+    e.preventDefault()
+    setPaymentLoading(true)
+    const toastId = toast.loading("Membuat tagihan pembayaran...")
+    try {
+      const res = await fetchAPI('/payments', {
+        method: 'POST',
+        body: JSON.stringify({
+          eventId: Number(id),
+          amount: Number(paymentFormData.amount),
+          paymentType: paymentFormData.paymentType,
+          status: paymentFormData.status === "lunas" ? "paid" : "unpaid"
+        })
+      })
+
+      if (res.success) {
+        toast.success("Tagihan berhasil dibuat!", { id: toastId })
+        setIsPaymentDialogOpen(false)
+        setPaymentFormData({ amount: "", paymentType: "dp", status: "belum_lunas" })
+        fetchEventDetails()
+      } else {
+        toast.error(res.error || "Gagal membuat tagihan", { id: toastId })
+      }
+    } catch (error: any) {
+      console.error("Error creating payment:", error)
+      toast.error(error.message || "Gagal membuat tagihan", { id: toastId })
+    } finally {
+      setPaymentLoading(false)
     }
   }
 
@@ -613,11 +653,77 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                 <CreditCard className="h-5 w-5 text-primary" />
                 Payment
               </CardTitle>
-              <div className="text-right">
-                <p className="text-sm text-muted-foreground">Total</p>
-                <p className="text-xl font-bold text-primary">
-                  {formatCurrency(Number(event.total_price) || 0)}
-                </p>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <p className="text-sm text-muted-foreground">Total Keseluruhan</p>
+                  <p className="text-xl font-bold text-primary">
+                    {formatCurrency(Number(event.total_price) || 0)}
+                  </p>
+                </div>
+                <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button size="sm" className="bg-primary hover:bg-primary/90">
+                      + Buat Tagihan
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Buat Tagihan Pembayaran Baru</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleCreatePayment} className="space-y-4 pt-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="payment-type">Jenis Tagihan *</Label>
+                        <Select
+                          value={paymentFormData.paymentType}
+                          onValueChange={(value) => setPaymentFormData({ ...paymentFormData, paymentType: value })}
+                        >
+                          <SelectTrigger id="payment-type">
+                            <SelectValue placeholder="Pilih jenis..." />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="dp">Uang Muka (DP)</SelectItem>
+                            <SelectItem value="pelunasan">Pelunasan / Penuh</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="payment-amount">Nominal (Rp) *</Label>
+                        <Input
+                          id="payment-amount"
+                          type="number"
+                          placeholder="Contoh: 5000000"
+                          value={paymentFormData.amount}
+                          onChange={(e) => setPaymentFormData({ ...paymentFormData, amount: e.target.value })}
+                          required
+                          min={0}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="payment-status">Status Pembayaran</Label>
+                        <Select
+                          value={paymentFormData.status}
+                          onValueChange={(value) => setPaymentFormData({ ...paymentFormData, status: value })}
+                        >
+                          <SelectTrigger id="payment-status">
+                            <SelectValue placeholder="Pilih status..." />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="belum_lunas">Belum Dibayar</SelectItem>
+                            <SelectItem value="lunas">Sudah Lunas</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex justify-end gap-2 pt-2">
+                        <Button type="button" variant="outline" onClick={() => setIsPaymentDialogOpen(false)}>
+                          Batal
+                        </Button>
+                        <Button type="submit" className="bg-primary" disabled={paymentLoading}>
+                          {paymentLoading ? "Memproses..." : "Buat Tagihan"}
+                        </Button>
+                      </div>
+                    </form>
+                  </DialogContent>
+                </Dialog>
               </div>
             </CardHeader>
             <CardContent>
