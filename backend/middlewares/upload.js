@@ -1,16 +1,20 @@
 import multer from 'multer'
 import path from 'path'
-import fs from 'fs'
+import multerS3 from 'multer-s3'
+import { S3Client } from '@aws-sdk/client-s3'
+import dotenv from 'dotenv'
 
-const rootUploadDir = path.resolve('uploads')
+dotenv.config() // Ensure env variables are loaded
 
-function ensureDir(dir) {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true })
+// S3 Client configuration for Cloudflare R2
+const s3 = new S3Client({
+  region: 'auto',
+  endpoint: process.env.R2_ENDPOINT,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
   }
-}
-
-ensureDir(rootUploadDir)
+})
 
 const fileFilter = (req, file, cb) => {
   const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -22,19 +26,17 @@ const fileFilter = (req, file, cb) => {
 }
 
 function createImageUpload(subdir, maxFileSizeMb = 5) {
-  const uploadDir = path.join(rootUploadDir, subdir)
-  ensureDir(uploadDir)
-
-  const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, uploadDir)
-    },
-    filename: (req, file, cb) => {
+  const storage = multerS3({
+    s3: s3,
+    bucket: process.env.R2_BUCKET_NAME,
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    key: function (req, file, cb) {
       const safeExt = path.extname(file.originalname).toLowerCase() || '.jpg'
       const userPart = req.user?.id ? `u${req.user.id}-` : ''
       const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`
-      cb(null, `${file.fieldname}-${userPart}${uniqueSuffix}${safeExt}`)
-    },
+      const fileName = `${subdir}/${file.fieldname}-${userPart}${uniqueSuffix}${safeExt}`
+      cb(null, fileName)
+    }
   })
 
   return multer({
@@ -48,8 +50,12 @@ function createImageUpload(subdir, maxFileSizeMb = 5) {
 }
 
 export function toPublicUploadUrl(file) {
-  const relativePath = path.relative(rootUploadDir, file.path).split(path.sep).join('/')
-  return `/uploads/${relativePath}`
+  // multer-s3 menempatkan path file di dalam properti 'key'
+  if (file.key) {
+    return `${process.env.R2_PUBLIC_URL}/${file.key}`
+  }
+  // Fallback
+  return file.location || ''
 }
 
 export const avatarUpload = createImageUpload('avatars', 5)

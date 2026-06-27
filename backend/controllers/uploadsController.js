@@ -8,7 +8,7 @@ export async function uploadImages(req, res) {
 
   const data = files.map((file) => ({
     url: toPublicUploadUrl(file),
-    filename: file.filename,
+    filename: file.key || file.filename || file.originalname,
     mimeType: file.mimetype,
     size: file.size,
   }))
