@@ -64,6 +64,18 @@ export const DetailTugasScreen = ({ route, navigation }: any) => {
     Linking.openURL(`tel:${clientPhone}`).catch(() => Alert.alert('Gagal', 'Tidak dapat membuka telepon.'));
   };
 
+  const updateEventStatus = async (newStatus: string) => {
+    try {
+      const res = await api.put(`/events/${eventId}/status`, { status: newStatus });
+      if (res.data?.success) {
+        Alert.alert('Sukses', 'Status tugas berhasil diperbarui.');
+        setEvent((prev: any) => ({ ...prev, status: newStatus }));
+      }
+    } catch (err: any) {
+      Alert.alert('Gagal', err.response?.data?.error || 'Gagal mengubah status');
+    }
+  };
+
   return (
     <View className="flex-1 bg-primary">
       {/* Hero Cover Image Header */}
@@ -228,12 +240,35 @@ export const DetailTugasScreen = ({ route, navigation }: any) => {
         </ScrollView>
 
         {/* Sticky Update Progress CTA */}
-        <View className="absolute bottom-0 left-0 right-0 border-t border-slate-100 bg-white px-5 pb-7 pt-4">
+        <View className="absolute bottom-0 left-0 right-0 border-t border-slate-100 bg-white px-5 pb-7 pt-4 flex-row justify-between gap-3">
           <TouchableOpacity 
-            className="items-center rounded-xl bg-crewAccent py-3.5 shadow-md shadow-crewAccent/25" 
+            className="flex-1 items-center rounded-xl bg-slate-100 py-3.5" 
             onPress={openDocumentation}
           >
-            <Text className="text-xs font-bold text-white">Update Progress</Text>
+            <Text className="text-xs font-bold text-slate-600">Dokumentasi</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            className="flex-1 items-center rounded-xl bg-crewAccent py-3.5 shadow-md shadow-crewAccent/25" 
+            onPress={() => {
+              if (data.status === 'selesai') {
+                 Alert.alert('Info', 'Tugas ini sudah selesai.');
+                 return;
+              }
+              const nextStatus = data.status === 'running' ? 'selesai' : 'running';
+              const nextLabel = data.status === 'running' ? 'Selesaikan Tugas' : 'Mulai Event';
+              Alert.alert(
+                'Update Status', 
+                `Ubah status tugas menjadi "${nextLabel}"?`,
+                [
+                  { text: 'Batal', style: 'cancel' },
+                  { text: 'Ya, Ubah', onPress: () => updateEventStatus(nextStatus) }
+                ]
+              );
+            }}
+          >
+            <Text className="text-xs font-bold text-white">
+               {data.status === 'selesai' ? 'Tugas Selesai' : (data.status === 'running' ? 'Selesaikan Tugas' : 'Mulai Event')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

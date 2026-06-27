@@ -53,6 +53,7 @@ export const EditProfileScreen = ({ navigation }: any) => {
           rules={{ required: 'Nama lengkap wajib diisi' }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              variant="light"
               label="Nama Lengkap"
               placeholder="Masukkan nama lengkap Anda"
               onBlur={onBlur}
@@ -70,6 +71,7 @@ export const EditProfileScreen = ({ navigation }: any) => {
           rules={{ required: 'Nomor HP wajib diisi' }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              variant="light"
               label="Nomor HP"
               placeholder="Masukkan nomor handphone"
               onBlur={onBlur}
@@ -85,6 +87,7 @@ export const EditProfileScreen = ({ navigation }: any) => {
 
         <View className="mb-4">
           <Input
+            variant="light"
             label="Email"
             value={user?.email}
             editable={false}

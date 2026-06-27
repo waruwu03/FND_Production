@@ -91,6 +91,7 @@ export const RekeningScreen = ({ navigation }: any) => {
           </View>
 
           <Input
+            variant="light"
             label="Nomor Rekening"
             placeholder="Masukkan nomor rekening"
             value={accountNumber}
@@ -100,6 +101,7 @@ export const RekeningScreen = ({ navigation }: any) => {
           />
 
           <Input
+            variant="light"
             label="Nama Pemilik Rekening"
             placeholder="Nama sesuai buku tabungan"
             value={accountHolder}

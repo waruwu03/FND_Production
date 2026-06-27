@@ -103,24 +103,28 @@ export const LayananScreen = ({ navigation }: any) => {
             {filtered.length === 0 ? (
               <EmptyState icon="construct-outline" title="Layanan tidak ditemukan" />
             ) : (
-              filtered.map((service) => (
-                <TouchableOpacity
-                  key={service.id}
-                  className="mb-4 flex-row rounded-[24px] border border-slate-100 bg-white p-3"
-                  style={{ elevation: 2, shadowColor: '#0F172A', shadowOpacity: 0.04, shadowRadius: 8, shadowOffset: { width: 0, height: 4 } }}
-                  onPress={() => selectService(service)}
-                >
-                  <Image source={{ uri: getAssetUrl(service.image) || service.image }} className="mr-4 h-24 w-24 rounded-2xl" resizeMode="cover" />
-                  <View className="flex-1 justify-center py-1">
-                    <Text className="text-base font-black text-primary" numberOfLines={1}>{service.name}</Text>
-                    <Text className="mt-1 text-xs leading-4 text-slate-500" numberOfLines={2}>{service.description}</Text>
-                    <View className="mt-auto pt-2">
-                      <Text className="text-[10px] font-bold text-slate-400">Mulai dari</Text>
-                      <Text className="text-sm font-black text-accent">{formatCurrency(service.price)}</Text>
+              <View className="flex-row flex-wrap justify-between">
+                {filtered.map((service) => (
+                  <TouchableOpacity
+                    key={service.id}
+                    className="mb-4 w-[48%] bg-white border-[1.5px] border-slate-300"
+                    onPress={() => selectService(service)}
+                  >
+                    <View className="bg-white p-2">
+                      <Image 
+                        source={{ uri: getAssetUrl(service.image) || service.image }} 
+                        className="w-full aspect-square bg-white" 
+                        resizeMode="contain" 
+                      />
                     </View>
-                  </View>
-                </TouchableOpacity>
-              ))
+                    <View className="p-3 items-center justify-center border-t-[1.5px] border-slate-100 min-h-[50px]">
+                      <Text className="text-[11px] font-black text-primary text-center uppercase" numberOfLines={2}>
+                        {service.name}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
             )}
           </ScrollView>
         </View>

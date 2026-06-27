@@ -290,7 +290,7 @@ export const CheckInScreen = ({ navigation }: any) => {
 
       {/* Floating Header Actions */}
       <TouchableOpacity
-        onPress={() => navigation.getParent()?.navigate('Beranda')}
+        onPress={() => navigation.navigate('Beranda')}
         style={[styles.backButton, { top: insets.top + 12 }]}
       >
         <Ionicons name="chevron-back" size={24} color="#0F172A" />

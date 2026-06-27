@@ -6,9 +6,10 @@ interface InputProps extends TextInputProps {
   label?: string;
   error?: string;
   icon?: string;
+  variant?: 'light' | 'dark';
 }
 
-export const Input = ({ label, error, className, secureTextEntry, icon, ...props }: InputProps) => {
+export const Input = ({ label, error, className, secureTextEntry, icon, variant = 'dark', ...props }: InputProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
@@ -19,7 +20,7 @@ export const Input = ({ label, error, className, secureTextEntry, icon, ...props
       {label && (
         <Text
           style={{
-            color: '#CBD5E1',
+            color: variant === 'light' ? '#64748B' : '#CBD5E1',
             fontWeight: '600',
             fontSize: 13,
             marginBottom: 8,
@@ -33,9 +34,9 @@ export const Input = ({ label, error, className, secureTextEntry, icon, ...props
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          backgroundColor: 'rgba(255,255,255,0.06)',
+          backgroundColor: variant === 'light' ? '#F8FAFC' : 'rgba(255,255,255,0.06)',
           borderWidth: 1,
-          borderColor: error ? '#EF4444' : isFocused ? '#3B82F6' : 'rgba(255,255,255,0.1)',
+          borderColor: error ? '#EF4444' : isFocused ? '#3B82F6' : variant === 'light' ? '#E2E8F0' : 'rgba(255,255,255,0.1)',
           borderRadius: 14,
           paddingHorizontal: 16,
           minHeight: 52,
@@ -45,7 +46,7 @@ export const Input = ({ label, error, className, secureTextEntry, icon, ...props
           <Ionicons
             name={icon as any}
             size={20}
-            color={error ? '#EF4444' : isFocused ? '#3B82F6' : '#64748B'}
+            color={error ? '#EF4444' : isFocused ? '#3B82F6' : variant === 'light' ? '#94A3B8' : '#64748B'}
             style={{ marginRight: 10 }}
           />
         )}
@@ -54,9 +55,9 @@ export const Input = ({ label, error, className, secureTextEntry, icon, ...props
             flex: 1,
             paddingVertical: 14,
             fontSize: 15,
-            color: '#F1F5F9',
+            color: variant === 'light' ? '#0F172A' : '#F1F5F9',
           }}
-          placeholderTextColor="#475569"
+          placeholderTextColor={variant === 'light' ? '#94A3B8' : '#475569'}
           secureTextEntry={isPasswordField ? !isPasswordVisible : false}
           onFocus={() => setIsFocused(true)}
           onBlur={(e) => {

@@ -126,6 +126,7 @@ export const DataPribadiScreen = ({ navigation }: any) => {
         {/* Form */}
         <View className="mt-6">
           <Input
+            variant="light"
             label="Nama Lengkap"
             placeholder="Masukkan nama lengkap"
             value={name}
@@ -143,6 +144,7 @@ export const DataPribadiScreen = ({ navigation }: any) => {
           </View>
 
           <Input
+            variant="light"
             label="Nomor Telepon"
             placeholder="Masukkan nomor telepon"
             value={phone}

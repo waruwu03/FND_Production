@@ -30,6 +30,6 @@ router.post('/:id/documentation', authorize('admin','crew'), imageUpload.array('
 router.post('/', authorize('admin','client'), validate(eventSchema), createEvent)
 router.put('/:id', authorize('admin','client'), validate(updateEventSchema), updateEvent)
 router.delete('/:id', authorize('admin','client'), deleteEvent)
-router.put('/:id/status', authorize('admin'), validate(statusSchema), updateStatus)
+router.put('/:id/status', authorize('admin', 'crew'), validate(statusSchema), updateStatus)
 
 export default router
