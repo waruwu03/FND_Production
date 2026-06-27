@@ -81,6 +81,20 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
   })
   const [paymentLoading, setPaymentLoading] = useState(false)
 
+  // Auto-calculate remaining balance
+  useEffect(() => {
+    if (isPaymentDialogOpen && event && paymentFormData.paymentType === "pelunasan") {
+      const total = Number(event.total_price) || 0;
+      const alreadyPaid = payments.reduce((sum, p) => sum + Number(p.amount), 0);
+      const remaining = total - alreadyPaid;
+      if (remaining > 0) {
+        setPaymentFormData(prev => ({ ...prev, amount: remaining.toString() }));
+      }
+    } else if (isPaymentDialogOpen && paymentFormData.paymentType === "dp" && !paymentFormData.amount) {
+      setPaymentFormData(prev => ({ ...prev, amount: "" }));
+    }
+  }, [paymentFormData.paymentType, isPaymentDialogOpen, event, payments]);
+
   useEffect(() => {
     fetchEventDetails()
     fetchAllCrew()
