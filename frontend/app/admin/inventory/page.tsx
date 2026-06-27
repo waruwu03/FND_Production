@@ -14,6 +14,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Label } from "@/components/ui/label"
 import {
   Select,
@@ -44,6 +54,10 @@ export default function InventoryPage() {
     available_quantity: "",
   })
   const [imageFile, setImageFile] = useState<File | null>(null)
+  
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [equipmentToDelete, setEquipmentToDelete] = useState<Equipment | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     fetchEquipment()
@@ -139,28 +153,28 @@ export default function InventoryPage() {
     }
   }
 
-  async function handleDelete(id: string) {
-    toast("Apakah Anda yakin ingin menghapus peralatan ini?", {
-      action: {
-        label: "Hapus",
-        onClick: async () => {
-          const toastId = toast.loading("Menghapus peralatan...")
-          try {
-            const res = await fetchAPI(`/equipment/${id}`, { method: 'DELETE' })
-            if (res.success) {
-              toast.success("Peralatan berhasil dihapus!", { id: toastId })
-              fetchEquipment()
-            }
-          } catch (error: any) {
-            toast.error(error.message || "Gagal menghapus peralatan", { id: toastId })
-          }
-        }
-      },
-      cancel: {
-        label: "Batal",
-        onClick: () => {}
+  function confirmDelete(item: Equipment) {
+    setEquipmentToDelete(item)
+    setDeleteDialogOpen(true)
+  }
+
+  async function handleDelete() {
+    if (!equipmentToDelete) return
+    setIsDeleting(true)
+    const toastId = toast.loading("Menghapus peralatan...")
+    try {
+      const res = await fetchAPI(`/equipment/${equipmentToDelete.id}`, { method: 'DELETE' })
+      if (res.success) {
+        toast.success("Peralatan berhasil dihapus!", { id: toastId })
+        fetchEquipment()
       }
-    })
+    } catch (error: any) {
+      toast.error(error.message || "Gagal menghapus peralatan", { id: toastId })
+    } finally {
+      setIsDeleting(false)
+      setDeleteDialogOpen(false)
+      setEquipmentToDelete(null)
+    }
   }
 
   function openEditDialog(item: Equipment) {
@@ -376,7 +390,7 @@ export default function InventoryPage() {
                           variant="ghost"
                           size="icon"
                           className="h-8 w-8 text-destructive"
-                          onClick={() => handleDelete(item.id)}
+                          onClick={() => confirmDelete(item)}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -401,6 +415,32 @@ export default function InventoryPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hapus Peralatan</AlertDialogTitle>
+            <AlertDialogDescription>
+              Apakah Anda yakin ingin menghapus <strong>{equipmentToDelete?.name}</strong> secara permanen dari sistem inventaris? 
+              Tindakan ini tidak dapat dibatalkan.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                e.preventDefault()
+                handleDelete()
+              }}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Menghapus..." : "Ya, Hapus Permanen"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
