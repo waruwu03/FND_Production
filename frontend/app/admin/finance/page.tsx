@@ -294,11 +294,11 @@ export default function FinancePage() {
                       <TableCell>{payment.event?.client?.full_name || "-"}</TableCell>
                       <TableCell>
                         {payment.payment_type === "dp"
-                          ? `DP (${payment.percentage}%)`
+                          ? `DP`
                           : "Pelunasan"}
                       </TableCell>
                       <TableCell>
-                        {payment.payment_date ? formatDate(payment.payment_date) : "-"}
+                        {(payment as any).created_at ? formatDate((payment as any).created_at) : "-"}
                       </TableCell>
                       <TableCell>
                         <Badge
@@ -352,7 +352,7 @@ export default function FinancePage() {
                   <span className="text-muted-foreground">Tipe</span>
                   <span className="font-medium">
                     {selectedPayment.payment_type === "dp"
-                      ? `DP (${selectedPayment.percentage}%)`
+                      ? `DP`
                       : "Pelunasan"}
                   </span>
                 </div>
