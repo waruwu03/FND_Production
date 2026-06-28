@@ -16,7 +16,7 @@ async function createDatabasePool() {
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'event_lighting',
-    ssl: process.env.DB_HOST && process.env.DB_HOST.includes('aivencloud.com') ? { rejectUnauthorized: false } : undefined,
+    ssl: process.env.DB_HOST && (process.env.DB_HOST.includes('aivencloud.com') || process.env.DB_HOST.includes('tidbcloud.com')) ? { rejectUnauthorized: true } : undefined,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
