@@ -11,11 +11,8 @@ const getBaseUrl = () => {
     return process.env.EXPO_PUBLIC_API_URL;
   }
 
-  if (Platform.OS === 'web' || Platform.OS === 'ios') {
-    return 'http://localhost:4000/api';
-  }
-
-  return 'http://10.0.2.2:4000/api';
+  // Default: URL backend production di Render
+  return 'https://fnd-production-backend.onrender.com/api';
 };
 
 const BASE_URL = getBaseUrl();
@@ -55,7 +52,7 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 20000,
+  timeout: 120000, // 2 menit — Render Free Tier butuh ~60-90 detik untuk bangun dari sleep
 });
 
 let refreshPromise: Promise<string | null> | null = null;
@@ -66,7 +63,7 @@ async function refreshAccessToken() {
 
   const response = await axios.post(`${BASE_URL}/auth/refresh`, { refreshToken }, {
     headers: { 'Content-Type': 'application/json' },
-    timeout: 20000,
+    timeout: 120000,
   });
 
   const payload = response.data?.data || response.data;
