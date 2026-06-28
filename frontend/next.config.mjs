@@ -9,6 +9,16 @@ const nextConfig = {
   turbopack: {
     root: workspaceRoot,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'pub-055e43670ea7462fb9dfe8e3cb7f222a.r2.dev',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
   async rewrites() {
     if (process.env.NEXT_PUBLIC_API_URL) {
       return []
