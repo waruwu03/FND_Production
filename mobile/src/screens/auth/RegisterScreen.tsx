@@ -103,7 +103,7 @@ export const RegisterScreen = ({ navigation }: any) => {
                 Buat Akun Baru
               </Text>
               <Text style={{ color: '#94A3B8', fontSize: 14, textAlign: 'center', lineHeight: 22 }}>
-                Daftar sebagai Crew FND Production
+                Daftar sebagai Client FND Production
               </Text>
             </View>
 

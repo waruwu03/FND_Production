@@ -11,9 +11,9 @@ import { initials } from '../../utils/fnd';
 
 const MENU = [
   { label: 'Data Pribadi', icon: 'person-outline', screen: 'EditProfile' },
-  { label: 'Ubah Password', icon: 'lock-closed-outline', screen: null },
-  { label: 'Pengaturan', icon: 'settings-outline', screen: null },
-  { label: 'Bantuan', icon: 'help-circle-outline', screen: null },
+  { label: 'Ubah Password', icon: 'lock-closed-outline', screen: 'ChangePassword' },
+  { label: 'Pengaturan', icon: 'settings-outline', screen: 'Settings' },
+  { label: 'Bantuan', icon: 'help-circle-outline', screen: 'Help' },
 ];
 
 export const ProfileClientScreen = ({ navigation }: any) => {

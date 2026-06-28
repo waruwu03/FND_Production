@@ -179,16 +179,46 @@ export async function updateProfile(req, res) {
   const name = typeof req.body.name === 'string' ? req.body.name.trim() : undefined
   const phone = typeof req.body.phone === 'string' ? req.body.phone.trim() : undefined
 
+  const connection = await pool.getConnection()
   try {
-    await pool.query(
+    await connection.beginTransaction()
+
+    const [userRows] = await connection.query('SELECT role FROM users WHERE id = ?', [req.user.id])
+    const userRole = userRows[0]?.role
+
+    await connection.query(
       'UPDATE users SET name = COALESCE(NULLIF(?, \'\'), name), phone = ? WHERE id = ?',
       [name ?? '', phone ?? null, req.user.id],
     )
+    
+    // Update crew table if user is a crew
+    if (userRole === 'crew' && (name !== undefined || phone !== undefined)) {
+      const crewUpdates = []
+      const crewParams = []
+      if (name !== undefined) {
+        crewUpdates.push('name = ?')
+        crewParams.push(name)
+      }
+      if (phone !== undefined) {
+        crewUpdates.push('phone = ?')
+        crewParams.push(phone || null)
+      }
+      
+      if (crewUpdates.length > 0) {
+        crewParams.push(req.user.id)
+        await connection.query(`UPDATE crew SET ${crewUpdates.join(', ')} WHERE user_id = ?`, crewParams)
+      }
+    }
+
+    await connection.commit()
     const user = await findUserById(req.user.id)
     res.json({ success: true, data: publicUser(user) })
   } catch (error) {
+    await connection.rollback()
     console.error('updateProfile error:', error)
     res.status(500).json({ success: false, error: 'Failed to update profile' })
+  } finally {
+    connection.release()
   }
 }
 

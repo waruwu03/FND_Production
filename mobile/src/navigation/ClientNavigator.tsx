@@ -12,6 +12,9 @@ import { ProfileClientScreen } from '../screens/client/ProfileClientScreen';
 import { LayananScreen } from '../screens/client/LayananScreen';
 import { NotifikasiClientScreen } from '../screens/client/NotifikasiClientScreen';
 import { EditProfileScreen } from '../screens/client/EditProfileScreen';
+import { ChangePasswordClientScreen } from '../screens/client/ChangePasswordClientScreen';
+import { SettingsClientScreen } from '../screens/client/SettingsClientScreen';
+import { HelpClientScreen } from '../screens/client/HelpClientScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -46,6 +49,9 @@ const ProfileStackNavigator = () => (
   <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
     <ProfileStack.Screen name="ProfileMain" component={ProfileClientScreen} />
     <ProfileStack.Screen name="EditProfile" component={EditProfileScreen} />
+    <ProfileStack.Screen name="ChangePassword" component={ChangePasswordClientScreen} />
+    <ProfileStack.Screen name="Settings" component={SettingsClientScreen} />
+    <ProfileStack.Screen name="Help" component={HelpClientScreen} />
   </ProfileStack.Navigator>
 );
 
