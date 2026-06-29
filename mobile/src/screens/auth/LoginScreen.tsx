@@ -1,5 +1,6 @@
+import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, KeyboardAvoidingView, Platform, ScrollView, Alert, TouchableOpacity, Animated, StatusBar } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, Animated, StatusBar } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';

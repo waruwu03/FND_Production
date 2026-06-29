@@ -1,5 +1,6 @@
+import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Linking, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { FndHeader } from '../../components/FndUi';
 

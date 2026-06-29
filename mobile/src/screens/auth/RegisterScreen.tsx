@@ -1,5 +1,6 @@
+import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, Alert, Animated, StatusBar } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, Animated, StatusBar } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../../components/Button';

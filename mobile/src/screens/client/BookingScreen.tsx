@@ -1,8 +1,6 @@
+import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  View, Text, ScrollView, TouchableOpacity, TextInput,
-  Alert, Image, ActivityIndicator, Animated, StyleSheet,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Image, ActivityIndicator, Animated, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { api, getAssetUrl } from '../../services/api';

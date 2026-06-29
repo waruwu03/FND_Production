@@ -41,7 +41,7 @@ function removeLocalUpload(publicUrl) {
 
 async function findUserById(userId) {
   const [rows] = await pool.query(
-    'SELECT id, name, email, role, phone, avatar_url FROM users WHERE id = ? LIMIT 1',
+    'SELECT id, name, email, role, phone, avatar_url, push_notif, email_notif, dark_mode FROM users WHERE id = ? LIMIT 1',
     [userId],
   )
   return rows[0] || null
@@ -63,7 +63,7 @@ export async function login(req, res) {
 
   try {
     const [rows] = await pool.query(
-      'SELECT id, name, email, password, role, phone, avatar_url FROM users WHERE email = ? LIMIT 1',
+      'SELECT id, name, email, password, role, phone, avatar_url, push_notif, email_notif, dark_mode FROM users WHERE email = ? LIMIT 1',
       [email],
     )
     const user = rows[0]
@@ -217,6 +217,42 @@ export async function updateProfile(req, res) {
     await connection.rollback()
     console.error('updateProfile error:', error)
     res.status(500).json({ success: false, error: 'Failed to update profile' })
+  } finally {
+    connection.release()
+  }
+}
+
+export async function updatePreferences(req, res) {
+  const { push_notif, email_notif, dark_mode } = req.body
+
+  const connection = await pool.getConnection()
+  try {
+    const updates = []
+    const params = []
+
+    if (push_notif !== undefined) {
+      updates.push('push_notif = ?')
+      params.push(Boolean(push_notif))
+    }
+    if (email_notif !== undefined) {
+      updates.push('email_notif = ?')
+      params.push(Boolean(email_notif))
+    }
+    if (dark_mode !== undefined) {
+      updates.push('dark_mode = ?')
+      params.push(Boolean(dark_mode))
+    }
+
+    if (updates.length > 0) {
+      params.push(req.user.id)
+      await connection.query(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`, params)
+    }
+
+    const user = await findUserById(req.user.id)
+    res.json({ success: true, data: publicUser(user), message: 'Preferences updated successfully' })
+  } catch (error) {
+    console.error('updatePreferences error:', error)
+    res.status(500).json({ success: false, error: 'Failed to update preferences' })
   } finally {
     connection.release()
   }

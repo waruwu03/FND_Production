@@ -18,6 +18,9 @@ export function publicUser(user) {
     role: user.role,
     phone: user.phone ?? null,
     avatar_url: user.avatar_url ?? null,
+    push_notif: user.push_notif === undefined ? true : Boolean(user.push_notif),
+    email_notif: user.email_notif === undefined ? false : Boolean(user.email_notif),
+    dark_mode: user.dark_mode === undefined ? false : Boolean(user.dark_mode),
   }
 }
 
@@ -89,7 +92,7 @@ export async function findActiveRefreshToken(token) {
   const [rows] = await pool.query(
     `SELECT rt.id AS refresh_token_id, rt.user_id, rt.token_hash, rt.user_agent, rt.ip_address,
             rt.expires_at, rt.revoked_at, rt.created_at,
-            u.id, u.name, u.email, u.role, u.phone, u.avatar_url
+            u.id, u.name, u.email, u.role, u.phone, u.avatar_url, u.push_notif, u.email_notif, u.dark_mode
      FROM refresh_tokens rt
      JOIN users u ON u.id = rt.user_id
      WHERE rt.token_hash = ?

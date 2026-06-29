@@ -12,6 +12,7 @@ import {
   refresh,
   signup,
   updateProfile,
+  updatePreferences,
   updateUser,
   uploadAvatar,
   uploadAvatarBase64,
@@ -36,6 +37,7 @@ router.post('/logout', logout)
 router.post('/signup', validate(signupSchema), signup)
 router.get('/profile', authenticate, profile)
 router.put('/profile', authenticate, validate(updateProfileSchema), updateProfile)
+router.put('/preferences', authenticate, updatePreferences)
 router.put('/profile/password', authenticate, validate(changePasswordSchema), changePassword)
 router.post('/profile/avatar', authenticate, avatarUpload.single('avatar'), uploadAvatar)
 router.post('/profile/avatar-base64', authenticate, uploadAvatarBase64)

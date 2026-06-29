@@ -8,6 +8,9 @@ export interface User {
   role: 'CLIENT' | 'CREW' | 'ADMIN';
   phone?: string;
   avatar_url?: string;
+  push_notif?: boolean;
+  email_notif?: boolean;
+  dark_mode?: boolean;
 }
 
 interface AuthState {

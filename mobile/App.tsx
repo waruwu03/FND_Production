@@ -9,6 +9,8 @@ import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import './global.css';
 
+import { PremiumAlertProvider } from './src/components/PremiumAlert';
+
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -21,8 +23,10 @@ export default function App() {
           }
           persistor={persistor}
         >
-          <StatusBar style="light" />
-          <AppNavigator />
+          <PremiumAlertProvider>
+            <StatusBar style="light" />
+            <AppNavigator />
+          </PremiumAlertProvider>
         </PersistGate>
       </Provider>
     </GestureHandlerRootView>

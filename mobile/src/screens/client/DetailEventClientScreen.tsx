@@ -1,8 +1,6 @@
+import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import React, { useEffect, useState } from 'react';
-import {
-  View, Text, ScrollView, TouchableOpacity, ActivityIndicator,
-  Alert, Image, Linking, StyleSheet, Modal, TextInput,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Image, Linking, StyleSheet, Modal, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api, getAssetUrl } from '../../services/api';

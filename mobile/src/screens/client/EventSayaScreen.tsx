@@ -1,8 +1,7 @@
+import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import React, { useState } from 'react';
-import {
-  View, Text, ScrollView, TouchableOpacity, ActivityIndicator,
-  RefreshControl, Image, Modal, TextInput, StyleSheet, Alert,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator,
+  RefreshControl, Image, Modal, TextInput, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { api, getAssetUrl } from '../../services/api';

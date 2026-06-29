@@ -1,11 +1,12 @@
+import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert, Switch } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Switch, Alert as NativeAlert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootState } from '../../store';
-import { logout } from '../../store/slices/authSlice';
+import { logout, updateProfileSuccess } from '../../store/slices/authSlice';
 import { api } from '../../services/api';
 import { FndHeader } from '../../components/FndUi';
 
@@ -14,13 +15,13 @@ export const PengaturanScreen = ({ navigation }: any) => {
   const user = useSelector((state: RootState) => state.auth.user);
   const insets = useSafeAreaInsets();
 
-  const [notifPush, setNotifPush] = useState(true);
-  const [notifEmail, setNotifEmail] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [notifPush, setNotifPush] = useState(user?.push_notif ?? true);
+  const [notifEmail, setNotifEmail] = useState(user?.email_notif ?? false);
+  const [darkMode, setDarkMode] = useState(user?.dark_mode ?? false);
   const [saving, setSaving] = useState(false);
 
   const handleGantiPassword = () => {
-    Alert.prompt(
+    NativeAlert.prompt(
       'Ganti Password',
       'Masukkan password saat ini:',
       [
@@ -29,7 +30,7 @@ export const PengaturanScreen = ({ navigation }: any) => {
           text: 'Lanjut',
           onPress: (currentPassword: string | undefined) => {
             if (!currentPassword) return;
-            Alert.prompt(
+            NativeAlert.prompt(
               'Password Baru',
               'Masukkan password baru (min. 8 karakter):',
               [
@@ -110,6 +111,21 @@ export const PengaturanScreen = ({ navigation }: any) => {
     ]);
   };
 
+  const updatePreference = async (key: 'push_notif' | 'email_notif' | 'dark_mode', value: boolean) => {
+    try {
+      const response = await api.put('/auth/preferences', { [key]: value });
+      if (response.data?.success) {
+        dispatch(updateProfileSuccess({ [key]: value }));
+      }
+    } catch (error) {
+      console.error('Failed to update preference:', error);
+      // Revert the local state if the API fails
+      if (key === 'push_notif') setNotifPush(!value);
+      if (key === 'email_notif') setNotifEmail(!value);
+      if (key === 'dark_mode') setDarkMode(!value);
+    }
+  };
+
   return (
     <View className="flex-1 bg-background">
       <FndHeader title="Pengaturan Akun" dark onBack={() => navigation.goBack()} />
@@ -185,7 +201,7 @@ export const PengaturanScreen = ({ navigation }: any) => {
             </View>
             <Switch
               value={notifPush}
-              onValueChange={setNotifPush}
+              onValueChange={(val) => { setNotifPush(val); updatePreference('push_notif', val); }}
               trackColor={{ false: '#E2E8F0', true: '#0D1B5E' }}
               thumbColor="#FFFFFF"
             />
@@ -203,7 +219,7 @@ export const PengaturanScreen = ({ navigation }: any) => {
             </View>
             <Switch
               value={notifEmail}
-              onValueChange={setNotifEmail}
+              onValueChange={(val) => { setNotifEmail(val); updatePreference('email_notif', val); }}
               trackColor={{ false: '#E2E8F0', true: '#0D1B5E' }}
               thumbColor="#FFFFFF"
             />
@@ -225,10 +241,9 @@ export const PengaturanScreen = ({ navigation }: any) => {
             </View>
             <Switch
               value={darkMode}
-              onValueChange={setDarkMode}
+              onValueChange={(val) => { setDarkMode(val); updatePreference('dark_mode', val); }}
               trackColor={{ false: '#E2E8F0', true: '#0D1B5E' }}
               thumbColor="#FFFFFF"
-              disabled
             />
           </View>
         </View>

@@ -1,16 +1,31 @@
+import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Switch, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Switch } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useDispatch } from 'react-redux';
-import { logout } from '../../store/slices/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout, updateProfileSuccess } from '../../store/slices/authSlice';
+import { RootState } from '../../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from '../../services/api';
 
 export const SettingsClientScreen = ({ navigation }: any) => {
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.auth.user);
 
-  const toggleSwitch = () => setNotificationsEnabled(previousState => !previousState);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(user?.push_notif ?? true);
+
+  const toggleSwitch = async (val: boolean) => {
+    setNotificationsEnabled(val);
+    try {
+      const response = await api.put('/auth/preferences', { push_notif: val });
+      if (response.data?.success) {
+        dispatch(updateProfileSuccess({ push_notif: val }));
+      }
+    } catch (error) {
+      console.error('Failed to update preference:', error);
+      setNotificationsEnabled(!val);
+    }
+  };
 
   const handleDeleteAccount = () => {
     Alert.alert(
