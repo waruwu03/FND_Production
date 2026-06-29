@@ -4,6 +4,7 @@ import { Calendar, MapPin } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Event, EventStatus, EVENT_STATUS_LABELS } from "@/lib/types"
+import { getAssetUrl } from "@/lib/api"
 
 interface UpcomingEventsProps {
   events: Event[]
@@ -48,7 +49,7 @@ export function UpcomingEvents({ events }: UpcomingEventsProps) {
             <div className="relative h-12 w-16 flex-shrink-0 overflow-hidden rounded-md bg-muted">
               {event.reference_images?.[0] ? (
                 <Image
-                  src={event.reference_images[0]}
+                  src={getAssetUrl(event.reference_images[0]) as string}
                   alt={event.name}
                   fill
                   className="object-cover"

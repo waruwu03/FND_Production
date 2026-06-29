@@ -5,7 +5,7 @@ import { revokeUserRefreshTokens } from '../utils/authTokens.js'
 export async function fetchCrew(req, res) {
   try {
     const status = req.query.status === 'tersedia' ? 'available' : req.query.status
-    let query = 'SELECT c.*, u.avatar_url FROM crew c LEFT JOIN users u ON c.user_id = u.id'
+    let query = 'SELECT c.*, COALESCE(u.name, c.name) AS name, COALESCE(u.phone, c.phone) AS phone, u.avatar_url FROM crew c LEFT JOIN users u ON c.user_id = u.id'
     const params = []
 
     if (status) {
@@ -25,7 +25,7 @@ export async function fetchCrew(req, res) {
 export async function getCrew(req, res) {
   try {
     const [rows] = await pool.query(
-      'SELECT c.*, u.avatar_url FROM crew c LEFT JOIN users u ON c.user_id = u.id WHERE c.id = ?', 
+      'SELECT c.*, COALESCE(u.name, c.name) AS name, COALESCE(u.phone, c.phone) AS phone, u.avatar_url FROM crew c LEFT JOIN users u ON c.user_id = u.id WHERE c.id = ?', 
       [Number(req.params.id)]
     )
     const item = rows[0]

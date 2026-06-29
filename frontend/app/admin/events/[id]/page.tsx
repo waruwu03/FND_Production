@@ -26,6 +26,11 @@ import {
   Image as ImageIcon,
   Trash2,
   AlertCircle,
+  ClipboardList,
+  Search,
+  Handshake,
+  PlayCircle,
+  Flag,
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -44,6 +49,14 @@ const statusColors: Record<EventStatus, string> = {
 }
 
 const statusOrder: EventStatus[] = ["pending", "survey", "deal", "running", "selesai"]
+
+const statusIcons = {
+  pending: ClipboardList,
+  survey: Search,
+  deal: Handshake,
+  running: PlayCircle,
+  selesai: Flag,
+}
 
 function parseReferenceImages(value: unknown): string[] {
   if (Array.isArray(value)) return value.filter(Boolean) as string[]
@@ -343,51 +356,80 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
       </div>
 
       {/* Status Progress */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Status Event</CardTitle>
+      <Card className="border-border/50 shadow-sm overflow-hidden">
+        <CardHeader className="bg-muted/30 border-b border-border/50 pb-4">
+          <CardTitle className="text-lg font-semibold flex items-center gap-2">
+            Status Event
+          </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-between mb-4">
-            {statusOrder.map((status, index) => (
-              <div key={status} className="flex flex-col items-center flex-1">
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    index <= currentStatusIndex
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-muted-foreground"
-                  }`}
-                >
-                  {index < currentStatusIndex ? (
-                    <CheckCircle2 className="h-5 w-5" />
-                  ) : (
-                    <span className="text-sm font-medium">{index + 1}</span>
-                  )}
-                </div>
-                <span
-                  className={`text-xs mt-2 capitalize ${
-                    index <= currentStatusIndex ? "text-foreground font-medium" : "text-muted-foreground"
-                  }`}
-                >
-                  {status}
-                </span>
-              </div>
-            ))}
+        <CardContent className="pt-8 pb-6">
+          <div className="relative mx-auto max-w-4xl px-4">
+            {/* Background Track Line */}
+            <div className="absolute top-6 left-[10%] right-[10%] h-1.5 bg-muted rounded-full" />
+            
+            {/* Active Progress Line */}
+            <div className="absolute top-6 left-[10%] right-[10%] h-1.5 bg-transparent rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-primary transition-all duration-500 ease-in-out" 
+                style={{ width: `${(Math.max(0, currentStatusIndex) / (statusOrder.length - 1)) * 100}%` }}
+              />
+            </div>
+
+            <div className="flex items-center justify-between relative z-10">
+              {statusOrder.map((status, index) => {
+                const isCompleted = index < currentStatusIndex;
+                const isActive = index === currentStatusIndex;
+                const StatusIcon = statusIcons[status as keyof typeof statusIcons] || CheckCircle2;
+                
+                return (
+                  <div key={status} className="flex flex-col items-center flex-1 relative group">
+                    <div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center border-4 transition-all duration-300 ${
+                        isCompleted
+                          ? "bg-primary border-primary text-primary-foreground"
+                          : isActive
+                          ? "bg-background border-primary text-primary shadow-[0_0_15px_rgba(249,115,22,0.4)]"
+                          : "bg-background border-muted text-muted-foreground"
+                      }`}
+                    >
+                      {isCompleted ? (
+                        <CheckCircle2 className="h-5 w-5 animate-in zoom-in" />
+                      ) : (
+                        <StatusIcon className={`h-5 w-5 ${isActive ? "animate-pulse" : ""}`} />
+                      )}
+                    </div>
+                    <div className="mt-3 text-center">
+                      <span
+                        className={`text-sm font-semibold capitalize block transition-colors duration-300 ${
+                          isActive || isCompleted ? "text-foreground" : "text-muted-foreground"
+                        }`}
+                      >
+                        {status}
+                      </span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
-          <div className="flex justify-end">
-            <Select value={event.status} onValueChange={(v) => updateStatus(v as EventStatus)}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {statusOrder.map((status) => (
-                  <SelectItem key={status} value={status}>
-                    {status.charAt(0).toUpperCase() + status.slice(1)}
-                  </SelectItem>
-                ))}
-                <SelectItem value="cancel">Cancel</SelectItem>
-              </SelectContent>
-            </Select>
+          
+          <div className="flex justify-end mt-10 pt-6 border-t border-border/50">
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-medium text-muted-foreground">Ubah Status:</span>
+              <Select value={event.status} onValueChange={(v) => updateStatus(v as EventStatus)}>
+                <SelectTrigger className="w-[180px] border-primary/20 hover:border-primary/50 transition-colors bg-primary/5 font-medium">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {statusOrder.map((status) => (
+                    <SelectItem key={status} value={status}>
+                      {status.charAt(0).toUpperCase() + status.slice(1)}
+                    </SelectItem>
+                  ))}
+                  <SelectItem value="cancel">Cancel</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </CardContent>
       </Card>

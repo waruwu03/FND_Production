@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Equipment } from "@/lib/types"
+import { getAssetUrl } from "@/lib/api"
 
 interface InventoryStatusProps {
   equipment: Equipment[]
@@ -26,7 +27,7 @@ export function InventoryStatus({ equipment }: InventoryStatusProps) {
               <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded bg-muted">
                 {item.image_url ? (
                   <Image
-                    src={item.image_url}
+                    src={getAssetUrl(item.image_url) as string}
                     alt={item.name}
                     fill
                     className="object-cover"

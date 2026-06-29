@@ -46,7 +46,7 @@ export async function getEvent(req, res) {
   try {
     const eventId = Number(req.params.id)
     const [rows] = await pool.query(
-      `SELECT e.*, u.name AS client_name, u.email AS client_email
+      `SELECT e.*, u.name AS client_name, u.email AS client_email, u.phone AS client_phone
        FROM events e
        LEFT JOIN users u ON e.client_id = u.id
        WHERE e.id = ?`,

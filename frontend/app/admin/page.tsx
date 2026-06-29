@@ -58,7 +58,7 @@ function buildDashboardData(events: any[], equipmentData: any[], crewData: any[]
   const eventsToday = events.filter((event) => String(event.event_date || "").startsWith(today)).length
   const totalRevenue = events
     .filter((event) => ["deal", "running", "selesai"].includes(event.status))
-    .reduce((sum, event) => sum + Number(event.total_amount || 0), 0)
+    .reduce((sum, event) => sum + Number(event.total_price || 0), 0)
 
   const totalEquipment = equipmentData.reduce((sum, item) => sum + Number(item.total_stock || 0), 0)
   const availableEquipment = equipmentData.reduce((sum, item) => sum + Number(item.available_stock || 0), 0)
@@ -116,7 +116,6 @@ function buildDashboardData(events: any[], equipmentData: any[], crewData: any[]
   })
 
   const topEquipment = [...equipmentData]
-    .sort((a, b) => Number(b.total_stock || 0) - Number(a.total_stock || 0))
     .slice(0, 5)
     .map((item) => ({
       ...item,

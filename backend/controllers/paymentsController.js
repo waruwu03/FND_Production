@@ -39,6 +39,10 @@ export async function createPayment(req, res) {
       await connection.query('UPDATE events SET paid_amount = paid_amount + ? WHERE id = ?', [amount, eventId])
     }
     
+    if (normalizedPaymentType === 'dp') {
+      await connection.query('UPDATE events SET dp_amount = dp_amount + ? WHERE id = ?', [amount, eventId])
+    }
+    
     await connection.commit()
     res.status(201).json({ success: true, data: { paymentId: result.insertId } })
   } catch (error) {
@@ -87,6 +91,13 @@ export async function updatePayment(req, res) {
     } else if (existing.status === 'paid' && Number(nextAmount) !== Number(existing.amount)) {
       await connection.query(
         'UPDATE events SET paid_amount = GREATEST(paid_amount - ? + ?, 0) WHERE id = ?',
+        [existing.amount, nextAmount, existing.event_id]
+      )
+    }
+    
+    if (existing.payment_type === 'dp' && Number(nextAmount) !== Number(existing.amount)) {
+      await connection.query(
+        'UPDATE events SET dp_amount = GREATEST(dp_amount - ? + ?, 0) WHERE id = ?',
         [existing.amount, nextAmount, existing.event_id]
       )
     }
