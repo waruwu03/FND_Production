@@ -104,7 +104,7 @@ export function AdminSidebar({ user: initialUser }: SidebarProps) {
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-slate-200 truncate">
-              {user?.name || "Victor Wonggow"}
+              {user?.name || "Admin"}
             </p>
             <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider truncate mt-0.5">
               {user?.role || "Administrator"}

@@ -52,7 +52,8 @@ function createImageUpload(subdir, maxFileSizeMb = 5) {
 export function toPublicUploadUrl(file) {
   // multer-s3 menempatkan path file di dalam properti 'key'
   if (file.key) {
-    return `${process.env.R2_PUBLIC_URL}/${file.key}`
+    const baseUrl = process.env.R2_PUBLIC_URL || 'https://pub-055e43670ea7462fb9dfe8e3cb7f222a.r2.dev';
+    return `${baseUrl}/${file.key}`
   }
   // Fallback
   return file.location || ''

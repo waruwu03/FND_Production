@@ -195,7 +195,7 @@ export default function HomePage() {
                       <Users className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <p className="text-white font-bold">Victor Wonggow</p>
+                      <p className="text-white font-bold">Admin FND</p>
                       <p className="text-slate-500 text-sm">Person In Charge</p>
                     </div>
                   </div>

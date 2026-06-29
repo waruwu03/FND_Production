@@ -9,6 +9,9 @@ export const BACKEND_API_URL =
 export function getAssetUrl(url?: string | null) {
   if (!url) return undefined
   if (url.startsWith("http")) return url
+  if (url.startsWith("undefined/")) {
+    return `https://pub-055e43670ea7462fb9dfe8e3cb7f222a.r2.dev/${url.replace("undefined/", "")}`
+  }
   if (url.startsWith("/uploads/")) {
     const assetBase =
       process.env.NEXT_PUBLIC_ASSET_URL ||
