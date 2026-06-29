@@ -70,9 +70,10 @@ export async function getEvent(req, res) {
     )
 
     const [crewMembers] = await pool.query(
-      `SELECT c.id, c.name, c.role, c.status, ec.task
+      `SELECT c.id, COALESCE(u.name, c.name) AS name, c.role, c.status, ec.task, u.avatar_url
        FROM event_crew ec
        JOIN crew c ON ec.crew_id = c.id
+       LEFT JOIN users u ON c.user_id = u.id
        WHERE ec.event_id = ?`,
       [eventId],
     )
