@@ -116,7 +116,7 @@ export const ProfileCrewScreen = ({ navigation }: any) => {
         <View style={{ alignItems: 'center', zIndex: 10, marginBottom: -48 }}>
           <TouchableOpacity onPress={handlePickImage} disabled={isUploading} className="relative">
             {avatarUrl ? (
-              <Image source={{ uri: avatarUrl }} className="h-24 w-24 rounded-full border-[4px] border-white bg-slate-100 shadow-sm" />
+              <Image key={avatarUrl} source={{ uri: avatarUrl }} className="h-24 w-24 rounded-full border-[4px] border-white bg-slate-100 shadow-sm" />
             ) : (
               <View className="h-24 w-24 items-center justify-center rounded-full border-[4px] border-white bg-slate-200">
                 <Text className="text-2xl font-bold text-primary">{initials(user?.name)}</Text>

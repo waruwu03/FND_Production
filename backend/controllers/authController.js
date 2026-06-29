@@ -12,7 +12,8 @@ import {
   revokeUserRefreshTokens,
   verifyRefreshToken,
 } from '../utils/authTokens.js'
-import { toPublicUploadUrl } from '../middlewares/upload.js'
+import { toPublicUploadUrl, s3 } from '../middlewares/upload.js'
+import { PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3'
 
 const uploadRoot = path.resolve('uploads')
 
@@ -30,13 +31,19 @@ function readCookie(req, name) {
 }
 
 function removeLocalUpload(publicUrl) {
-  if (!publicUrl || !publicUrl.startsWith('/uploads/')) return
-
-  const relativePath = publicUrl.replace('/uploads/', '')
-  const targetPath = path.resolve(uploadRoot, relativePath)
-  if (!targetPath.startsWith(uploadRoot)) return
-
-  fs.promises.unlink(targetPath).catch(() => {})
+  if (!publicUrl) return
+  if (publicUrl.startsWith('/uploads/')) {
+    const relativePath = publicUrl.replace('/uploads/', '')
+    const targetPath = path.resolve(uploadRoot, relativePath)
+    if (!targetPath.startsWith(uploadRoot)) return
+    fs.promises.unlink(targetPath).catch(() => {})
+  } else if (publicUrl.startsWith(process.env.R2_PUBLIC_URL)) {
+    const key = publicUrl.replace(`${process.env.R2_PUBLIC_URL}/`, '')
+    s3.send(new DeleteObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME,
+      Key: key
+    })).catch(() => {})
+  }
 }
 
 async function findUserById(userId) {
@@ -333,15 +340,23 @@ export async function uploadAvatarBase64(req, res) {
 
     const extMap = { 'image/jpeg': 'jpg', 'image/jpg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' }
     const ext = extMap[finalMime] || 'jpg'
-    const filename = `avatar-u${req.user.id}-${Date.now()}.${ext}`
-    const avatarDir = path.join(uploadRoot, 'avatars')
-    fs.mkdirSync(avatarDir, { recursive: true })
-    const filepath = path.join(avatarDir, filename)
-    fs.writeFileSync(filepath, buffer)
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`
+    const filename = `avatars/avatar-u${req.user.id}-${uniqueSuffix}.${ext}`
+    
+    const command = new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME,
+      Key: filename,
+      Body: buffer,
+      ContentType: finalMime
+    })
+    
+    await s3.send(command)
 
     const [currentRows] = await pool.query('SELECT avatar_url FROM users WHERE id = ? LIMIT 1', [req.user.id])
     const oldAvatarUrl = currentRows[0]?.avatar_url
-    const avatarUrl = `/uploads/avatars/${filename}`
+    
+    const baseUrl = process.env.R2_PUBLIC_URL || 'https://pub-055e43670ea7462fb9dfe8e3cb7f222a.r2.dev'
+    const avatarUrl = `${baseUrl}/${filename}`
 
     await pool.query('UPDATE users SET avatar_url = ? WHERE id = ?', [avatarUrl, req.user.id])
     removeLocalUpload(oldAvatarUrl)

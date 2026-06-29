@@ -107,7 +107,7 @@ export const ProfileClientScreen = ({ navigation }: any) => {
         <View style={{ alignItems: 'center', zIndex: 10, marginBottom: -48 }}>
           <TouchableOpacity onPress={pickImage} disabled={isUploading} className="relative">
             <View className="h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-sm">
-              {avatarUrl ? <Image source={{ uri: avatarUrl }} className="h-full w-full" /> : <Text className="text-xl font-bold text-primary">{initials(user?.name)}</Text>}
+              {avatarUrl ? <Image key={avatarUrl} source={{ uri: avatarUrl }} className="h-full w-full" /> : <Text className="text-xl font-bold text-primary">{initials(user?.name)}</Text>}
               {isUploading ? (
                 <View className="absolute inset-0 items-center justify-center bg-black/40">
                   <ActivityIndicator color="#FFFFFF" />

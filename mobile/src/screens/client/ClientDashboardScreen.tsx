@@ -74,7 +74,7 @@ export const ClientDashboardScreen = ({ navigation }: any) => {
 
         <View className="flex-row items-center">
           {avatarUrl ? (
-            <Image source={{ uri: avatarUrl }} className="h-11 w-11 rounded-full border border-white/20 bg-slate-800" />
+            <Image key={avatarUrl} source={{ uri: avatarUrl }} className="h-11 w-11 rounded-full border border-white/20 bg-slate-800" />
           ) : (
             <View className="h-11 w-11 items-center justify-center rounded-full bg-white/10 border border-white/20">
               <Text className="font-bold text-white text-xs">{initials(user?.name)}</Text>

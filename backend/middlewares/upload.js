@@ -7,7 +7,7 @@ import dotenv from 'dotenv'
 dotenv.config() // Ensure env variables are loaded
 
 // S3 Client configuration for Cloudflare R2
-const s3 = new S3Client({
+export const s3 = new S3Client({
   region: 'auto',
   endpoint: process.env.R2_ENDPOINT,
   credentials: {
