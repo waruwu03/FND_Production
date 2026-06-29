@@ -232,7 +232,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         setEventCrew(e.crew?.map((c: any) => ({
           id: c.id,
           role: c.task || c.role,
-          crew: { full_name: c.name, position: c.role }
+          crew: { full_name: c.name, position: c.role, avatar_url: c.avatar_url }
         })) || [])
 
         setPayments((e.payments || []).map((payment: any) => ({
@@ -643,9 +643,17 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                       className="flex items-center justify-between rounded-lg border p-3 hover:bg-muted/30 transition-colors"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                          <User className="h-5 w-5 text-primary" />
-                        </div>
+                        {item.crew?.avatar_url ? (
+                          <img
+                            src={getAssetUrl(item.crew.avatar_url)}
+                            alt={item.crew.full_name || "Crew"}
+                            className="h-10 w-10 rounded-full object-cover border border-primary/20"
+                          />
+                        ) : (
+                          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                            <User className="h-5 w-5 text-primary" />
+                          </div>
+                        )}
                         <div>
                           <p className="font-medium">{item.crew?.full_name}</p>
                           <p className="text-sm text-muted-foreground">{item.role || item.crew?.position}</p>
