@@ -41,7 +41,7 @@ export const eventSchema = z.object({
     clientId: z.coerce.number().int().positive().optional(),
     totalAmount: z.coerce.number().nonnegative().optional(),
     dpAmount: z.coerce.number().nonnegative().optional(),
-    referenceImages: z.array(z.string().startsWith('/uploads/')).max(10).optional(),
+    referenceImages: z.array(z.string()).max(10).optional(),
     equipment: z.array(z.object({
       equipmentId: z.coerce.number().int().positive(),
       quantity: z.coerce.number().int().positive(),

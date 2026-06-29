@@ -1,6 +1,6 @@
 import { pool } from './config/db.js';
 
-const baseUrl = 'https://pub-055e43670ea7462fb9dfe8e3cb7f222a.r2.dev/images/';
+const baseUrl = 'https://fnd-production-frontend-uxxg.vercel.app/r2-assets/images/';
 
 const mapping = [
   { id: 2, file: 'FND-Par120-ezgif.com-png-to-webp-converter.webp' },
