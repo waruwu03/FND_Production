@@ -1,12 +1,9 @@
 import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, Modal } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as ImagePicker from 'expo-image-picker';
-import { logout, updateProfileSuccess } from '../../store/slices/authSlice';
 import { RootState } from '../../store';
 import { api, getAssetUrl } from '../../services/api';
 import { initials } from '../../utils/fnd';
@@ -25,7 +22,7 @@ export const ProfileCrewScreen = ({ navigation }: any) => {
   const insets = useSafeAreaInsets();
   const avatarUrl = getAssetUrl(user?.avatar_url);
   const [tasks, setTasks] = useState<any[]>([]);
-  const [isUploading, setIsUploading] = useState(false);
+  const [isAvatarModalVisible, setIsAvatarModalVisible] = useState(false);
 
   useEffect(() => {
     api.get('/events/assigned')
@@ -40,62 +37,7 @@ export const ProfileCrewScreen = ({ navigation }: any) => {
     [tasks],
   );
 
-  const handleLogout = async () => {
-    const refreshToken = await AsyncStorage.getItem('refreshToken');
-    await api.post('/auth/logout', { refreshToken }).catch(() => null);
-    dispatch(logout());
-  };
 
-  const handlePickImage = async () => {
-    try {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Izin Ditolak', 'Maaf, kami memerlukan izin galeri foto untuk mengubah avatar.');
-        return;
-      }
-
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.8,
-        base64: true,
-      });
-
-      if (!result.canceled && result.assets[0].base64) {
-        uploadAvatar(result.assets[0]);
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Gagal memilih gambar.');
-    }
-  };
-
-  const uploadAvatar = async (asset: ImagePicker.ImagePickerAsset) => {
-    setIsUploading(true);
-    try {
-      let mimeType = 'image/jpeg';
-      if (asset.uri.endsWith('.png')) mimeType = 'image/png';
-      else if (asset.uri.endsWith('.webp')) mimeType = 'image/webp';
-
-      const base64Data = `data:${mimeType};base64,${asset.base64}`;
-
-      const response = await api.post('/auth/profile/avatar-base64', {
-        image: base64Data,
-        mimeType,
-      });
-
-      if (response.data?.success && response.data?.data) {
-        dispatch(updateProfileSuccess(response.data.data));
-        Alert.alert('Sukses', 'Avatar berhasil diperbarui!');
-      } else {
-        throw new Error(response.data?.error || 'Gagal upload avatar');
-      }
-    } catch (error: any) {
-      Alert.alert('Upload Gagal', error.message || 'Terjadi kesalahan saat mengunggah avatar.');
-    } finally {
-      setIsUploading(false);
-    }
-  };
 
   return (
     <View className="flex-1 bg-white">
@@ -114,7 +56,7 @@ export const ProfileCrewScreen = ({ navigation }: any) => {
       <ScrollView className="-mt-14 flex-1" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 110, paddingTop: 48 }}>
         {/* Avatar container outside of the card to prevent clipping */}
         <View style={{ alignItems: 'center', zIndex: 10, marginBottom: -48 }}>
-          <TouchableOpacity onPress={handlePickImage} disabled={isUploading} className="relative">
+          <TouchableOpacity onPress={() => setIsAvatarModalVisible(true)} className="relative">
             {avatarUrl ? (
               <Image key={avatarUrl} source={{ uri: avatarUrl }} className="h-24 w-24 rounded-full border-[4px] border-white bg-slate-100 shadow-sm" />
             ) : (
@@ -122,14 +64,6 @@ export const ProfileCrewScreen = ({ navigation }: any) => {
                 <Text className="text-2xl font-bold text-primary">{initials(user?.name)}</Text>
               </View>
             )}
-            {isUploading && (
-              <View className="absolute inset-0 items-center justify-center rounded-full bg-black/40">
-                <ActivityIndicator size="small" color="#FFFFFF" />
-              </View>
-            )}
-            <View className="absolute bottom-0 right-0 h-7 w-7 items-center justify-center rounded-full border border-white bg-crewAccent">
-              <Ionicons name="pencil" size={12} color="#FFFFFF" />
-            </View>
           </TouchableOpacity>
         </View>
 
@@ -194,18 +128,38 @@ export const ProfileCrewScreen = ({ navigation }: any) => {
           ))}
         </View>
 
-        {/* Logout Option */}
-        <TouchableOpacity 
-          className="mx-4 mt-5 flex-row items-center px-4 py-3.5 rounded-[24px] bg-red-500/10 border border-red-500/15" 
-          onPress={handleLogout}
-        >
-          <View className="h-9 w-9 items-center justify-center rounded-xl bg-red-100">
-            <Ionicons name="log-out-outline" size={18} color="#EF4444" />
-          </View>
-          <Text className="ml-3.5 font-bold text-red-500 text-xs">Keluar</Text>
-          <Ionicons name="chevron-forward" size={16} color="#EF4444" className="ml-auto" style={{ marginLeft: 'auto' }} />
-        </TouchableOpacity>
       </ScrollView>
+
+      {/* Avatar Viewer Modal */}
+      <Modal
+        visible={isAvatarModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setIsAvatarModalVisible(false)}
+      >
+        <View className="flex-1 bg-black/90 items-center justify-center">
+          <TouchableOpacity 
+            className="absolute top-12 right-6 h-10 w-10 items-center justify-center rounded-full bg-white/10" 
+            onPress={() => setIsAvatarModalVisible(false)}
+          >
+            <Ionicons name="close" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+          
+          {avatarUrl ? (
+            <Image 
+              source={{ uri: avatarUrl }} 
+              className="w-full h-[500px]" 
+              resizeMode="contain" 
+            />
+          ) : (
+            <View className="w-48 h-48 items-center justify-center rounded-full bg-slate-200">
+              <Text className="text-5xl font-bold text-primary">{initials(user?.name)}</Text>
+            </View>
+          )}
+          
+          <Text className="text-white mt-8 text-sm opacity-60">Foto profil</Text>
+        </View>
+      </Modal>
     </View>
   );
 };

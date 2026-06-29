@@ -1,14 +1,14 @@
 import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, Modal } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { logout, updateProfileSuccess } from '../../store/slices/authSlice';
+import { logout } from '../../store/slices/authSlice';
 import { RootState } from '../../store';
 import { api, getAssetUrl } from '../../services/api';
 import { initials } from '../../utils/fnd';
+import { ConfirmDialog } from '../../components/FndUi';
 
 const MENU = [
   { label: 'Data Pribadi', icon: 'person-outline', screen: 'EditProfile' },
@@ -20,8 +20,10 @@ const MENU = [
 export const ProfileClientScreen = ({ navigation }: any) => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
-  const [isUploading, setIsUploading] = useState(false);
   const [events, setEvents] = useState<any[]>([]);
+  const [logoutVisible, setLogoutVisible] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isAvatarModalVisible, setIsAvatarModalVisible] = useState(false);
   const avatarUrl = getAssetUrl(user?.avatar_url);
 
   useEffect(() => {
@@ -38,55 +40,16 @@ export const ProfileClientScreen = ({ navigation }: any) => {
   );
 
   const handleLogout = async () => {
-    const refreshToken = await AsyncStorage.getItem('refreshToken');
-    await api.post('/auth/logout', { refreshToken }).catch(() => null);
-    dispatch(logout());
-  };
-
-  const pickImage = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permissionResult.granted) {
-      Alert.alert('Izin Ditolak', 'Aplikasi memerlukan izin untuk mengakses galeri foto Anda.');
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.5,
-      base64: true,
-    });
-
-    if (!result.canceled && result.assets[0]?.base64) {
-      setIsUploading(true);
-      try {
-        const response = await api.post('/auth/profile/avatar-base64', {
-          image: result.assets[0].base64,
-          mimeType: result.assets[0].mimeType || 'image/jpeg',
-        });
-
-        if (response.data?.success) {
-          // Fix: dispatch full user data agar tersimpan permanen di Redux + AsyncStorage
-          const updatedUser = response.data.data;
-          if (updatedUser) {
-            dispatch(updateProfileSuccess({
-              name: updatedUser.name,
-              phone: updatedUser.phone,
-              avatar_url: updatedUser.avatar_url,
-            }));
-          }
-          Alert.alert('Berhasil', 'Foto profil berhasil diperbarui.');
-        } else {
-          throw new Error(response.data?.error || 'Upload gagal');
-        }
-      } catch {
-        Alert.alert('Gagal', 'Terjadi kesalahan saat mengunggah foto profil.');
-      } finally {
-        setIsUploading(false);
-      }
+    setIsLoggingOut(true);
+    try {
+      const refreshToken = await AsyncStorage.getItem('refreshToken');
+      await api.post('/auth/logout', { refreshToken }).catch(() => null);
+    } finally {
+      dispatch(logout());
     }
   };
+
+
 
   return (
     <View className="flex-1 bg-white">
@@ -105,17 +68,9 @@ export const ProfileClientScreen = ({ navigation }: any) => {
       <ScrollView className="-mt-14 flex-1" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 104, paddingTop: 48 }}>
         {/* Avatar container outside of the card to prevent clipping */}
         <View style={{ alignItems: 'center', zIndex: 10, marginBottom: -48 }}>
-          <TouchableOpacity onPress={pickImage} disabled={isUploading} className="relative">
+          <TouchableOpacity onPress={() => setIsAvatarModalVisible(true)} className="relative">
             <View className="h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-sm">
               {avatarUrl ? <Image key={avatarUrl} source={{ uri: avatarUrl }} className="h-full w-full" /> : <Text className="text-xl font-bold text-primary">{initials(user?.name)}</Text>}
-              {isUploading ? (
-                <View className="absolute inset-0 items-center justify-center bg-black/40">
-                  <ActivityIndicator color="#FFFFFF" />
-                </View>
-              ) : null}
-            </View>
-            <View className="absolute right-0 bottom-0 h-8 w-8 items-center justify-center rounded-full border border-white bg-primary">
-              <Ionicons name="camera" size={15} color="#FFFFFF" />
             </View>
           </TouchableOpacity>
         </View>
@@ -154,11 +109,58 @@ export const ProfileClientScreen = ({ navigation }: any) => {
           ))}
         </View>
 
-        <TouchableOpacity className="mx-5 mt-5 flex-row items-center rounded-xl border border-red-100 bg-white px-4 py-4" onPress={handleLogout}>
+        <TouchableOpacity className="mx-5 mt-5 flex-row items-center rounded-xl border border-red-100 bg-white px-4 py-4" onPress={() => setLogoutVisible(true)}>
           <Ionicons name="log-out-outline" size={20} color="#EF4444" />
           <Text className="ml-3 font-bold text-danger">Keluar Akun</Text>
         </TouchableOpacity>
       </ScrollView>
+
+      {/* Premium Logout Popup */}
+      <ConfirmDialog
+        visible={logoutVisible}
+        onClose={() => !isLoggingOut && setLogoutVisible(false)}
+        onConfirm={handleLogout}
+        loading={isLoggingOut}
+        icon="log-out-outline"
+        iconBg="#FEF2F2"
+        iconColor="#EF4444"
+        title="Keluar dari Akun?"
+        description="Apakah Anda yakin ingin keluar dari sesi ini? Anda harus memasukkan kata sandi lagi saat masuk."
+        confirmLabel="Ya, Keluar"
+        confirmBg="#EF4444"
+        cancelLabel="Batal"
+      />
+
+      {/* Avatar Viewer Modal */}
+      <Modal
+        visible={isAvatarModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setIsAvatarModalVisible(false)}
+      >
+        <View className="flex-1 bg-black/90 items-center justify-center">
+          <TouchableOpacity 
+            className="absolute top-12 right-6 h-10 w-10 items-center justify-center rounded-full bg-white/10" 
+            onPress={() => setIsAvatarModalVisible(false)}
+          >
+            <Ionicons name="close" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+          
+          {avatarUrl ? (
+            <Image 
+              source={{ uri: avatarUrl }} 
+              className="w-full h-[500px]" 
+              resizeMode="contain" 
+            />
+          ) : (
+            <View className="w-48 h-48 items-center justify-center rounded-full bg-slate-200">
+              <Text className="text-5xl font-bold text-primary">{initials(user?.name)}</Text>
+            </View>
+          )}
+          
+          <Text className="text-white mt-8 text-sm opacity-60">Foto profil</Text>
+        </View>
+      </Modal>
     </View>
   );
 };

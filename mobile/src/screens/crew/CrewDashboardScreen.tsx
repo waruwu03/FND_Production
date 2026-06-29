@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, RefreshControl, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, RefreshControl, StyleSheet, Dimensions } from 'react-native';
 import { useSelector } from 'react-redux';
 import { DrawerActions, useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,6 +8,47 @@ import { RootState } from '../../store';
 import { api, getAssetUrl } from '../../services/api';
 import { EmptyState, InfoRow, ProgressBar, StatusBadge } from '../../components/FndUi';
 import { formatDate, getEventStatusMeta, getLocationParts, initials } from '../../utils/fnd';
+import { AnimatedButton } from '../../components/AnimatedButton';
+
+const { width: screenWidth } = Dimensions.get('window');
+const CAROUSEL_WIDTH = screenWidth - 40;
+
+const CAROUSEL_ITEMS = [
+  {
+    id: 1,
+    title: 'SAFETY FIRST',
+    subtitle: 'Prioritaskan keselamatan\ndalam setiap pemasangan',
+    image: 'https://images.unsplash.com/photo-1508215885820-4585e5610e28?w=900&q=80',
+    action: 'Tugas'
+  },
+  {
+    id: 2,
+    title: 'TARGET BULANAN',
+    subtitle: 'Capai target penyelesaian\ntugas Anda bulan ini',
+    image: 'https://images.unsplash.com/photo-1516280440502-8693c06637ee?w=900&q=80',
+    action: 'Tugas'
+  },
+  {
+    id: 3,
+    title: 'CREW BRIEFING',
+    subtitle: 'Baca panduan instalasi\nterbaru dari admin',
+    image: 'https://images.unsplash.com/photo-1540324155974-7523202daa3f?w=900&q=80',
+    action: 'Notifikasi'
+  },
+];
+
+const INFINITE_ITEMS = [
+  { ...CAROUSEL_ITEMS[CAROUSEL_ITEMS.length - 1], uid: 'fake_last' },
+  ...CAROUSEL_ITEMS.map(item => ({ ...item, uid: `real_${item.id}` })),
+  { ...CAROUSEL_ITEMS[0], uid: 'fake_first' },
+];
+
+const QUICK_MENU = [
+  { label: 'Tugas Aktif', icon: 'briefcase', screen: 'Tugas', bg: '#FFF7ED', color: '#F97316' },
+  { label: 'Check-In', icon: 'scan-circle', screen: 'CheckIn', bg: '#EFF6FF', color: '#3B82F6' },
+  { label: 'Laporan', icon: 'document-text', screen: 'Profil', params: { screen: 'RiwayatTugas' }, bg: '#F5F3FF', color: '#8B5CF6' },
+  { label: 'Profil', icon: 'person', screen: 'Profil', bg: '#F0FDF4', color: '#22C55E' },
+];
 
 const CircularProgress = ({ percentage, color = '#F97316', size = 32, strokeWidth = 2.5, children }: any) => {
   const borderStyle: any = {
@@ -25,7 +66,7 @@ const CircularProgress = ({ percentage, color = '#F97316', size = 32, strokeWidt
       height: size,
       borderRadius: size / 2,
       borderWidth: strokeWidth,
-      borderColor: '#E2E8F0', // slate-200
+      borderColor: '#E2E8F0',
       alignItems: 'center',
       justifyContent: 'center',
       position: 'relative'
@@ -73,6 +114,60 @@ export const CrewDashboardScreen = () => {
     setRefreshing(false);
   };
 
+  const scrollViewRef = React.useRef<ScrollView>(null);
+  const [currentIndex, setCurrentIndex] = useState(1);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      scrollViewRef.current?.scrollTo({ x: CAROUSEL_WIDTH, animated: false });
+    }, 50);
+  }, []);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => {
+        const next = prev + 1;
+        scrollViewRef.current?.scrollTo({
+          x: next * CAROUSEL_WIDTH,
+          animated: true,
+        });
+
+        if (next === INFINITE_ITEMS.length - 1) {
+          setTimeout(() => {
+            scrollViewRef.current?.scrollTo({
+              x: 1 * CAROUSEL_WIDTH,
+              animated: false,
+            });
+          }, 350);
+          return 1;
+        }
+        return next;
+      });
+    }, 3500);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleScroll = (event: any) => {
+    const scrollPosition = event.nativeEvent.contentOffset.x;
+    const index = Math.round(scrollPosition / CAROUSEL_WIDTH);
+
+    if (index === 0) {
+      scrollViewRef.current?.scrollTo({ x: CAROUSEL_ITEMS.length * CAROUSEL_WIDTH, animated: false });
+      setCurrentIndex(CAROUSEL_ITEMS.length);
+    } else if (index === INFINITE_ITEMS.length - 1) {
+      scrollViewRef.current?.scrollTo({ x: 1 * CAROUSEL_WIDTH, animated: false });
+      setCurrentIndex(1);
+    } else {
+      setCurrentIndex(index);
+    }
+  };
+
+  const activeIndicator = currentIndex === 0 
+    ? CAROUSEL_ITEMS.length - 1 
+    : currentIndex === INFINITE_ITEMS.length - 1 
+      ? 0 
+      : currentIndex - 1;
+
   const activeTasks = useMemo(
     () => tasks.filter((task) => !['selesai', 'cancel'].includes(String(task.status).toLowerCase())),
     [tasks],
@@ -93,6 +188,14 @@ export const CrewDashboardScreen = () => {
   const openNotifications = () => navigation.getParent()?.navigate('Notifikasi');
   const openProfile = () => navigation.getParent()?.navigate('Profil');
 
+  const goTo = (screen: string, params?: any) => {
+    if (screen === 'Notifikasi' || screen === 'Profil') {
+      navigation.getParent()?.navigate(screen, params);
+    } else {
+      navigation.navigate(screen, params);
+    }
+  };
+
   return (
     <View className="flex-1 bg-primary">
       {/* Header section with Dark Navy background */}
@@ -105,11 +208,8 @@ export const CrewDashboardScreen = () => {
             <Text className="text-xs font-black tracking-widest text-white">FND PRODUCTION</Text>
             <Text className="text-[8px] font-semibold tracking-widest text-slate-400">CREW APP</Text>
           </View>
-          <TouchableOpacity onPress={openNotifications} className="relative h-9 w-9 items-center justify-center rounded-full bg-white/10">
+          <TouchableOpacity onPress={openNotifications} className="h-9 w-9 items-center justify-center rounded-full bg-white/10">
             <Ionicons name="notifications-outline" size={20} color="#FFFFFF" />
-            <View className="absolute -right-1 -top-1 h-4 w-4 items-center justify-center rounded-full bg-danger">
-              <Text className="text-[8px] font-bold text-white">3</Text>
-            </View>
           </TouchableOpacity>
         </View>
 
@@ -131,13 +231,76 @@ export const CrewDashboardScreen = () => {
       </View>
 
       {/* Main body with light off-white background */}
-      <View className="-mt-4 flex-1 rounded-t-[24px] bg-crewBg px-4 pt-5">
+      <View className="-mt-4 flex-1 rounded-t-[24px] bg-crewBg">
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#F97316" />}
-          contentContainerStyle={{ paddingBottom: 110 }}
+          contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 20, paddingBottom: 110 }}
         >
-          {/* Stats Card Container */}
+          {/* Infinite Carousel Banner */}
+          <View className="mb-5">
+            <ScrollView
+              ref={scrollViewRef}
+              horizontal
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              onMomentumScrollEnd={handleScroll}
+              scrollEventThrottle={16}
+            >
+              {INFINITE_ITEMS.map((item) => (
+                <View 
+                  key={item.uid} 
+                  style={{ width: CAROUSEL_WIDTH }} 
+                  className="overflow-hidden rounded-[24px] border border-slate-100 bg-primary"
+                >
+                  <Image source={{ uri: item.image }} className="absolute h-full w-full opacity-55" resizeMode="cover" />
+                  <View className="min-h-[160px] justify-between p-6">
+                    <View>
+                      <Text className="text-xl font-black tracking-wide text-white" style={{ textShadowColor: 'rgba(0,0,0,0.3)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 4 }}>
+                        {item.title}
+                      </Text>
+                      <Text className="mt-2 text-xs font-medium leading-5 text-white/90">
+                        {item.subtitle}
+                      </Text>
+                    </View>
+                    <AnimatedButton className="self-start rounded-full bg-crewAccent px-5 py-2.5" onPress={() => goTo(item.action)}>
+                      <Text className="text-xs font-black text-white">Lihat Detail</Text>
+                    </AnimatedButton>
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
+            <View className="mt-4 flex-row justify-center">
+              {CAROUSEL_ITEMS.map((_, index) => (
+                <View 
+                  key={index} 
+                  className={`mx-1 h-1.5 rounded-full ${activeIndicator === index ? 'w-6 bg-crewAccent' : 'w-2 bg-slate-300'}`} 
+                />
+              ))}
+            </View>
+          </View>
+
+          {/* Quick Menu */}
+          <View className="mb-8 mt-2 flex-row justify-between px-2">
+            {QUICK_MENU.map((item) => (
+              <AnimatedButton key={item.label} className="items-center" onPress={() => goTo(item.screen, item.params)}>
+                <View 
+                  className="mb-2.5 h-[52px] w-[52px] items-center justify-center rounded-[18px]" 
+                  style={{ 
+                    backgroundColor: item.bg,
+                    elevation: 0, 
+                    borderWidth: 1,
+                    borderColor: 'rgba(0,0,0,0.03)'
+                  }}
+                >
+                  <Ionicons name={item.icon as any} size={24} color={item.color} />
+                </View>
+                <Text className="text-center text-[11px] font-bold text-primary">{item.label}</Text>
+              </AnimatedButton>
+            ))}
+          </View>
+
+          {/* Stats Card Container (Premium Glassmorphism-like style) */}
           <View 
             className="mb-5 rounded-[24px] border border-slate-100 bg-white p-4"
             style={{ 
@@ -150,7 +313,6 @@ export const CrewDashboardScreen = () => {
           >
             <Text className="text-xs font-black text-primary mb-3">Performa Bulan Ini</Text>
             <View style={dashboardStyles.gridContainer}>
-              
               {/* Stat item 1: Tugas Selesai */}
               <View style={dashboardStyles.statCard}>
                 <CircularProgress percentage={taskPercentage} color="#F97316">
@@ -194,7 +356,6 @@ export const CrewDashboardScreen = () => {
                   <Text style={dashboardStyles.statLabel} numberOfLines={1}>Rating Kinerja</Text>
                 </View>
               </View>
-
             </View>
           </View>
 
@@ -215,7 +376,7 @@ export const CrewDashboardScreen = () => {
                 const location = getLocationParts(task);
                 const isOngoing = status.label.toLowerCase() === 'on going';
                 return (
-                  <TouchableOpacity
+                  <AnimatedButton
                     key={task.id}
                     className="mb-3 rounded-[24px] border border-slate-100 bg-white p-4"
                     style={{ 
@@ -237,44 +398,20 @@ export const CrewDashboardScreen = () => {
                     </View>
                     <InfoRow icon="location-outline" title={location.venue} dense />
                     <InfoRow icon="time-outline" title={`${formatDate(task.event_date)} - Selesai`} dense />
-                  </TouchableOpacity>
+                  </AnimatedButton>
                 );
               })
             )}
-          </View>
-
-          {/* Upcoming Event Promo Card */}
-          <View 
-            className="mb-4 flex-row rounded-[24px] border border-orange-100 bg-orange-50 p-4"
-            style={{ 
-              elevation: 1, 
-              shadowColor: '#F97316', 
-              shadowOpacity: 0.05, 
-              shadowRadius: 6, 
-              shadowOffset: { width: 0, height: 2 } 
-            }}
-          >
-            <View className="mr-3.5 h-10 w-10 items-center justify-center rounded-xl bg-orange-100">
-              <Ionicons name="megaphone-outline" size={20} color="#F97316" />
-            </View>
-            <View className="flex-1">
-              <Text className="text-[8px] font-bold tracking-wider text-slate-400 text-uppercase mb-0.5">UPCOMING EVENT CARD</Text>
-              <Text className="text-sm font-extrabold text-primary">Live Music Event</Text>
-              <View className="mt-1.5 flex-row items-center gap-2">
-                <StatusBadge label="Menunggu" bg="bg-crewAccent/10" text="text-crewAccent" />
-                <Text className="text-[10px] text-slate-400">18 Juni 2026</Text>
-              </View>
-            </View>
           </View>
 
           {/* Progress Tracker Widget */}
           {activeTasks.slice(0, 1).map((task) => {
             const status = getEventStatusMeta(task.status);
             return (
-              <View key={`progress-${task.id}`} className="mb-4 rounded-[24px] bg-slate-100/50 p-4 border border-slate-100">
+              <View key={`progress-${task.id}`} className="mb-4 rounded-[24px] bg-white p-4 border border-slate-100 shadow-sm">
                 <View className="mb-2 flex-row justify-between">
                   <Text className="text-[10px] font-bold text-slate-500">Progress event aktif</Text>
-                  <Text className="text-[10px] font-extrabold text-primary">{status.progress}%</Text>
+                  <Text className="text-[10px] font-extrabold text-crewAccent">{status.progress}%</Text>
                 </View>
                 <ProgressBar progress={status.progress} color="#F97316" />
               </View>
@@ -298,10 +435,10 @@ const dashboardStyles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 8,
     paddingVertical: 10,
-    borderRadius: 12,
-    backgroundColor: '#F8FAFC', // slate-50/crewBg
+    borderRadius: 16,
+    backgroundColor: '#F8FAFC',
     borderWidth: 1,
-    borderColor: '#F1F5F9', // slate-100
+    borderColor: '#F1F5F9',
     marginBottom: 8,
   },
   circleText: {
@@ -321,7 +458,8 @@ const dashboardStyles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 7.5,
-    color: '#64748B', // slate-500
+    color: '#64748B',
     lineHeight: 9,
   }
 });
+

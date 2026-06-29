@@ -1,10 +1,12 @@
 import { PremiumAlert as Alert } from "../../components/PremiumAlert";
+import { Toast } from '../../components/PremiumToast';
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, Linking } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api, getAssetUrl } from '../../services/api';
-import { InfoRow, LoadingState, StatusBadge } from '../../components/FndUi';
+import { InfoRow, LoadingState, StatusBadge, DetailHeroSkeleton } from '../../components/FndUi';
 import { formatLongDate, getEventImage, getEventStatusMeta, getLocationParts } from '../../utils/fnd';
 
 const TIMELINE = [
@@ -31,7 +33,7 @@ export const DetailTugasScreen = ({ route, navigation }: any) => {
         }
       } catch (error: any) {
         if (!event) {
-          Alert.alert('Error', error.response?.data?.error || error.message || 'Gagal memuat detail tugas');
+          Toast.show({ title: 'Gagal Memuat', message: error.response?.data?.error || error.message || 'Gagal memuat detail tugas', type: 'error' });
         }
       } finally {
         setLoading(false);
@@ -40,7 +42,7 @@ export const DetailTugasScreen = ({ route, navigation }: any) => {
     fetchEvent();
   }, [eventId]);
 
-  if (loading) return <LoadingState dark />;
+  if (loading) return <DetailHeroSkeleton />;
 
   const data = event || {};
   const status = getEventStatusMeta(data.status);
@@ -59,32 +61,38 @@ export const DetailTugasScreen = ({ route, navigation }: any) => {
 
   const callClient = () => {
     if (!clientPhone) {
-      Alert.alert('Kontak belum tersedia', 'Nomor PIC/client belum tersedia di database.');
+      Toast.show({ title: 'Kontak belum tersedia', message: 'Nomor PIC/client belum tersedia di database.', type: 'info' });
       return;
     }
-    Linking.openURL(`tel:${clientPhone}`).catch(() => Alert.alert('Gagal', 'Tidak dapat membuka telepon.'));
+    Linking.openURL(`tel:${clientPhone}`).catch(() => Toast.show({ title: 'Gagal', message: 'Tidak dapat membuka telepon.', type: 'error' }));
   };
 
   const updateEventStatus = async (newStatus: string) => {
     try {
       const res = await api.put(`/events/${eventId}/status`, { status: newStatus });
       if (res.data?.success) {
-        Alert.alert('Sukses', 'Status tugas berhasil diperbarui.');
+        Toast.show({ title: 'Sukses', message: 'Status tugas berhasil diperbarui.', type: 'success' });
         setEvent((prev: any) => ({ ...prev, status: newStatus }));
       }
     } catch (err: any) {
-      Alert.alert('Gagal', err.response?.data?.error || 'Gagal mengubah status');
+      Toast.show({ title: 'Gagal', message: err.response?.data?.error || 'Gagal mengubah status', type: 'error' });
     }
   };
 
   return (
-    <View className="flex-1 bg-primary">
+    <View className="flex-1 bg-primary dark:bg-slate-950">
       {/* Hero Cover Image Header */}
       <View className="relative h-64">
         {imageUrl ? (
-          <Image source={{ uri: imageUrl }} className="h-full w-full bg-slate-800" resizeMode="cover" />
+          // @ts-ignore - Reanimated 3 types sometimes miss sharedTransitionTag
+          <Animated.Image 
+            {...({ sharedTransitionTag: `event-hero-${data?.id || eventId}` } as any)}
+            source={{ uri: imageUrl }} 
+            className="h-full w-full bg-slate-800" 
+            resizeMode="cover" 
+          />
         ) : (
-          <View className="h-full w-full bg-slate-800" />
+          <Animated.View {...({ sharedTransitionTag: `event-hero-${data?.id || eventId}` } as any)} className="h-full w-full bg-slate-800" />
         )}
         <View className="absolute inset-0 bg-black/40" />
         
@@ -99,7 +107,7 @@ export const DetailTugasScreen = ({ route, navigation }: any) => {
 
         {/* Horizontal timeline progress nodes on top of cover image bottom */}
         <View className="absolute bottom-6 left-4 right-4">
-          <View className="flex-row items-center justify-between px-3 py-2.5 bg-black/55 rounded-2xl">
+          <View className="flex-row items-center justify-between px-3 py-2.5 bg-black/55 dark:bg-black/75 rounded-2xl">
             {/* Step 1: Persiapan */}
             <View className="items-center">
               <View className="h-6 w-6 rounded-full bg-emerald-500 items-center justify-center">
@@ -139,36 +147,36 @@ export const DetailTugasScreen = ({ route, navigation }: any) => {
       </View>
 
       {/* Detail Content Sheet */}
-      <View className="-mt-4 flex-1 rounded-t-[24px] bg-white">
+      <View className="-mt-4 flex-1 rounded-t-[24px] bg-white dark:bg-slate-900">
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 24, paddingBottom: 110 }}>
-          <Text className="mb-4 text-xl font-black text-primary">{data.name || 'Detail Tugas'}</Text>
+          <Text className="mb-4 text-xl font-black text-primary dark:text-slate-100">{data.name || 'Detail Tugas'}</Text>
 
           <InfoRow icon="location-outline" title={location.venue} subtitle={location.address} />
           <InfoRow icon="time-outline" title={formatLongDate(data.event_date)} subtitle="08.00 - Selesai" />
 
           {/* Action buttons side-by-side */}
           <View className="flex-row gap-2.5 my-3">
-            <TouchableOpacity onPress={callClient} className="flex-1 flex-row items-center justify-center bg-primary py-3 rounded-xl shadow-sm">
+            <TouchableOpacity onPress={callClient} className="flex-1 flex-row items-center justify-center bg-primary dark:bg-slate-800 py-3 rounded-xl shadow-sm">
               <Ionicons name="call-outline" size={14} color="#FFFFFF" />
               <Text className="ml-2 text-xs font-bold text-white">Contact Client</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('CheckIn')} className="flex-1 flex-row items-center justify-center bg-slate-50 border border-slate-200 py-3 rounded-xl">
-              <Ionicons name="location-outline" size={14} color="#0F172A" />
-              <Text className="ml-2 text-xs font-bold text-primary">Location Card</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('CheckIn')} className="flex-1 flex-row items-center justify-center bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-3 rounded-xl">
+              <Ionicons name="location-outline" size={14} color="#0F172A" style={{ color: '#0F172A' }} />
+              <Text className="ml-2 text-xs font-bold text-primary dark:text-slate-100">Location Card</Text>
             </TouchableOpacity>
           </View>
 
-          <View className="my-2 h-px bg-slate-100" />
+          <View className="my-2 h-px bg-slate-100 dark:bg-slate-800" />
 
           <View className="py-2.5">
-            <Text className="text-xs font-black text-primary mb-1">Posisi</Text>
-            <Text className="text-xs text-slate-500">{data.task || 'Support Crew'}</Text>
+            <Text className="text-xs font-black text-primary dark:text-slate-100 mb-1">Posisi</Text>
+            <Text className="text-xs text-slate-500 dark:text-slate-400">{data.task || 'Support Crew'}</Text>
           </View>
 
-          <View className="h-px bg-slate-100" />
+          <View className="h-px bg-slate-100 dark:bg-slate-800" />
 
           {/* Checklist Area with custom checkboxes */}
-          <Text className="mb-3 mt-4 text-sm font-black text-primary">Task Checklist</Text>
+          <Text className="mb-3 mt-4 text-sm font-black text-primary dark:text-slate-100">Task Checklist</Text>
           <View className="mb-4">
             {TIMELINE.map((step, index) => {
               const done = index < status.step || data.status === 'selesai';
@@ -202,12 +210,12 @@ export const DetailTugasScreen = ({ route, navigation }: any) => {
               }
 
               return (
-                <View key={step.label} className="flex-row items-center justify-between py-2.5 border-b border-slate-50">
+                <View key={step.label} className="flex-row items-center justify-between py-2.5 border-b border-slate-50 dark:border-slate-800/50">
                   <View className="flex-row items-center flex-1 mr-4">
-                    <View className={`h-5 w-5 rounded-[6px] items-center justify-center mr-3 ${done ? 'bg-emerald-500' : 'border border-slate-300'}`}>
+                    <View className={`h-5 w-5 rounded-[6px] items-center justify-center mr-3 ${done ? 'bg-emerald-500' : 'border border-slate-300 dark:border-slate-600'}`}>
                       {done ? <Ionicons name="checkmark" size={12} color="#FFFFFF" /> : null}
                     </View>
-                    <Text className={`text-xs ${done ? 'line-through text-slate-400' : 'font-semibold text-primary'}`}>
+                    <Text className={`text-xs ${done ? 'line-through text-slate-400 dark:text-slate-500' : 'font-semibold text-primary dark:text-slate-100'}`}>
                       {step.label}
                     </Text>
                   </View>
@@ -217,42 +225,42 @@ export const DetailTugasScreen = ({ route, navigation }: any) => {
             })}
           </View>
 
-          <View className="h-px bg-slate-100" />
+          <View className="h-px bg-slate-100 dark:bg-slate-800" />
 
           {/* Contact client preview card */}
           <View className="py-4">
-            <Text className="mb-2 text-xs font-black text-primary">PIC / Client</Text>
-            <View className="flex-row items-center justify-between rounded-xl bg-slate-50 p-3 border border-slate-100">
+            <Text className="mb-2 text-xs font-black text-primary dark:text-slate-100">PIC / Client</Text>
+            <View className="flex-row items-center justify-between rounded-xl bg-slate-50 dark:bg-slate-800 p-3 border border-slate-100 dark:border-slate-700">
               <View>
-                <Text className="text-xs font-bold text-primary">{data.client_name || 'PT Maju Bersama'}</Text>
-                <Text className="text-[10px] text-slate-400">{clientPhone || '0812-xxxx-xxxx'}</Text>
+                <Text className="text-xs font-bold text-primary dark:text-slate-100">{data.client_name || 'PT Maju Bersama'}</Text>
+                <Text className="text-[10px] text-slate-400 dark:text-slate-500">{clientPhone || '0812-xxxx-xxxx'}</Text>
               </View>
-              <TouchableOpacity onPress={callClient} className="h-8 w-8 items-center justify-center rounded-full bg-primary">
+              <TouchableOpacity onPress={callClient} className="h-8 w-8 items-center justify-center rounded-full bg-primary dark:bg-slate-700">
                 <Ionicons name="call" size={14} color="#FFFFFF" />
               </TouchableOpacity>
             </View>
           </View>
 
           {/* Embedded Contact Button Widget */}
-          <TouchableOpacity onPress={callClient} className="flex-row items-center bg-orange-50 border border-orange-200 rounded-xl p-3.5 mt-2">
+          <TouchableOpacity onPress={callClient} className="flex-row items-center bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-900 rounded-xl p-3.5 mt-2">
             <Ionicons name="call-outline" size={16} color="#F97316" />
-            <Text className="ml-3 text-xs font-bold text-crewAccent">Contact Client Button</Text>
+            <Text className="ml-3 text-xs font-bold text-crewAccent dark:text-orange-400">Contact Client Button</Text>
           </TouchableOpacity>
         </ScrollView>
 
         {/* Sticky Update Progress CTA */}
-        <View className="absolute bottom-0 left-0 right-0 border-t border-slate-100 bg-white px-5 pb-7 pt-4 flex-row justify-between gap-3">
+        <View className="absolute bottom-0 left-0 right-0 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 px-5 pb-7 pt-4 flex-row justify-between gap-3">
           <TouchableOpacity 
-            className="flex-1 items-center rounded-xl bg-slate-100 py-3.5" 
+            className="flex-1 items-center rounded-xl bg-slate-100 dark:bg-slate-800 py-3.5" 
             onPress={openDocumentation}
           >
-            <Text className="text-xs font-bold text-slate-600">Dokumentasi</Text>
+            <Text className="text-xs font-bold text-slate-600 dark:text-slate-300">Dokumentasi</Text>
           </TouchableOpacity>
           <TouchableOpacity 
             className="flex-1 items-center rounded-xl bg-crewAccent py-3.5 shadow-md shadow-crewAccent/25" 
             onPress={() => {
               if (data.status === 'selesai') {
-                 Alert.alert('Info', 'Tugas ini sudah selesai.');
+                 Toast.show({ title: 'Info', message: 'Tugas ini sudah selesai.', type: 'info' });
                  return;
               }
               const nextStatus = data.status === 'running' ? 'selesai' : 'running';

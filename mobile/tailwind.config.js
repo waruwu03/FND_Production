@@ -18,6 +18,13 @@ module.exports = {
         crewAccent: '#F97316',
         crewBg: '#F8FAFC',
       },
+      fontFamily: {
+        sans: ['PlusJakartaSans-Regular', 'sans-serif'],
+        semibold: ['PlusJakartaSans-SemiBold', 'sans-serif'],
+        bold: ['PlusJakartaSans-Bold', 'sans-serif'],
+        extrabold: ['PlusJakartaSans-ExtraBold', 'sans-serif'],
+        black: ['PlusJakartaSans-ExtraBold', 'sans-serif'],
+      },
     },
   },
   plugins: [],

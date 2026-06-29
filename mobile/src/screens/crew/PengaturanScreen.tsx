@@ -1,4 +1,5 @@
 import { PremiumAlert as Alert } from "../../components/PremiumAlert";
+import { Toast } from '../../components/PremiumToast';
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Switch, Alert as NativeAlert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -39,7 +40,7 @@ export const PengaturanScreen = ({ navigation }: any) => {
                   text: 'Simpan',
                   onPress: async (newPassword: string | undefined) => {
                     if (!newPassword || newPassword.length < 8) {
-                      Alert.alert('Error', 'Password baru minimal 8 karakter.');
+                      Toast.show({ title: 'Error', message: 'Password baru minimal 8 karakter.', type: 'error' });
                       return;
                     }
                     setSaving(true);
@@ -49,21 +50,17 @@ export const PengaturanScreen = ({ navigation }: any) => {
                         newPassword,
                       });
                       if (response.data?.success) {
-                        Alert.alert('Berhasil', 'Password berhasil diganti. Silakan login ulang.', [
-                          {
-                            text: 'OK',
-                            onPress: async () => {
-                              const refreshToken = await AsyncStorage.getItem('refreshToken');
-                              await api.post('/auth/logout', { refreshToken }).catch(() => null);
-                              dispatch(logout());
-                            },
-                          },
-                        ]);
+                        Toast.show({ title: 'Berhasil', message: 'Password berhasil diganti. Silakan login ulang.', type: 'success' });
+                        setTimeout(async () => {
+                          const refreshToken = await AsyncStorage.getItem('refreshToken');
+                          await api.post('/auth/logout', { refreshToken }).catch(() => null);
+                          dispatch(logout());
+                        }, 2500);
                       } else {
                         throw new Error(response.data?.error);
                       }
                     } catch (error: any) {
-                      Alert.alert('Gagal', error.response?.data?.error || error.message || 'Gagal mengganti password.');
+                      Toast.show({ title: 'Gagal', message: error.response?.data?.error || error.message || 'Gagal mengganti password.', type: 'error' });
                     } finally {
                       setSaving(false);
                     }
@@ -89,7 +86,7 @@ export const PengaturanScreen = ({ navigation }: any) => {
           text: 'Hapus',
           style: 'destructive',
           onPress: () => {
-            Alert.alert('Info', 'Untuk menghapus akun, silakan hubungi administrator FND Production.');
+            Toast.show({ title: 'Info', message: 'Untuk menghapus akun, silakan hubungi administrator FND Production.', type: 'info' });
           },
         },
       ]
@@ -172,7 +169,7 @@ export const PengaturanScreen = ({ navigation }: any) => {
             <Ionicons name="chevron-forward" size={16} color="#CBD5E1" />
           </TouchableOpacity>
 
-          <TouchableOpacity className="flex-row items-center px-4 py-4" onPress={() => Alert.alert('Info', 'Fitur autentikasi dua faktor akan segera tersedia.')}>
+          <TouchableOpacity className="flex-row items-center px-4 py-4" onPress={() => Toast.show({ title: 'Info', message: 'Fitur autentikasi dua faktor akan segera tersedia.', type: 'info' })}>
             <View className="mr-3 h-9 w-9 items-center justify-center rounded-xl bg-green-50">
               <Ionicons name="shield-checkmark-outline" size={18} color="#059669" />
             </View>

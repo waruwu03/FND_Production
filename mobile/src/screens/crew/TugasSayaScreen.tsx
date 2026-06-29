@@ -1,12 +1,14 @@
 import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import React, { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, ScrollView, TouchableOpacity, RefreshControl, TextInput } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, RefreshControl, TextInput, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { api } from '../../services/api';
-import { EmptyState, InfoRow, LoadingState, ProgressBar, StatusBadge } from '../../components/FndUi';
-import { formatDate, getEventStatusMeta, getLocationParts } from '../../utils/fnd';
+import Animated from 'react-native-reanimated';
+import { api, getAssetUrl } from '../../services/api';
+import { EmptyState, InfoRow, LoadingState, ProgressBar, StatusBadge, TugasCardSkeleton } from '../../components/FndUi';
+import { formatDate, getEventStatusMeta, getLocationParts, getEventImage } from '../../utils/fnd';
+import { AnimatedButton } from '../../components/AnimatedButton';
 
 const TABS = ['Aktif', 'On Going', 'Selesai'];
 
@@ -76,10 +78,27 @@ export const TugasSayaScreen = ({ navigation }: any) => {
     }
   });
 
-  if (loading) return <LoadingState />;
+  if (loading) {
+    return (
+      <View className="flex-1 bg-crewBg dark:bg-[#0B1120]">
+        <View style={{ paddingTop: insets.top + 10 }} className="bg-primary px-5 pb-5">
+          <View className="mb-4 flex-row items-center justify-between">
+            <View className="h-9 w-9" />
+            <Text className="text-base font-extrabold text-white">Daftar Tugas</Text>
+            <View className="h-9 w-9" />
+          </View>
+        </View>
+        <ScrollView className="flex-1 px-4 mt-4" showsVerticalScrollIndicator={false}>
+          <TugasCardSkeleton />
+          <TugasCardSkeleton />
+          <TugasCardSkeleton />
+        </ScrollView>
+      </View>
+    );
+  }
 
   return (
-    <View className="flex-1 bg-crewBg">
+    <View className="flex-1 bg-crewBg dark:bg-[#0B1120]">
       {/* Dark Navy Header Section with Search Bar */}
       <View style={{ paddingTop: insets.top + 10 }} className="bg-primary px-5 pb-5">
         <View className="mb-4 flex-row items-center justify-between">
@@ -105,21 +124,23 @@ export const TugasSayaScreen = ({ navigation }: any) => {
       </View>
 
       {/* Pill tabs Segmented Control */}
-      <View className="flex-row px-4 pb-3.5 pt-3.5 bg-white border-b border-slate-100">
-        {TABS.map((tab) => (
-          <TouchableOpacity
-            key={tab}
-            onPress={() => setActiveTab(tab)}
-            className={`mx-1 flex-1 items-center rounded-xl py-2.5 ${activeTab === tab ? 'bg-primary' : 'bg-crewBg'}`}
-          >
-            <Text className={`text-[11px] font-bold ${activeTab === tab ? 'text-white' : 'text-slate-500'}`}>{tab}</Text>
-          </TouchableOpacity>
-        ))}
+      <View className="bg-primary pb-3 px-4">
+        <View className="flex-row rounded-[14px] bg-black/20 p-1 border border-white/5">
+          {TABS.map((tab) => (
+            <TouchableOpacity
+              key={tab}
+              onPress={() => setActiveTab(tab)}
+              className={`flex-1 items-center rounded-[10px] py-2.5 ${activeTab === tab ? 'bg-white shadow-sm' : ''}`}
+            >
+              <Text className={`text-[11px] font-bold ${activeTab === tab ? 'text-primary' : 'text-white/60'}`}>{tab}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
 
       {/* Scrollable Tasks List */}
       <ScrollView
-        className="flex-1 px-4 mt-3"
+        className="flex-1 px-4 mt-4"
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#F97316" />}
         contentContainerStyle={{ paddingBottom: 110 }}
@@ -137,22 +158,29 @@ export const TugasSayaScreen = ({ navigation }: any) => {
             const totalSteps = 9;
             const completedSteps = Math.round((status.progress / 100) * totalSteps);
 
+            const imageUrl = getAssetUrl(getEventImage(task)) || getEventImage(task);
+
             return (
               <View
                 key={task.id}
-                className="mb-4 rounded-[24px] border border-slate-100 bg-white overflow-hidden"
+                className="mb-5 rounded-[24px] border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden"
                 style={{ 
-                  elevation: 3, 
+                  elevation: 6, 
                   shadowColor: '#0F172A', 
-                  shadowOpacity: 0.05, 
-                  shadowRadius: 10, 
-                  shadowOffset: { width: 0, height: 4 } 
+                  shadowOpacity: 0.08, 
+                  shadowRadius: 16, 
+                  shadowOffset: { width: 0, height: 6 } 
                 }}
               >
                 {/* Visual Thumbnail Banner */}
-                <View className={`h-16 ${bgClass} relative items-center justify-center`}>
-                  <View className="absolute inset-0 bg-black/10" />
-                  <Text className="text-2xl">{emoji}</Text>
+                <View className="h-16 relative items-center justify-center bg-slate-800">
+                  <Animated.Image 
+                    {...({ sharedTransitionTag: `event-hero-${task.id}` } as any)}
+                    source={{ uri: imageUrl }} 
+                    className="absolute inset-0 h-full w-full" 
+                    resizeMode="cover" 
+                  />
+                  <View className="absolute inset-0 bg-black/40" />
                   <View className="absolute bottom-2.5 left-3">
                     <StatusBadge 
                       label={status.label} 
@@ -164,26 +192,26 @@ export const TugasSayaScreen = ({ navigation }: any) => {
 
                 {/* Card Info details */}
                 <View className="p-4">
-                  <Text className="mb-2 text-sm font-extrabold text-primary" numberOfLines={1}>{task.name}</Text>
+                  <Text className="mb-2 text-sm font-extrabold text-primary dark:text-slate-100" numberOfLines={1}>{task.name}</Text>
                   
                   <InfoRow icon="location-outline" title={location.venue} dense />
                   <InfoRow icon="time-outline" title={`${formatDate(task.event_date)} - Selesai`} dense />
 
                   {/* Progress tracker widget */}
-                  <View className="mb-4 mt-2">
+                  <View className="mb-4 mt-3 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
                     <View className="mb-2 flex-row justify-between items-center" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Text className="text-[10px] font-bold text-slate-400">Progress</Text>
+                      <Text className="text-[10px] font-bold text-slate-500 dark:text-slate-400">Progress Pengerjaan</Text>
                       <Text className="text-[10px] font-black text-crewAccent">{completedSteps}/{totalSteps}</Text>
                     </View>
                     <ProgressBar progress={status.progress} color="#F97316" />
                   </View>
 
-                  <TouchableOpacity
-                    className="items-center rounded-xl bg-crewAccent py-3 shadow-md shadow-crewAccent/20"
+                  <AnimatedButton
+                    className="items-center rounded-xl bg-crewAccent py-3"
                     onPress={() => navigation.navigate('DetailTugas', { taskId: task.id, event: task })}
                   >
                     <Text className="text-xs font-bold text-white">Lihat Detail</Text>
-                  </TouchableOpacity>
+                  </AnimatedButton>
                 </View>
               </View>
             );

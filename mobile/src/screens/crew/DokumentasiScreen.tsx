@@ -1,4 +1,5 @@
 import { PremiumAlert as Alert } from "../../components/PremiumAlert";
+import { Toast } from '../../components/PremiumToast';
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, ActivityIndicator, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -62,7 +63,7 @@ export const DokumentasiScreen = ({ route, navigation }: any) => {
 
   const uploadPhoto = async () => {
     if (!event?.id) {
-      Alert.alert('Belum ada event', 'Pilih event tugas terlebih dahulu untuk mengunggah dokumentasi.');
+      Toast.show({ title: 'Belum ada event', message: 'Pilih event tugas terlebih dahulu untuk mengunggah dokumentasi.', type: 'info' });
       return;
     }
 
@@ -118,11 +119,11 @@ export const DokumentasiScreen = ({ route, navigation }: any) => {
 
       const detail = await api.get(`/events/${event.id}`);
       if (detail.data?.success) setEvent(detail.data.data);
-      Alert.alert('Berhasil! 🎉', `${result.assets.length} foto berhasil diunggah ke dokumentasi event.`);
+      Toast.show({ title: 'Berhasil! 🎉', message: `${result.assets.length} foto berhasil diunggah ke dokumentasi event.`, type: 'success' });
     } catch (error: any) {
       console.error('Upload error detail:', error);
       const errMsg = error?.message || JSON.stringify(error) || 'Terjadi kesalahan saat upload';
-      Alert.alert('Upload Gagal', errMsg);
+      Toast.show({ title: 'Upload Gagal', message: errMsg, type: 'error' });
     } finally {
       setUploading(false);
     }

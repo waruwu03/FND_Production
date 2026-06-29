@@ -53,6 +53,8 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
     status: "pending",
     totalAmount: "",
     dpAmount: "",
+    discountPrice: "",
+    logisticsPrice: "",
   })
 
   useEffect(() => {
@@ -70,6 +72,8 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
           status: event.status || "pending",
           totalAmount: String(event.total_amount || ""),
           dpAmount: String(event.dp_amount || ""),
+          discountPrice: String(event.discount_price || ""),
+          logisticsPrice: String(event.logistics_price || ""),
         })
 
         let parsedImages = []
@@ -148,6 +152,8 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
           status: formData.status,
           totalAmount: Number(formData.totalAmount || 0),
           dpAmount: Number(formData.dpAmount || 0),
+          discountPrice: Number(formData.discountPrice || 0),
+          logisticsPrice: Number(formData.logisticsPrice || 0),
           referenceImages,
           equipment: [],
           crew: [],
@@ -235,6 +241,14 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
             <div className="grid gap-2">
               <Label htmlFor="dp">DP</Label>
               <Input id="dp" type="number" value={formData.dpAmount} onChange={(event) => setFormData({ ...formData, dpAmount: event.target.value })} min={0} />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="discount">Diskon / Potongan Harga</Label>
+              <Input id="discount" type="number" value={formData.discountPrice} onChange={(event) => setFormData({ ...formData, discountPrice: event.target.value })} min={0} />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="logistics">Biaya Logistik & Transport</Label>
+              <Input id="logistics" type="number" value={formData.logisticsPrice} onChange={(event) => setFormData({ ...formData, logisticsPrice: event.target.value })} min={0} />
             </div>
             <div className="grid gap-2 md:col-span-2">
               <Label htmlFor="notes">Catatan</Label>

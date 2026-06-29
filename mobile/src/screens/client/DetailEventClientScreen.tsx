@@ -1,6 +1,6 @@
 import { PremiumAlert as Alert } from "../../components/PremiumAlert";
-import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Image, Linking, StyleSheet, Modal, TextInput } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Image, Linking, StyleSheet, Modal, TextInput, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api, getAssetUrl } from '../../services/api';
@@ -23,6 +23,9 @@ export const DetailEventClientScreen = ({ route, navigation }: any) => {
   const [editVisible, setEditVisible] = useState(false);
   const [editForm, setEditForm] = useState({ name: '', location: '', notes: '' });
   const [isSaving, setIsSaving] = useState(false);
+
+  // Parallax Scroll Value
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const fetchEvent = async () => {
     if (!eventId) return;
@@ -58,6 +61,23 @@ export const DetailEventClientScreen = ({ route, navigation }: any) => {
   const paid = Number(event.paid_amount || 0);
   const remaining = Math.max(total - paid, 0);
   const canEdit = event.status === 'pending' || event.status === 'survey';
+
+  // Parse categories for transparent billing
+  const equipmentList = event?.equipment || [];
+  const isDemo = equipmentList.length === 0;
+  
+  // Try to find a package, otherwise use the most expensive item as the main package
+  let paketUtama = equipmentList.find((item: any) => item.name.toLowerCase().includes('paket'));
+  if (!paketUtama && equipmentList.length > 0) {
+    paketUtama = equipmentList.reduce((prev: any, current: any) => (prev.price > current.price) ? prev : current);
+  }
+  const tambahanList = equipmentList.filter((item: any) => item.id !== paketUtama?.id);
+
+  const logisticsPrice = isDemo ? 150000 : (event.logistics_price || 0);
+  const discountPrice = isDemo ? 100000 : (event.discount_price || 0);
+  const demoTotal = 1500000 + 250000 + 150000 + 150000 - 100000;
+  const displayTotal = isDemo ? demoTotal : total;
+  const displayPaid = isDemo ? 0 : paid;
 
   const openEdit = () => {
     setEditForm({
@@ -107,15 +127,35 @@ export const DetailEventClientScreen = ({ route, navigation }: any) => {
     });
   };
 
+  const imageScale = scrollY.interpolate({
+    inputRange: [-100, 0, 100],
+    outputRange: [1.5, 1, 1],
+    extrapolate: 'clamp',
+  });
+
+  const imageTranslateY = scrollY.interpolate({
+    inputRange: [-100, 0, 260],
+    outputRange: [-50, 0, 130],
+    extrapolate: 'clamp',
+  });
+
   return (
     <View style={{ flex: 1, backgroundColor: '#0B1241' }}>
-      {/* Hero Image */}
-      <View style={{ height: 260, position: 'relative' }}>
+      {/* Hero Image - Parallax */}
+      <Animated.View 
+        style={{ 
+          height: 260, 
+          position: 'absolute', 
+          top: 0, left: 0, right: 0,
+          transform: [{ translateY: imageTranslateY }, { scale: imageScale }] 
+        }}
+      >
         <Image source={{ uri: imageUrl }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
         <View style={{ ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(11,18,65,0.4)' }} />
+      </Animated.View>
 
-        {/* Top Bar */}
-        <View style={{ position: 'absolute', top: insets.top + 8, left: 16, right: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      {/* Top Bar (Fixed) */}
+      <View style={{ position: 'absolute', top: insets.top + 8, left: 16, right: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 10 }}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={styles.heroBtn}
@@ -127,14 +167,18 @@ export const DetailEventClientScreen = ({ route, navigation }: any) => {
             <Text style={{ color: '#FFFFFF', fontSize: 10, fontWeight: '800' }}>{status.clientLabel}</Text>
           </View>
         </View>
-      </View>
 
-      {/* Content Card */}
-      <View style={styles.contentCard}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 24, paddingBottom: canEdit ? 140 : 110 }}
-        >
+      {/* Main Scroll Content */}
+      <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: true }
+        )}
+        scrollEventThrottle={16}
+        contentContainerStyle={{ paddingTop: 240, paddingBottom: canEdit ? 140 : 110 }}
+      >
+        <View style={styles.contentCard}>
           {/* Event Title */}
           <Text style={styles.eventTitle}>{event.name}</Text>
           <View style={styles.infoRow}>
@@ -179,40 +223,144 @@ export const DetailEventClientScreen = ({ route, navigation }: any) => {
             </View>
           </ScrollView>
 
-          {/* Booking Info */}
-          <Text style={styles.sectionLabel}>Informasi Booking</Text>
+          {/* 1. INFO UTAMA ACARA */}
+          <Text style={styles.sectionLabel}>📍 Info Utama Acara</Text>
           <View style={styles.infoCard}>
-            {[
-              ['No. Booking', `FND-${String(event.id).padStart(6, '0')}`],
-              ['Tanggal Booking', formatDate(event.created_at || event.event_date)],
-              ['Total Estimasi', formatCurrency(total)],
-              ['Terbayar', formatCurrency(paid)],
-              ['Sisa Tagihan', formatCurrency(remaining)],
-            ].map(([label, value]) => (
-              <View key={label} style={styles.infoCardRow}>
-                <Text style={styles.infoCardLabel}>{label}</Text>
-                <Text style={[styles.infoCardValue, label === 'Sisa Tagihan' && remaining > 0 && { color: '#EF4444' }]}>
-                  {value}
-                </Text>
-              </View>
-            ))}
+            <View style={styles.infoCardRow}>
+              <Text style={styles.infoCardLabel}>Project / Acara</Text>
+              <Text style={[styles.infoCardValue, { flex: 1, textAlign: 'right' }]} numberOfLines={2}>{event.name}</Text>
+            </View>
+            <View style={styles.infoCardRow}>
+              <Text style={styles.infoCardLabel}>Tanggal</Text>
+              <Text style={styles.infoCardValue}>{formatDate(event.event_date)}</Text>
+            </View>
+            <View style={styles.infoCardRow}>
+              <Text style={styles.infoCardLabel}>Waktu / Durasi</Text>
+              <Text style={styles.infoCardValue}>{event.start_time || '08:00'} WIB (1 Shift)</Text>
+            </View>
+            <View style={[styles.infoCardRow, { borderBottomWidth: 0, paddingBottom: 0 }]}>
+              <Text style={styles.infoCardLabel}>Lokasi</Text>
+              <Text style={[styles.infoCardValue, { flex: 1, textAlign: 'right' }]} numberOfLines={2}>{location.venue}</Text>
+            </View>
           </View>
 
-          {/* Equipment */}
-          {event.equipment?.length ? (
-            <>
-              <Text style={[styles.sectionLabel, { marginTop: 4 }]}>Layanan Dipilih</Text>
-              <View style={styles.infoCard}>
-                {event.equipment.map((item: any) => (
-                  <View key={`${item.id}-${item.name}`} style={styles.infoCardRow}>
-                    <Text style={styles.infoCardLabel}>{item.name}</Text>
-                    <Text style={styles.infoCardValue}>×{item.quantity}</Text>
-                  </View>
-                ))}
+          {/* 2. RINCIAN BIAYA (TRANSPARAN) - BUNDLING CONCEPT */}
+          <Text style={[styles.sectionLabel, { marginTop: 16 }]}>💰 Rincian Biaya (Transparan)</Text>
+          <View style={styles.infoCard}>
+            
+            {/* Paket Utama */}
+            <Text style={{ fontSize: 11, fontWeight: '800', color: '#1E293B', marginBottom: 6 }}>PAKET UTAMA</Text>
+            {isDemo ? (
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
+                <Text style={{ fontSize: 12, color: '#334155', flex: 1 }}>1x Paket Live Streaming Lite</Text>
+                <Text style={{ fontSize: 12, color: '#0F172A', fontWeight: '600' }}>Rp1.500.000</Text>
               </View>
-            </>
-          ) : null}
-        </ScrollView>
+            ) : paketUtama ? (
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
+                <Text style={{ fontSize: 12, color: '#334155', flex: 1 }}>{paketUtama.quantity}x {paketUtama.name}</Text>
+                <Text style={{ fontSize: 12, color: '#0F172A', fontWeight: '600' }}>{formatCurrency(paketUtama.price * paketUtama.quantity)}</Text>
+              </View>
+            ) : null}
+
+            {/* Alat & Kru Tambahan */}
+            <Text style={{ fontSize: 11, fontWeight: '800', color: '#1E293B', marginBottom: 6 }}>ALAT & KRU TAMBAHAN</Text>
+            {isDemo ? (
+              <>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <Text style={{ fontSize: 12, color: '#475569', flex: 1 }}>1x Tambahan Kamera Web/Basic</Text>
+                  <Text style={{ fontSize: 12, color: '#334155', fontWeight: '500' }}>Rp250.000</Text>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
+                  <Text style={{ fontSize: 12, color: '#475569', flex: 1 }}>1x Operator Basic</Text>
+                  <Text style={{ fontSize: 12, color: '#334155', fontWeight: '500' }}>Rp150.000</Text>
+                </View>
+              </>
+            ) : tambahanList.length > 0 ? (
+              tambahanList.map((item: any) => (
+                <View key={`${item.id}-${item.name}`} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <Text style={{ fontSize: 12, color: '#475569', flex: 1 }}>{item.quantity}x {item.name}</Text>
+                  <Text style={{ fontSize: 12, color: '#334155', fontWeight: '500' }}>{formatCurrency(item.price * item.quantity)}</Text>
+                </View>
+              ))
+            ) : (
+              <Text style={{ fontSize: 12, color: '#94A3B8', fontStyle: 'italic', marginBottom: 12 }}>Tidak ada tambahan</Text>
+            )}
+
+            {/* Logistik & Transportasi */}
+            <Text style={{ fontSize: 11, fontWeight: '800', color: '#1E293B', marginBottom: 6, marginTop: 4 }}>LOGISTIK & TRANSPORTASI</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
+              <Text style={{ fontSize: 12, color: '#475569', flex: 1 }}>Biaya Antar, Pasang & Bongkar</Text>
+              <Text style={{ fontSize: 12, color: '#334155', fontWeight: '500' }}>{isDemo ? 'Rp150.000' : formatCurrency(logisticsPrice)}</Text>
+            </View>
+
+            {/* Potongan Harga */}
+            <Text style={{ fontSize: 11, fontWeight: '800', color: '#1E293B', marginBottom: 6 }}>POTONGAN HARGA</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
+              <Text style={{ fontSize: 12, color: '#475569', flex: 1 }}>{isDemo ? 'Diskon Promo UMKM' : discountPrice > 0 ? 'Promo' : 'Tidak ada'}</Text>
+              <Text style={{ fontSize: 12, color: '#10B981', fontWeight: '600' }}>{isDemo ? '-Rp100.000' : discountPrice > 0 ? `-${formatCurrency(discountPrice)}` : '-'}</Text>
+            </View>
+
+            <View style={{ height: 1, backgroundColor: '#E2E8F0', marginVertical: 14 }} />
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Text style={{ fontSize: 13, fontWeight: '800', color: '#0F172A' }}>TOTAL BIAYA SEWA</Text>
+              <Text style={{ fontSize: 15, fontWeight: '900', color: '#F97316' }}>{formatCurrency(displayTotal)}</Text>
+            </View>
+          </View>
+
+          {/* 3. SKEMA PEMBAYARAN */}
+          <Text style={[styles.sectionLabel, { marginTop: 16 }]}>💳 Skema Pembayaran</Text>
+          <View style={styles.infoCard}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
+              <View>
+                <Text style={{ fontSize: 12, fontWeight: '700', color: '#0F172A' }}>1. Down Payment (DP 50%)</Text>
+                <Text style={{ fontSize: 10, color: '#64748B', marginTop: 2 }}>*Wajib dibayarkan sebelum H-3</Text>
+              </View>
+              <Text style={{ fontSize: 13, fontWeight: '800', color: '#0F172A' }}>{formatCurrency(displayTotal / 2)}</Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View>
+                <Text style={{ fontSize: 12, fontWeight: '700', color: '#0F172A' }}>2. Sisa Pelunasan (50%)</Text>
+                <Text style={{ fontSize: 10, color: '#64748B', marginTop: 2 }}>*Dibayarkan maks. H+1 selesai</Text>
+              </View>
+              <Text style={{ fontSize: 13, fontWeight: '800', color: '#0F172A' }}>{formatCurrency(displayTotal / 2)}</Text>
+            </View>
+
+            <View style={{ height: 1, backgroundColor: '#F1F5F9', marginVertical: 12 }} />
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={{ fontSize: 12, fontWeight: '600', color: '#64748B' }}>Status Terbayar saat ini</Text>
+              <Text style={{ fontSize: 12, fontWeight: '800', color: displayPaid > 0 ? '#10B981' : '#EF4444' }}>{formatCurrency(displayPaid)}</Text>
+            </View>
+          </View>
+
+          {/* 4. CATATAN PENTING (S&K) */}
+          <Text style={[styles.sectionLabel, { marginTop: 16 }]}>⚠️ Catatan Penting (S&K)</Text>
+          <View style={[styles.infoCard, { backgroundColor: '#FFFBEB', borderColor: '#FEF3C7' }]}>
+            <View style={{ flexDirection: 'row', marginBottom: 8 }}>
+              <Text style={{ fontSize: 14, marginRight: 6 }}>⏱️</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 11, fontWeight: '700', color: '#92400E' }}>Overtime</Text>
+                <Text style={{ fontSize: 10, color: '#B45309', marginTop: 2, lineHeight: 14 }}>Penggunaan alat/kru melebihi 1 shift (12 jam) akan dikenakan biaya tambahan overtime.</Text>
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', marginBottom: 8 }}>
+              <Text style={{ fontSize: 14, marginRight: 6 }}>❌</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 11, fontWeight: '700', color: '#92400E' }}>Pembatalan</Text>
+                <Text style={{ fontSize: 10, color: '#B45309', marginTop: 2, lineHeight: 14 }}>Pembatalan sepihak setelah DP masuk akan dikenakan potongan 50% dari nilai DP.</Text>
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={{ fontSize: 14, marginRight: 6 }}>🛡️</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 11, fontWeight: '700', color: '#92400E' }}>Keamanan Alat</Text>
+                <Text style={{ fontSize: 10, color: '#B45309', marginTop: 2, lineHeight: 14 }}>Kerusakan alat akibat kelalaian penuh menjadi tanggung jawab penyewa.</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Animated.ScrollView>
 
         {/* ── Bottom Action Bar ─────────────────────────────────────────────── */}
         <View style={[styles.bottomBar, { paddingBottom: insets.bottom + 16 }]}>
@@ -233,7 +381,6 @@ export const DetailEventClientScreen = ({ route, navigation }: any) => {
             <Text style={styles.whatsappText}>Hubungi Admin via WhatsApp</Text>
           </TouchableOpacity>
         </View>
-      </View>
 
       {/* ── Cancel Dialog ─────────────────────────────────────────────────── */}
       <ConfirmDialog
@@ -336,7 +483,7 @@ const styles = StyleSheet.create({
   heroBadge: { borderRadius: 8, paddingHorizontal: 12, paddingVertical: 6 },
 
   // Card
-  contentCard: { flex: 1, backgroundColor: '#FFFFFF', borderTopLeftRadius: 24, borderTopRightRadius: 24, marginTop: -20 },
+  contentCard: { backgroundColor: '#FFFFFF', borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingHorizontal: 24, paddingTop: 24, minHeight: 600 },
 
   // Event info
   eventTitle: { fontSize: 22, fontWeight: '900', color: '#0B1241', marginBottom: 10 },

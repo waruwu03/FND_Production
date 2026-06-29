@@ -1,7 +1,10 @@
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, { useEffect } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, Dimensions } from 'react-native';
+import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import * as Haptics from 'expo-haptics';
 
 import { ClientDashboardScreen } from '../screens/client/ClientDashboardScreen';
 import { BookingScreen } from '../screens/client/BookingScreen';
@@ -55,43 +58,83 @@ const ProfileStackNavigator = () => (
   </ProfileStack.Navigator>
 );
 
+const { width } = Dimensions.get('window');
+
+const CustomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
+  const TAB_BAR_WIDTH = width - 40;
+  const TAB_WIDTH = TAB_BAR_WIDTH / state.routes.length;
+  
+  const translateX = useSharedValue(0);
+
+  useEffect(() => {
+    translateX.value = withSpring(state.index * TAB_WIDTH, {
+      damping: 20,
+      stiffness: 250,
+    });
+  }, [state.index]);
+
+  const indicatorStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: translateX.value }],
+    };
+  });
+
+  return (
+    <View style={styles.tabBarContainer}>
+      <Animated.View style={[styles.indicator, indicatorStyle, { width: TAB_WIDTH - 20, left: 10 }]} />
+      {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        const label = options.title !== undefined ? options.title : route.name;
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name, route.params);
+          }
+        };
+
+        const icons: { [key: string]: keyof typeof Ionicons.glyphMap } = {
+          Beranda: isFocused ? 'home' : 'home-outline',
+          Booking: isFocused ? 'calendar' : 'calendar-outline',
+          EventSaya: isFocused ? 'albums' : 'albums-outline',
+          Invoice: isFocused ? 'receipt' : 'receipt-outline',
+          Profil: isFocused ? 'person' : 'person-outline',
+        };
+        const iconName = icons[route.name] ?? 'ellipse-outline';
+
+        return (
+          <TouchableOpacity
+            key={route.key}
+            accessibilityRole="button"
+            accessibilityState={isFocused ? { selected: true } : {}}
+            accessibilityLabel={options.tabBarAccessibilityLabel}
+            testID={options.tabBarButtonTestID}
+            onPress={onPress}
+            style={styles.tabItem}
+          >
+            <Ionicons name={iconName} size={22} color={isFocused ? '#F97316' : '#94A3B8'} />
+            <Text style={[styles.tabLabel, { color: isFocused ? '#F97316' : '#94A3B8' }]}>
+              {label as string}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+};
+
 export const ClientNavigator = () => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        headerShown: false,
-        tabBarActiveTintColor: '#F97316',   // accent orange — mengikuti warna aksen crew app
-        tabBarInactiveTintColor: '#94A3B8',
-        tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopWidth: 1,
-          borderTopColor: '#F1F5F9',
-          paddingBottom: 10,
-          paddingTop: 8,
-          height: 72,
-          shadowColor: '#0D1B5E',
-          shadowOffset: { width: 0, height: -4 },
-          shadowOpacity: 0.08,
-          shadowRadius: 16,
-          elevation: 12,
-        },
-        tabBarLabelStyle: {
-          fontSize: 10,
-          fontWeight: '600',
-          marginTop: 2,
-        },
-        tabBarIcon: ({ color, size, focused }) => {
-          const icons: { [key: string]: keyof typeof Ionicons.glyphMap } = {
-            Beranda: focused ? 'home' : 'home-outline',
-            Booking: focused ? 'calendar' : 'calendar-outline',
-            EventSaya: focused ? 'albums' : 'albums-outline',
-            Invoice: focused ? 'receipt' : 'receipt-outline',
-            Profil: focused ? 'person' : 'person-outline',
-          };
-          const iconName = icons[route.name] ?? 'ellipse-outline';
-          return <Ionicons name={iconName} size={22} color={color} />;
-        },
-      })}
+      screenOptions={{ headerShown: false }}
+      tabBar={(props) => <CustomTabBar {...props} />}
     >
       <Tab.Screen name="Beranda" component={BerandaStack} />
       <Tab.Screen name="Booking" component={BookingStackNavigator} />
@@ -101,3 +144,43 @@ export const ClientNavigator = () => {
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  tabBarContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    position: 'absolute',
+    bottom: 24,
+    left: 20,
+    right: 20,
+    height: 64,
+    borderRadius: 32,
+    elevation: 8,
+    shadowColor: '#0F172A',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    zIndex: 2,
+  },
+  tabLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    marginTop: 4,
+  },
+  indicator: {
+    position: 'absolute',
+    height: 48,
+    backgroundColor: '#FFF7ED', // orange-50
+    borderRadius: 24,
+    zIndex: 1,
+    top: 8,
+  },
+});

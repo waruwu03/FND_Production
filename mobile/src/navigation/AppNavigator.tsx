@@ -36,7 +36,11 @@ export const AppNavigator = () => {
             }));
           }
         } catch (error: any) {
-          console.error('[Auth Sync] Gagal sinkronisasi profil:', error);
+          if (error.message === 'Network Error' || !error.response) {
+            console.log('[Auth Sync] Sedang offline, menggunakan data profil lokal.');
+          } else {
+            console.warn('[Auth Sync] Gagal sinkronisasi profil:', error.message);
+          }
           // Jika token tidak valid / expired (401), paksa logout
           if (error.response && error.response.status === 401) {
             dispatch(logout());

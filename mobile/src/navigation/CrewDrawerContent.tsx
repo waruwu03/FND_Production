@@ -16,7 +16,7 @@ const menuItems = [
   { name: 'Check-In', icon: 'location-outline', tab: 'CheckIn' },
   { name: 'Dokumentasi', icon: 'images-outline', tab: 'Tugas', params: { screen: 'Dokumentasi' } },
   { name: 'Riwayat Tugas', icon: 'time-outline', tab: 'Profil', params: { screen: 'RiwayatTugas' } },
-  { name: 'Notifikasi', icon: 'notifications-outline', tab: 'Notifikasi', badge: 3 },
+  { name: 'Notifikasi', icon: 'notifications-outline', tab: 'Notifikasi' },
   { name: 'Profil Saya', icon: 'person-outline', tab: 'Profil' },
 ];
 
@@ -116,11 +116,7 @@ export const CrewDrawerContent = (props: any) => {
               >
                 <Ionicons name={item.icon as any} size={20} color={active ? '#FFFFFF' : '#94A3B8'} />
                 <Text className={`ml-4 text-sm font-semibold ${active ? 'text-white' : 'text-slate-300'}`}>{item.name}</Text>
-                {item.badge ? (
-                  <View className="ml-auto h-4 w-6 items-center justify-center rounded-full bg-danger">
-                    <Text className="text-[9px] font-bold text-white">{item.badge}</Text>
-                  </View>
-                ) : null}
+
               </TouchableOpacity>
             );
           })}

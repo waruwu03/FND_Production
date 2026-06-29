@@ -1,4 +1,5 @@
 import { PremiumAlert as Alert } from "../../components/PremiumAlert";
+import { Toast } from '../../components/PremiumToast';
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -30,15 +31,15 @@ export const RekeningScreen = ({ navigation }: any) => {
 
   const handleSave = async () => {
     if (!bankName || !accountNumber || !accountHolder) {
-      Alert.alert('Error', 'Semua field wajib diisi.');
+      Toast.show({ title: 'Error', message: 'Semua field wajib diisi.', type: 'error' });
       return;
     }
     setSaving(true);
     try {
       await AsyncStorage.setItem('fnd-rekening', JSON.stringify({ bankName, accountNumber, accountHolder }));
-      Alert.alert('Berhasil', 'Data rekening berhasil disimpan.');
+      Toast.show({ title: 'Berhasil', message: 'Data rekening berhasil disimpan.', type: 'success' });
     } catch {
-      Alert.alert('Error', 'Gagal menyimpan data rekening.');
+      Toast.show({ title: 'Error', message: 'Gagal menyimpan data rekening.', type: 'error' });
     } finally {
       setSaving(false);
     }

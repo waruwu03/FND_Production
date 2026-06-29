@@ -1,13 +1,17 @@
 import { PremiumAlert as Alert } from "../../components/PremiumAlert";
+import { Toast } from '../../components/PremiumToast';
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, ActivityIndicator, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { enqueueTask } from '../../store/slices/syncSlice';
 import * as Location from 'expo-location';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api, getAssetUrl } from '../../services/api';
 import { EmptyState, InfoRow } from '../../components/FndUi';
-import { getEventStatusMeta, getLocationParts } from '../../utils/fnd';
+import { getEventStatusMeta, getLocationParts, getEventImage } from '../../utils/fnd';
+import MapView, { Marker, Circle } from 'react-native-maps';
 
 type CheckStatus = 'idle' | 'checkedIn' | 'checkedOut';
 
@@ -37,6 +41,7 @@ function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
 
 export const CheckInScreen = ({ navigation }: any) => {
   const insets = useSafeAreaInsets();
+  const dispatch = useDispatch();
   const [tasks, setTasks] = useState<any[]>([]);
   const [status, setStatus] = useState<CheckStatus>('idle');
   const [isLoading, setIsLoading] = useState(false);
@@ -49,13 +54,28 @@ export const CheckInScreen = ({ navigation }: any) => {
     [tasks],
   );
 
-  const eventCoords = useMemo(() => {
-    // Hotel Mulia Jakarta coordinates or mock coordinates close to default emulator location for testing
-    return {
-      latitude: -6.2088,
-      longitude: 106.8456,
+  const [eventCoords, setEventCoords] = useState<{ latitude: number, longitude: number }>({
+    latitude: -6.2088,
+    longitude: 106.8456,
+  });
+
+  useEffect(() => {
+    const geocodeEventLocation = async () => {
+      if (!event?.location) return;
+      try {
+        const results = await Location.geocodeAsync(event.location);
+        if (results && results.length > 0) {
+          setEventCoords({
+            latitude: results[0].latitude,
+            longitude: results[0].longitude,
+          });
+        }
+      } catch (err) {
+        console.log('Geocoding error:', err);
+      }
     };
-  }, []);
+    geocodeEventLocation();
+  }, [event?.location]);
 
   const fetchTasks = async () => {
     try {
@@ -168,15 +188,26 @@ export const CheckInScreen = ({ navigation }: any) => {
       if (response.data?.success) {
         await AsyncStorage.setItem(`fnd-checkin-${event.id}`, 'checkedIn');
         setStatus('checkedIn');
-        Alert.alert('Check-In Berhasil! 🎉', 'Kehadiran Anda di area geofence berhasil dicatat.');
+        Toast.show({ title: 'Check-In Berhasil! 🎉', message: 'Kehadiran Anda di area geofence berhasil dicatat.', type: 'success' });
       } else {
         throw new Error(response.data?.error || 'Gagal menyimpan data check-in.');
       }
     } catch (error: any) {
       // Fallback local checkin in case server offline
+      dispatch(enqueueTask({
+        url: `/events/${event.id}/checkin`,
+        method: 'POST',
+        body: {
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude,
+          timestamp: new Date().toISOString(),
+        },
+        type: 'checkIn',
+        timestamp: new Date().toISOString(),
+      }));
       await AsyncStorage.setItem(`fnd-checkin-${event.id}`, 'checkedIn');
       setStatus('checkedIn');
-      Alert.alert('Check-In Berhasil (Offline)', 'Lokasi telah dicatat secara lokal.');
+      Toast.show({ title: 'Disimpan di Antrean (Offline)', message: 'Sinyal terputus. Data absen akan diunggah otomatis saat jaringan stabil.', type: 'info' });
     } finally {
       setIsLoading(false);
     }
@@ -235,9 +266,20 @@ export const CheckInScreen = ({ navigation }: any) => {
       await proceedCheckIn(loc);
     } catch (error: any) {
       // Fallback local checkin in case location fails entirely
+      dispatch(enqueueTask({
+        url: `/events/${event.id}/checkin`,
+        method: 'POST',
+        body: {
+          latitude: eventCoords.latitude,
+          longitude: eventCoords.longitude,
+          timestamp: new Date().toISOString(),
+        },
+        type: 'checkIn',
+        timestamp: new Date().toISOString(),
+      }));
       await AsyncStorage.setItem(`fnd-checkin-${event.id}`, 'checkedIn');
       setStatus('checkedIn');
-      Alert.alert('Check-In Berhasil (Offline)', 'Lokasi telah dicatat secara lokal.');
+      Toast.show({ title: 'Disimpan di Antrean (Offline)', message: 'Sinyal terputus. Data absen akan diunggah otomatis.', type: 'info' });
       setIsLoading(false);
     }
   };
@@ -250,14 +292,21 @@ export const CheckInScreen = ({ navigation }: any) => {
       if (response.data?.success) {
         await AsyncStorage.setItem(`fnd-checkin-${event.id}`, 'checkedOut');
         setStatus('checkedOut');
-        Alert.alert('Check-Out Berhasil! 🏁', 'Tugas Anda selesai dan telah berhasil dicatat.');
+        Toast.show({ title: 'Check-Out Berhasil! 🏁', message: 'Tugas Anda selesai dan telah berhasil dicatat.', type: 'success' });
       } else {
         throw new Error(response.data?.error || 'Gagal check-out.');
       }
-    } catch {
+    } catch (error: any) {
+      dispatch(enqueueTask({
+        url: `/events/${event.id}/checkout`,
+        method: 'POST',
+        body: { timestamp: new Date().toISOString() },
+        type: 'checkOut',
+        timestamp: new Date().toISOString(),
+      }));
       await AsyncStorage.setItem(`fnd-checkin-${event.id}`, 'checkedOut');
       setStatus('checkedOut');
-      Alert.alert('Check-Out Berhasil (Offline)', 'Waktu selesai telah dicatat secara lokal.');
+      Toast.show({ title: 'Disimpan di Antrean (Offline)', message: 'Sinyal terputus. Waktu selesai akan diunggah otomatis.', type: 'info' });
     } finally {
       setIsLoading(false);
     }
@@ -267,86 +316,97 @@ export const CheckInScreen = ({ navigation }: any) => {
   const isWithinGeofence = distance !== null && distance <= 100;
 
   const eventImageUrl = useMemo(() => {
-    if (event?.reference_images) {
-      try {
-        const parsed = JSON.parse(event.reference_images);
-        if (Array.isArray(parsed) && parsed[0]) return getAssetUrl(parsed[0]);
-      } catch {
-        if (typeof event.reference_images === 'string' && event.reference_images.startsWith('http')) {
-          return event.reference_images;
-        }
-      }
-    }
-    return 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=300&q=80';
-  }, [event?.reference_images]);
+    const imagePath = getEventImage(event);
+    return getAssetUrl(imagePath) || imagePath;
+  }, [event]);
 
   return (
     <View style={styles.container}>
-      {/* Background Static Map */}
-      <Image
-        source={{ uri: 'https://api.mapbox.com/styles/v1/mapbox/light-v10/static/106.8456,-6.2088,14.5,0/640x960?access_token=YOUR_MAPBOX_ACCESS_TOKEN' }}
+      {/* Background Interactive Map */}
+      <MapView
         style={styles.map}
-        resizeMode="cover"
-      />
+        initialRegion={{
+          latitude: eventCoords.latitude,
+          longitude: eventCoords.longitude,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.015,
+        }}
+        region={{
+          latitude: eventCoords.latitude,
+          longitude: eventCoords.longitude,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.015,
+        }}
+        showsUserLocation={true}
+        showsMyLocationButton={false}
+      >
+        <Marker coordinate={eventCoords}>
+          <View style={{ alignItems: 'center', justifyContent: 'center', shadowColor: '#F97316', shadowOpacity: 0.3, shadowRadius: 5, shadowOffset: { width: 0, height: 3 } }}>
+            <Ionicons name="location" size={42} color="#F97316" />
+          </View>
+        </Marker>
+        <Circle
+          center={eventCoords}
+          radius={100}
+          strokeWidth={2}
+          strokeColor="rgba(249, 115, 22, 0.8)"
+          fillColor="rgba(249, 115, 22, 0.15)"
+        />
+      </MapView>
 
       {/* Floating Header Actions */}
       <TouchableOpacity
         onPress={() => navigation.navigate('Beranda')}
-        style={[styles.backButton, { top: insets.top + 12 }]}
+        className="absolute left-5 h-11 w-11 items-center justify-center rounded-full bg-white dark:bg-slate-800 z-20 shadow-md"
+        style={[{ top: insets.top + 12 }]}
       >
-        <Ionicons name="chevron-back" size={24} color="#0F172A" />
+        <Ionicons name="chevron-back" size={24} color="#94A3B8" />
       </TouchableOpacity>
 
-      <View style={[styles.topRightContainer, { top: insets.top + 12 }]}>
-        <TouchableOpacity style={styles.roundButton}>
-          <Ionicons name="compass" size={20} color="#0F172A" />
+      <View className="absolute right-5 items-center z-20" style={[{ top: insets.top + 12 }]}>
+        <TouchableOpacity className="h-11 w-11 items-center justify-center rounded-full bg-white dark:bg-slate-800 mb-2.5 shadow-md">
+          <Ionicons name="compass" size={20} color="#94A3B8" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.roundButton}>
-          <Ionicons name="navigate" size={18} color="#0F172A" style={{ transform: [{ rotate: '45deg' }] }} />
+        <TouchableOpacity className="h-11 w-11 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md">
+          <Ionicons name="navigate" size={18} color="#94A3B8" style={{ transform: [{ rotate: '45deg' }] }} />
         </TouchableOpacity>
       </View>
 
-      <View style={[styles.geofenceLabelBadge, { top: insets.top + 12 }]}>
-        <View style={styles.orangeDot} />
-        <Text style={styles.geofenceBadgeText}>Geofence</Text>
+      <View className="absolute self-center flex-row items-center bg-white dark:bg-slate-800 rounded-full px-4 py-2 z-20 shadow-sm" style={[{ top: insets.top + 12 }]}>
+        <View className="w-2 h-2 rounded-full bg-orange-500 mr-1.5" />
+        <Text className="text-[10px] font-black text-primary dark:text-slate-100">Geofence</Text>
       </View>
 
-      {/* Geofence Overlay Marker */}
-      <View style={styles.markerContainer}>
-        <View style={styles.geofenceCircle} />
-        <View style={styles.pinContainer}>
-          <Ionicons name="location" size={38} color="#F97316" />
-        </View>
-      </View>
+
 
       {/* Bottom Floating Container */}
       <View style={[styles.bottomContainer, { bottom: insets.bottom + 16 }]}>
         {/* Floating status row */}
-        <View style={styles.badgeRow}>
-          <View style={styles.floatingBadge}>
-            <Ionicons name="location" size={14} color="#0F172A" />
-            <Text style={styles.badgeText}>Geofence</Text>
+        <View className="flex-row justify-between mb-2.5">
+          <View className="flex-row items-center bg-white dark:bg-slate-800 rounded-xl px-3 py-2 border border-slate-100 dark:border-slate-700 shadow-sm">
+            <Ionicons name="location" size={14} color="#94A3B8" />
+            <Text className="ml-1 text-[9px] font-black text-primary dark:text-slate-100">Geofence</Text>
           </View>
-          <View style={styles.floatingBadge}>
+          <View className="flex-row items-center bg-white dark:bg-slate-800 rounded-xl px-3 py-2 border border-slate-100 dark:border-slate-700 shadow-sm">
             <Ionicons
               name={isWithinGeofence ? 'checkmark-circle' : 'close-circle'}
               size={14}
               color={isWithinGeofence ? '#10B981' : '#F59E0B'}
             />
-            <Text style={styles.badgeText}>
+            <Text className="ml-1 text-[9px] font-black text-primary dark:text-slate-100">
               {distance !== null ? `${distance} m` : 'Calculating...'}
             </Text>
           </View>
         </View>
 
         {/* Bottom White Card */}
-        <View style={styles.bottomCard}>
-          <View style={styles.eventRow}>
-            <Image source={{ uri: eventImageUrl || 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=300&q=80' }} style={styles.eventImage} resizeMode="cover" />
-            <View style={styles.eventInfo}>
-              <Text style={styles.eventVenue} numberOfLines={1}>{location.venue || 'Hotel Mulia Jakarta'}</Text>
-              <Text style={styles.eventName} numberOfLines={1}>{event.name || 'Wedding Andi & Sinta'}</Text>
-              <Text style={styles.eventAddress} numberOfLines={1}>{location.address || 'Jakarta'}</Text>
+        <View className="bg-white dark:bg-slate-900 rounded-[24px] p-4 shadow-lg shadow-black/10" style={{ elevation: 8 }}>
+          <View className="flex-row items-center mb-4">
+            <Image source={{ uri: eventImageUrl || 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=300&q=80' }} className="w-16 h-16 rounded-xl bg-slate-200 dark:bg-slate-800" resizeMode="cover" />
+            <View className="ml-3 flex-1">
+              <Text className="text-[13px] font-black text-primary dark:text-slate-100" numberOfLines={1}>{location.venue || 'Hotel Mulia Jakarta'}</Text>
+              <Text className="text-[11px] font-bold text-slate-500 dark:text-slate-400 mt-0.5" numberOfLines={1}>{event.name || 'Wedding Andi & Sinta'}</Text>
+              <Text className="text-[9px] text-slate-400 dark:text-slate-500 mt-0.5" numberOfLines={1}>{location.address || 'Jakarta'}</Text>
             </View>
           </View>
 

@@ -1,12 +1,13 @@
 import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import React, { useState, useCallback, useMemo } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, ScrollView, TouchableOpacity, RefreshControl, TextInput } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, RefreshControl, TextInput, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { api } from '../../services/api';
-import { EmptyState, FndHeader, InfoRow, LoadingState, StatusBadge } from '../../components/FndUi';
-import { formatDate, getEventStatusMeta, getLocationParts } from '../../utils/fnd';
+import Animated from 'react-native-reanimated';
+import { api, getAssetUrl } from '../../services/api';
+import { EmptyState, FndHeader, InfoRow, LoadingState, StatusBadge, TugasCardSkeleton } from '../../components/FndUi';
+import { formatDate, getEventStatusMeta, getLocationParts, getEventImage } from '../../utils/fnd';
 
 const FILTER_OPTIONS = ['Semua Status', 'Selesai', 'Dibatalkan'];
 
@@ -75,21 +76,38 @@ export const RiwayatTugasScreen = ({ navigation }: any) => {
     return label === filter;
   });
 
-  if (loading) return <LoadingState />;
+  if (loading) {
+    return (
+      <View className="flex-1 bg-crewBg dark:bg-[#0B1120]">
+        <FndHeader title="Riwayat Tugas" dark onBack={() => navigation.goBack()} />
+        <View className="bg-white dark:bg-slate-900 px-4 py-3 border-b border-slate-100 dark:border-slate-800">
+          <View className="flex-row items-center gap-2.5">
+            <View className="flex-1 h-9 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+            <View className="w-20 h-9 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+          </View>
+        </View>
+        <ScrollView className="flex-1 px-4 mt-4" showsVerticalScrollIndicator={false}>
+          <TugasCardSkeleton />
+          <TugasCardSkeleton />
+          <TugasCardSkeleton />
+        </ScrollView>
+      </View>
+    );
+  }
 
   return (
-    <View className="flex-1 bg-crewBg">
+    <View className="flex-1 bg-crewBg dark:bg-[#0B1120]">
       <FndHeader title="Riwayat Tugas" dark onBack={() => navigation.goBack()} />
 
       {/* Advanced Search Section */}
-      <View className="bg-white px-4 py-3 border-b border-slate-100">
+      <View className="bg-white dark:bg-slate-900 px-4 py-3 border-b border-slate-100 dark:border-slate-800">
         <View className="flex-row items-center gap-2.5">
-          <View className="flex-1 flex-row items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5">
+          <View className="flex-1 flex-row items-center bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5">
             <Ionicons name="search-outline" size={14} color="#94A3B8" />
             <TextInput
               placeholder="Advanced Search"
               placeholderTextColor="#94A3B8"
-              className="flex-1 ml-2 text-xs p-0 font-medium text-primary"
+              className="flex-1 ml-2 text-xs p-0 font-medium text-primary dark:text-slate-100"
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
@@ -97,26 +115,26 @@ export const RiwayatTugasScreen = ({ navigation }: any) => {
           
           <TouchableOpacity 
             onPress={() => setShowFilter(!showFilter)}
-            className="flex-row items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5"
+            className="flex-row items-center bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5"
           >
             <Ionicons name="funnel-outline" size={14} color="#475569" />
-            <Text className="ml-1.5 text-xs font-bold text-slate-600">Filter</Text>
+            <Text className="ml-1.5 text-xs font-bold text-slate-600 dark:text-slate-300">Filter</Text>
           </TouchableOpacity>
         </View>
 
         {/* Dropdown overlay */}
         {showFilter ? (
-          <View className="mt-2.5 overflow-hidden rounded-xl border border-slate-100 bg-white shadow-lg" style={{ elevation: 5 }}>
+          <View className="mt-2.5 overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-lg" style={{ elevation: 5 }}>
             {FILTER_OPTIONS.map((option) => (
               <TouchableOpacity
                 key={option}
-                className={`px-4 py-3 ${option === filter ? 'bg-orange-50/20' : 'bg-white'}`}
+                className={`px-4 py-3 ${option === filter ? 'bg-orange-50/20 dark:bg-orange-900/20' : 'bg-white dark:bg-slate-900'}`}
                 onPress={() => {
                   setFilter(option);
                   setShowFilter(false);
                 }}
               >
-                <Text className={`text-xs font-bold ${option === filter ? 'text-crewAccent' : 'text-primary'}`}>{option}</Text>
+                <Text className={`text-xs font-bold ${option === filter ? 'text-crewAccent' : 'text-primary dark:text-slate-300'}`}>{option}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -124,15 +142,15 @@ export const RiwayatTugasScreen = ({ navigation }: any) => {
       </View>
 
       {/* Filter Quick Chips */}
-      <View className="flex-row gap-2 px-4 py-2.5 bg-white border-b border-slate-100">
+      <View className="flex-row gap-2 px-4 py-2.5 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
         <View className="bg-crewAccent px-3 py-1.5 rounded-full shadow-sm shadow-crewAccent/25">
           <Text className="text-[9px] font-black text-white">Rating Badge</Text>
         </View>
-        <View className="bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-full">
-          <Text className="text-[9px] font-bold text-slate-500">Performance Score</Text>
+        <View className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-full">
+          <Text className="text-[9px] font-bold text-slate-500 dark:text-slate-400">Performance Score</Text>
         </View>
-        <View className="bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-full">
-          <Text className="text-[9px] font-bold text-slate-500">Infinite Scroll</Text>
+        <View className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-full">
+          <Text className="text-[9px] font-bold text-slate-500 dark:text-slate-400">Infinite Scroll</Text>
         </View>
       </View>
 
@@ -153,10 +171,12 @@ export const RiwayatTugasScreen = ({ navigation }: any) => {
             const emoji = getEventEmoji(task.name);
             const bgClass = getEventBgClass(task.name);
 
+            const imageUrl = getAssetUrl(getEventImage(task)) || getEventImage(task);
+
             return (
               <TouchableOpacity
                 key={task.id}
-                className="mb-3 rounded-[24px] border border-slate-100 bg-white overflow-hidden flex-row"
+                className="mb-3 rounded-[24px] border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden flex-row"
                 style={{ 
                   elevation: 2, 
                   shadowColor: '#0F172A', 
@@ -167,18 +187,24 @@ export const RiwayatTugasScreen = ({ navigation }: any) => {
                 onPress={() => navigation.navigate('DetailTugas', { taskId: task.id, event: task })}
               >
                 {/* Left Thumbnail Section */}
-                <View className={`w-20 ${bgClass} items-center justify-center`}>
-                  <Text className="text-2xl">{emoji}</Text>
+                <View className="w-20 bg-slate-800 items-center justify-center relative">
+                  <Animated.Image 
+                    {...({ sharedTransitionTag: `event-hero-${task.id}` } as any)}
+                    source={{ uri: imageUrl }} 
+                    className="absolute inset-0 h-full w-full" 
+                    resizeMode="cover" 
+                  />
+                  <View className="absolute inset-0 bg-black/40" />
                 </View>
 
                 {/* Right Body Section */}
                 <View className="flex-1 p-3.5">
-                  <Text className="mb-2 text-xs font-black text-primary" numberOfLines={2}>{task.name}</Text>
+                  <Text className="mb-2 text-xs font-black text-primary dark:text-slate-100" numberOfLines={2}>{task.name}</Text>
                   
                   <InfoRow icon="location-outline" title={location.venue} dense />
                   <InfoRow icon="calendar-outline" title={formatDate(task.event_date)} dense />
                   
-                  <View className="flex-row items-center justify-between mt-2 pt-2 border-t border-slate-50">
+                  <View className="flex-row items-center justify-between mt-2 pt-2 border-t border-slate-50 dark:border-slate-800/50">
                     <View className="flex-row items-center bg-orange-50 px-2 py-0.5 rounded-md">
                       <Ionicons name="star" size={10} color="#F59E0B" />
                       <Text className="ml-1 text-[9px] font-black text-crewAccent">
@@ -187,8 +213,8 @@ export const RiwayatTugasScreen = ({ navigation }: any) => {
                     </View>
                     <StatusBadge 
                       label={status.label} 
-                      bg={isDone ? 'bg-emerald-50' : 'bg-orange-50'} 
-                      text={isDone ? 'text-emerald-600' : 'text-orange-600'} 
+                      bg={isDone ? 'bg-emerald-50 dark:bg-emerald-950' : 'bg-orange-50 dark:bg-orange-950'} 
+                      text={isDone ? 'text-emerald-600 dark:text-emerald-400' : 'text-orange-600 dark:text-orange-400'} 
                     />
                   </View>
                 </View>

@@ -108,6 +108,8 @@ export async function createEvent(req, res) {
     notes,
     totalAmount,
     dpAmount,
+    discountPrice = 0,
+    logisticsPrice = 0,
     referenceImages = [],
     equipment = [],
     crew = [],
@@ -161,8 +163,8 @@ export async function createEvent(req, res) {
     }
 
     const [result] = await connection.query(
-      'INSERT INTO events (name, type, event_date, location, notes, client_id, total_amount, dp_amount, paid_amount, reference_images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [name, type, eventDate, location, notes, clientId, totalAmount || 0, dpAmount || 0, dpAmount || 0, JSON.stringify(referenceImages)],
+      'INSERT INTO events (name, type, event_date, location, notes, client_id, total_amount, dp_amount, paid_amount, discount_price, logistics_price, reference_images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [name, type, eventDate, location, notes, clientId, totalAmount || 0, dpAmount || 0, dpAmount || 0, discountPrice || 0, logisticsPrice || 0, JSON.stringify(referenceImages)],
     )
 
     const eventId = result.insertId
@@ -193,7 +195,7 @@ export async function createEvent(req, res) {
 export async function updateEvent(req, res) {
   try {
     const eventId = Number(req.params.id)
-    const { name, type, eventDate, location, notes, status, totalAmount, dpAmount, referenceImages } = req.body
+    const { name, type, eventDate, location, notes, status, totalAmount, dpAmount, discountPrice, logisticsPrice, referenceImages } = req.body
     const [eventRows] = await pool.query('SELECT * FROM events WHERE id = ?', [eventId])
     const existing = eventRows[0]
 
@@ -215,7 +217,7 @@ export async function updateEvent(req, res) {
           : null)
 
     await pool.query(
-      'UPDATE events SET name = ?, type = ?, event_date = ?, location = ?, notes = ?, status = ?, total_amount = ?, dp_amount = ?, reference_images = ? WHERE id = ?',
+      'UPDATE events SET name = ?, type = ?, event_date = ?, location = ?, notes = ?, status = ?, total_amount = ?, dp_amount = ?, discount_price = ?, logistics_price = ?, reference_images = ? WHERE id = ?',
       [
         name || existing.name,
         type || existing.type,
@@ -223,8 +225,10 @@ export async function updateEvent(req, res) {
         location || existing.location,
         notes || existing.notes,
         updatedStatus,
-        totalAmount || existing.total_amount,
-        dpAmount || existing.dp_amount,
+        totalAmount !== undefined ? totalAmount : existing.total_amount,
+        dpAmount !== undefined ? dpAmount : existing.dp_amount,
+        discountPrice !== undefined ? discountPrice : existing.discount_price,
+        logisticsPrice !== undefined ? logisticsPrice : existing.logistics_price,
         updatedImages,
         eventId
       ],

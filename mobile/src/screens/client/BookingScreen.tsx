@@ -1,6 +1,8 @@
 import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, TextInput, Image, ActivityIndicator, Animated, StyleSheet } from 'react-native';
+import { useForm, Controller } from 'react-hook-form';
+import { AnimatedButton } from '../../components/AnimatedButton';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { api, getAssetUrl } from '../../services/api';
@@ -167,7 +169,12 @@ export const BookingScreen = ({ route, navigation }: any) => {
   const [step, setStep] = useState(1);
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [selected, setSelected] = useState<Record<string, { service: ServiceItem; qty: number }>>({});
-  const [formData, setFormData] = useState<BookingForm>(emptyForm);
+  
+  const { control, handleSubmit, watch, setValue, reset, trigger } = useForm<BookingForm>({
+    defaultValues: emptyForm,
+    mode: 'onChange'
+  });
+  const formData = watch();
   const [references, setReferences] = useState<ImagePicker.ImagePickerAsset[]>([]);
   const [loadingServices, setLoadingServices] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -191,7 +198,7 @@ export const BookingScreen = ({ route, navigation }: any) => {
     const unsubscribe = navigation.addListener('blur', () => {
       setStep((currentStep) => {
         if (currentStep === 4) {
-          setFormData(emptyForm);
+          reset(emptyForm);
           setSelected({});
           setReferences([]);
           return 1;
@@ -247,13 +254,6 @@ export const BookingScreen = ({ route, navigation }: any) => {
     });
   };
 
-  const validateDetail = () => {
-    if (!formData.name.trim()) return 'Nama event wajib diisi.';
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(formData.eventDate)) return 'Tanggal event belum dipilih.';
-    if (!formData.location.trim()) return 'Lokasi event wajib diisi.';
-    return null;
-  };
-
   const pickReference = async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permission.granted) {
@@ -285,9 +285,7 @@ export const BookingScreen = ({ route, navigation }: any) => {
     return (response.data?.data || []).map((item: any) => item.url).filter(Boolean);
   };
 
-  const submitBooking = async () => {
-    const validationError = validateDetail();
-    if (validationError) { Alert.alert('Data belum lengkap', validationError); setStep(2); return; }
+  const submitBooking = async (data: BookingForm) => {
     if (!selectedItems.length) { Alert.alert('Pilih layanan', 'Pilih minimal satu layanan untuk booking.'); setStep(1); return; }
 
     setIsSubmitting(true);
@@ -302,10 +300,10 @@ export const BookingScreen = ({ route, navigation }: any) => {
       ].filter(Boolean).join('\n');
 
       const response = await api.post('/events', {
-        name: formData.name.trim(),
+        name: data.name.trim(),
         type: selectedItems[0].service.category,
-        eventDate: formData.eventDate,
-        location: formData.location.trim(),
+        eventDate: data.eventDate,
+        location: data.location.trim(),
         notes,
         totalAmount,
         dpAmount: 0,
@@ -320,12 +318,12 @@ export const BookingScreen = ({ route, navigation }: any) => {
 
       setCreatedEvent({
         id: response.data.data?.eventId,
-        name: formData.name.trim(),
-        date: formData.eventDate,
+        name: data.name.trim(),
+        date: data.eventDate,
         total: totalAmount,
       });
       setStep(4);
-      setFormData(emptyForm);
+      reset(emptyForm);
       setReferences([]);
     } catch (error: any) {
       Alert.alert('Booking Gagal', error.response?.data?.error || error.message || 'Terjadi kesalahan');
@@ -334,16 +332,19 @@ export const BookingScreen = ({ route, navigation }: any) => {
     }
   };
 
-  const canGoNext = () => {
+  const canGoNext = async () => {
     if (step === 1 && !selectedItems.length) { Alert.alert('Pilih layanan', 'Pilih minimal satu layanan.'); return false; }
     if (step === 2) {
-      const err = validateDetail();
-      if (err) { Alert.alert('Data belum lengkap', err); return false; }
+      const isValid = await trigger(['name', 'eventDate', 'location']);
+      if (!isValid) return false;
     }
     return true;
   };
 
-  const nextStep = () => { if (!canGoNext()) return; setStep((c) => Math.min(c + 1, 3)); };
+  const nextStep = async () => { 
+    if (!(await canGoNext())) return; 
+    setStep((c) => Math.min(c + 1, 3)); 
+  };
   const stepLabels = ['Layanan', 'Detail', 'Ringkasan', 'Selesai'];
 
   // ── Stepper ────────────────────────────────────────────────────────────────
@@ -400,39 +401,47 @@ export const BookingScreen = ({ route, navigation }: any) => {
                 <Text style={styles.servicePrice}>{formatCurrency(service.price)}</Text>
               </View>
               <View style={styles.qtyRow}>
-                <TouchableOpacity style={styles.qtyBtn} onPress={() => updateQty(service, -1)}>
+                <AnimatedButton style={styles.qtyBtn} onPress={() => updateQty(service, -1)}>
                   <Ionicons name="remove" size={16} color={qty > 0 ? '#0F172A' : '#CBD5E1'} />
-                </TouchableOpacity>
+                </AnimatedButton>
                 <Text style={styles.qtyText}>{qty}</Text>
-                <TouchableOpacity style={[styles.qtyBtn, styles.qtyBtnAdd]} onPress={() => updateQty(service, 1)}>
+                <AnimatedButton style={[styles.qtyBtn, styles.qtyBtnAdd]} onPress={() => updateQty(service, 1)}>
                   <Ionicons name="add" size={16} color="#FFFFFF" />
-                </TouchableOpacity>
+                </AnimatedButton>
               </View>
             </View>
           );
         })
       )}
-      <TouchableOpacity style={styles.addMoreBtn} onPress={() => navigation.navigate('Layanan')}>
+      <AnimatedButton style={styles.addMoreBtn} onPress={() => navigation.navigate('Layanan')}>
         <Ionicons name="add-circle-outline" size={20} color="#F97316" />
         <Text style={styles.addMoreText}>Tambah Layanan Lain</Text>
-      </TouchableOpacity>
+      </AnimatedButton>
     </View>
   );
 
   // ── Input Helper ────────────────────────────────────────────────────────────
-  const renderInput = (label: string, value: string, onChange: (v: string) => void, placeholder: string, multiline = false) => (
-    <View style={styles.inputGroup}>
-      <Text style={styles.inputLabel}>{label}</Text>
-      <TextInput
-        value={value}
-        onChangeText={onChange}
-        placeholder={placeholder}
-        placeholderTextColor="#94A3B8"
-        multiline={multiline}
-        textAlignVertical={multiline ? 'top' : 'center'}
-        style={[styles.textInput, multiline && styles.textInputMulti]}
-      />
-    </View>
+  const renderInput = (name: keyof BookingForm, label: string, placeholder: string, rules: any = {}, multiline = false) => (
+    <Controller
+      control={control}
+      name={name}
+      rules={rules}
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputLabel}>{label}</Text>
+          <TextInput
+            value={value}
+            onChangeText={onChange}
+            placeholder={placeholder}
+            placeholderTextColor="#94A3B8"
+            multiline={multiline}
+            textAlignVertical={multiline ? 'top' : 'center'}
+            style={[styles.textInput, multiline && styles.textInputMulti, error && { borderColor: '#EF4444' }]}
+          />
+          {error && <Text style={styles.errorText}>{error.message}</Text>}
+        </View>
+      )}
+    />
   );
 
   // ── Step 2 — Detail ─────────────────────────────────────────────────────────
@@ -445,32 +454,41 @@ export const BookingScreen = ({ route, navigation }: any) => {
   const renderStep2 = () => (
     <View>
       <Text style={styles.sectionTitle}>Detail Event</Text>
-      {renderInput('Nama Event', formData.name, (v) => setFormData({ ...formData, name: v }), 'Wedding Andi & Sinta')}
+      {renderInput('name', 'Nama Event', 'Wedding Andi & Sinta', { required: 'Nama event wajib diisi.' })}
 
-      {/* Date & Time Row */}
       <View style={{ flexDirection: 'row', gap: 10 }}>
         {/* Date Picker Trigger */}
         <View style={{ flex: 1 }}>
           <Text style={styles.inputLabel}>Tanggal Event</Text>
-          <TouchableOpacity style={styles.pickerTrigger} onPress={() => setShowDatePicker(true)}>
-            <View style={{ flex: 1 }}>
-              {displayDate ? (
-                <>
-                  <Text style={styles.pickerValueMain} numberOfLines={1}>
-                    {displayDate.split(',')[1]?.trim() || displayDate}
-                  </Text>
-                  <Text style={styles.pickerValueSub}>
-                    {displayDate.split(',')[0]}
-                  </Text>
-                </>
-              ) : (
-                <Text style={styles.pickerPlaceholder}>Pilih Tanggal</Text>
-              )}
-            </View>
-            <View style={styles.pickerIcon}>
-              <Ionicons name="calendar" size={16} color="#F97316" />
-            </View>
-          </TouchableOpacity>
+          <Controller
+            control={control}
+            name="eventDate"
+            rules={{ required: 'Tanggal event belum dipilih.' }}
+            render={({ fieldState: { error } }) => (
+              <>
+                <TouchableOpacity style={[styles.pickerTrigger, error && { borderColor: '#EF4444' }]} onPress={() => setShowDatePicker(true)}>
+                  <View style={{ flex: 1 }}>
+                    {displayDate ? (
+                      <>
+                        <Text style={styles.pickerValueMain} numberOfLines={1}>
+                          {displayDate.split(',')[1]?.trim() || displayDate}
+                        </Text>
+                        <Text style={styles.pickerValueSub}>
+                          {displayDate.split(',')[0]}
+                        </Text>
+                      </>
+                    ) : (
+                      <Text style={styles.pickerPlaceholder}>Pilih Tanggal</Text>
+                    )}
+                  </View>
+                  <View style={styles.pickerIcon}>
+                    <Ionicons name="calendar" size={16} color="#F97316" />
+                  </View>
+                </TouchableOpacity>
+                {error && <Text style={styles.errorText}>{error.message}</Text>}
+              </>
+            )}
+          />
         </View>
 
         {/* Time Picker Trigger */}
@@ -503,7 +521,7 @@ export const BookingScreen = ({ route, navigation }: any) => {
           <CalendarPicker
             selectedDate={formData.eventDate}
             onSelect={(str) => {
-              setFormData({ ...formData, eventDate: str });
+              setValue('eventDate', str, { shouldValidate: true });
               setShowDatePicker(false);
             }}
           />
@@ -528,7 +546,7 @@ export const BookingScreen = ({ route, navigation }: any) => {
                     <TouchableOpacity
                       key={t}
                       style={[styles.timeSlot, active && styles.timeSlotActive]}
-                      onPress={() => { setFormData({ ...formData, startTime: t }); setShowTimePicker(false); }}
+                      onPress={() => { setValue('startTime', t); setShowTimePicker(false); }}
                     >
                       <Text style={[styles.timeSlotText, active && styles.timeSlotTextActive]}>{t}</Text>
                     </TouchableOpacity>
@@ -541,9 +559,9 @@ export const BookingScreen = ({ route, navigation }: any) => {
         </ScrollView>
       </PremiumModal>
 
-      {renderInput('Lokasi Event', formData.location, (v) => setFormData({ ...formData, location: v }), 'Gedung Graha Sarana')}
-      {renderInput('Jumlah Tamu (Estimasi)', formData.guests, (v) => setFormData({ ...formData, guests: v.replace(/[^\d]/g, '') }), '500 Orang')}
-      {renderInput('Catatan Tambahan', formData.notes, (v) => setFormData({ ...formData, notes: v }), 'Tuliskan kebutuhan khusus Anda di sini...', true)}
+      {renderInput('location', 'Lokasi Event', 'Gedung Graha Sarana', { required: 'Lokasi event wajib diisi.' })}
+      {renderInput('guests', 'Jumlah Tamu (Estimasi)', '500 Orang')}
+      {renderInput('notes', 'Catatan Tambahan', 'Tuliskan kebutuhan khusus Anda di sini...', {}, true)}
 
       <Text style={styles.inputLabel}>Upload Referensi (Opsional)</Text>
       <TouchableOpacity style={styles.uploadBtn} onPress={pickReference}>
@@ -647,7 +665,7 @@ export const BookingScreen = ({ route, navigation }: any) => {
       <ScrollView
         style={{ flex: 1, paddingHorizontal: 20 }}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: step === 4 ? 70 : 160 }}
+        contentContainerStyle={{ paddingBottom: step === 4 ? 120 : 220 }}
       >
         {renderStepper()}
         {step === 1 ? renderStep1() : null}
@@ -663,10 +681,10 @@ export const BookingScreen = ({ route, navigation }: any) => {
             <Text style={styles.bottomEstLabel}>Total Estimasi</Text>
             <Text style={styles.bottomEstValue}>{formatCurrency(totalAmount)}</Text>
           </View>
-          <TouchableOpacity
+          <AnimatedButton
             style={[styles.ctaBtn, isSubmitting && { opacity: 0.7 }]}
             disabled={isSubmitting}
-            onPress={step === 3 ? submitBooking : nextStep}
+            onPress={step === 3 ? handleSubmit(submitBooking) : nextStep}
           >
             {isSubmitting ? (
               <ActivityIndicator size="small" color="#FFFFFF" />
@@ -675,22 +693,22 @@ export const BookingScreen = ({ route, navigation }: any) => {
                 {step === 3 ? 'Kirim Booking' : 'Lanjutkan'}
               </Text>
             )}
-          </TouchableOpacity>
+          </AnimatedButton>
         </View>
       ) : (
         <View style={styles.bottomBar}>
-          <TouchableOpacity
+          <AnimatedButton
             style={[styles.ctaBtn, { marginBottom: 8 }]}
             onPress={() => navigation.getParent()?.navigate('EventSaya')}
           >
             <Text style={styles.ctaBtnText}>Lihat Event Saya</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </AnimatedButton>
+          <AnimatedButton
             style={styles.ghostBtn}
             onPress={() => navigation.getParent()?.navigate('Beranda')}
           >
             <Text style={styles.ghostBtnText}>Kembali ke Beranda</Text>
-          </TouchableOpacity>
+          </AnimatedButton>
         </View>
       )}
     </View>
@@ -745,6 +763,7 @@ const styles = StyleSheet.create({
   inputLabel: { fontSize: 11, fontWeight: '700', color: '#0B1241', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 },
   textInput: { backgroundColor: '#F8FAFC', borderRadius: 14, paddingHorizontal: 16, height: 50, fontSize: 14, color: '#0B1241', borderWidth: 1, borderColor: '#E2E8F0' },
   textInputMulti: { minHeight: 96, paddingTop: 14 },
+  errorText: { color: '#EF4444', fontSize: 11, marginTop: 4, fontWeight: '500' },
 
   // Picker trigger
   pickerTrigger: {
@@ -813,7 +832,7 @@ const styles = StyleSheet.create({
   receiptValue: { fontSize: 12, fontWeight: '700', color: '#0B1241' },
 
   // Bottom Bar
-  bottomBar: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#FFFFFF', paddingHorizontal: 20, paddingTop: 14, paddingBottom: 28, borderTopWidth: 1, borderTopColor: '#F1F5F9', elevation: 10 },
+  bottomBar: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#FFFFFF', paddingHorizontal: 20, paddingTop: 14, paddingBottom: 110, borderTopWidth: 1, borderTopColor: '#F1F5F9', elevation: 10 },
   bottomEstLabel: { fontSize: 11, fontWeight: '600', color: '#94A3B8', textTransform: 'uppercase' },
   bottomEstValue: { fontSize: 22, fontWeight: '900', color: '#0B1241' },
   ctaBtn: { backgroundColor: '#F97316', borderRadius: 20, paddingVertical: 16, alignItems: 'center', justifyContent: 'center' },

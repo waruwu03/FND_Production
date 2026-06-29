@@ -1,4 +1,5 @@
 import { PremiumAlert as Alert } from "../../components/PremiumAlert";
+import { Toast } from '../../components/PremiumToast';
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -39,9 +40,9 @@ export const KeahlianScreen = ({ navigation }: any) => {
     setSaving(true);
     try {
       await AsyncStorage.setItem('fnd-skills', JSON.stringify(selectedSkills));
-      Alert.alert('Berhasil', 'Keahlian berhasil disimpan.');
+      Toast.show({ title: 'Berhasil', message: 'Keahlian berhasil disimpan.', type: 'success' });
     } catch {
-      Alert.alert('Error', 'Gagal menyimpan keahlian.');
+      Toast.show({ title: 'Error', message: 'Gagal menyimpan keahlian.', type: 'error' });
     } finally {
       setSaving(false);
     }

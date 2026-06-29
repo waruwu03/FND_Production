@@ -1,4 +1,5 @@
 import { PremiumAlert as Alert } from "../../components/PremiumAlert";
+import { Toast } from '../../components/PremiumToast';
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,7 +25,7 @@ export const DataPribadiScreen = ({ navigation }: any) => {
 
   const handleSave = async () => {
     if (!name.trim()) {
-      Alert.alert('Error', 'Nama tidak boleh kosong.');
+      Toast.show({ title: 'Error', message: 'Nama tidak boleh kosong.', type: 'error' });
       return;
     }
     setSaving(true);
@@ -32,12 +33,12 @@ export const DataPribadiScreen = ({ navigation }: any) => {
       const response = await api.put('/auth/profile', { name: name.trim(), phone: phone.trim() });
       if (response.data?.success) {
         dispatch(updateProfileSuccess({ name: name.trim(), phone: phone.trim() }));
-        Alert.alert('Berhasil', 'Data pribadi berhasil diperbarui.');
+        Toast.show({ title: 'Berhasil', message: 'Data pribadi berhasil diperbarui.', type: 'success' });
       } else {
         throw new Error(response.data?.error || 'Gagal menyimpan');
       }
     } catch (error: any) {
-      Alert.alert('Error', error.response?.data?.error || error.message || 'Gagal menyimpan data.');
+      Toast.show({ title: 'Error', message: error.response?.data?.error || error.message || 'Gagal menyimpan data.', type: 'error' });
     } finally {
       setSaving(false);
     }
@@ -61,7 +62,7 @@ export const DataPribadiScreen = ({ navigation }: any) => {
     if (result.canceled || !result.assets[0]) return;
     const asset = result.assets[0];
     if (!asset.base64) {
-      Alert.alert('Error', 'Gagal membaca gambar. Silakan coba lagi.');
+      Toast.show({ title: 'Error', message: 'Gagal membaca gambar. Silakan coba lagi.', type: 'error' });
       return;
     }
 
@@ -85,12 +86,12 @@ export const DataPribadiScreen = ({ navigation }: any) => {
 
       if (response.data?.success && response.data?.data) {
         dispatch(updateProfileSuccess(response.data.data));
-        Alert.alert('Berhasil', 'Foto profil berhasil diperbarui.');
+        Toast.show({ title: 'Berhasil', message: 'Foto profil berhasil diperbarui.', type: 'success' });
       } else {
         throw new Error(response.data?.error || 'Gagal mengupload avatar');
       }
     } catch (error: any) {
-      Alert.alert('Upload Gagal', error.response?.data?.error || error.message || 'Gagal mengunggah foto.');
+      Toast.show({ title: 'Upload Gagal', message: error.response?.data?.error || error.message || 'Gagal mengunggah foto.', type: 'error' });
     } finally {
       setUploadingAvatar(false);
     }

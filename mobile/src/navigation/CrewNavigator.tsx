@@ -102,7 +102,7 @@ const CrewTabs = () => {
       <Tab.Screen name="Beranda" component={DashboardStack} options={{ tabBarLabel: 'Beranda' }} />
       <Tab.Screen name="Tugas" component={TugasStack} options={{ tabBarLabel: 'Tugas' }} />
       <Tab.Screen name="CheckIn" component={CheckInScreen} options={{ tabBarLabel: 'Check In' }} />
-      <Tab.Screen name="Notifikasi" component={NotifikasiStack} options={{ tabBarLabel: 'Notifikasi', tabBarBadge: 3 }} />
+      <Tab.Screen name="Notifikasi" component={NotifikasiStack} options={{ tabBarLabel: 'Notifikasi' }} />
       <Tab.Screen name="Profil" component={ProfileStack} options={{ tabBarLabel: 'Profil' }} />
     </Tab.Navigator>
   );

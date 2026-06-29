@@ -37,7 +37,7 @@ export const fallbackServices: ServiceItem[] = [
     name: 'Sound System',
     category: 'Sound System',
     description: 'Sistem suara profesional',
-    price: 3500000,
+    price: 1500000,
     image: serviceImages['Sound System'],
   },
   {
@@ -45,7 +45,7 @@ export const fallbackServices: ServiceItem[] = [
     name: 'Lighting',
     category: 'Lighting',
     description: 'Lighting panggung dan dekorasi',
-    price: 2000000,
+    price: 800000,
     image: serviceImages.Lighting,
   },
   {
@@ -53,7 +53,7 @@ export const fallbackServices: ServiceItem[] = [
     name: 'LED Videotron (P3)',
     category: 'LED Videotron',
     description: 'Indoor dan outdoor',
-    price: 4500000,
+    price: 2000000,
     image: serviceImages['LED Videotron'],
   },
   {
@@ -61,7 +61,7 @@ export const fallbackServices: ServiceItem[] = [
     name: 'Panggung',
     category: 'Panggung',
     description: 'Berbagai ukuran panggung',
-    price: 3000000,
+    price: 1000000,
     image: serviceImages.Panggung,
   },
   {
@@ -69,7 +69,7 @@ export const fallbackServices: ServiceItem[] = [
     name: 'Live Streaming',
     category: 'Live Streaming',
     description: 'Multi camera live streaming',
-    price: 6000000,
+    price: 1500000,
     image: serviceImages['Live Streaming'],
   },
   {
@@ -77,7 +77,7 @@ export const fallbackServices: ServiceItem[] = [
     name: 'Multimedia',
     category: 'Multimedia',
     description: 'Projector, TV, screen, dan kontrol',
-    price: 1000000,
+    price: 500000,
     image: serviceImages.Multimedia,
   },
 ];
@@ -95,14 +95,14 @@ export const serviceCategories = [
 ];
 
 const categoryPrice: Record<string, number> = {
-  'Sound System': 3500000,
-  Lighting: 2000000,
-  'LED Videotron': 4500000,
-  Panggung: 3000000,
-  Multimedia: 1000000,
-  'Live Streaming': 6000000,
-  Genset: 2500000,
-  Rigging: 1500000,
+  'Sound System': 1500000,
+  Lighting: 800000,
+  'LED Videotron': 2000000,
+  Panggung: 1000000,
+  Multimedia: 500000,
+  'Live Streaming': 1500000,
+  Genset: 800000,
+  Rigging: 1000000,
 };
 
 export function formatCurrency(amount?: number | string | null) {
@@ -209,7 +209,7 @@ export function buildServicesFromEquipment(equipment: any[] = []) {
       name: item.name,
       category,
       description: item.description || defaultServiceDescription(category),
-      price: categoryPrice[category] || 1500000,
+      price: categoryPrice[category] || 500000,
       image: item.image_url || serviceImages[category] || serviceImages.Lighting,
       stock: Number(item.available_stock ?? item.availableStock ?? 0),
     };
