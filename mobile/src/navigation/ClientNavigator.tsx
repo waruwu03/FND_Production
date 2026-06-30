@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Dimensions } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Animated } from 'react-native';
 import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 
 import { ClientDashboardScreen } from '../screens/client/ClientDashboardScreen';
@@ -61,27 +61,29 @@ const ProfileStackNavigator = () => (
 const { width } = Dimensions.get('window');
 
 const CustomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
+  const focusedRoute = state.routes[state.index];
+  const { options: focusedOptions } = descriptors[focusedRoute.key];
+  if (focusedOptions.tabBarStyle && (focusedOptions.tabBarStyle as any).display === 'none') {
+    return null;
+  }
+
   const TAB_BAR_WIDTH = width - 40;
   const TAB_WIDTH = TAB_BAR_WIDTH / state.routes.length;
   
-  const translateX = useSharedValue(0);
+  const translateX = useRef(new Animated.Value(state.index * TAB_WIDTH)).current;
 
   useEffect(() => {
-    translateX.value = withSpring(state.index * TAB_WIDTH, {
+    Animated.spring(translateX, {
+      toValue: state.index * TAB_WIDTH,
       damping: 20,
       stiffness: 250,
-    });
+      useNativeDriver: true,
+    }).start();
   }, [state.index]);
-
-  const indicatorStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateX: translateX.value }],
-    };
-  });
 
   return (
     <View style={styles.tabBarContainer}>
-      <Animated.View style={[styles.indicator, indicatorStyle, { width: TAB_WIDTH - 20, left: 10 }]} />
+      <Animated.View style={[styles.indicator, { width: TAB_WIDTH - 20, left: 10, transform: [{ translateX }] }]} />
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label = options.title !== undefined ? options.title : route.name;
@@ -137,10 +139,38 @@ export const ClientNavigator = () => {
       tabBar={(props) => <CustomTabBar {...props} />}
     >
       <Tab.Screen name="Beranda" component={BerandaStack} />
-      <Tab.Screen name="Booking" component={BookingStackNavigator} />
-      <Tab.Screen name="EventSaya" component={EventStackNavigator} options={{ title: 'Event Saya' }} />
+      <Tab.Screen 
+        name="Booking" 
+        component={BookingStackNavigator} 
+        options={({ route }) => {
+          const routeName = getFocusedRouteNameFromRoute(route) ?? 'BookingHome';
+          return {
+            tabBarStyle: routeName !== 'BookingHome' ? { display: 'none' } : undefined,
+          };
+        }}
+      />
+      <Tab.Screen 
+        name="EventSaya" 
+        component={EventStackNavigator} 
+        options={({ route }) => {
+          const routeName = getFocusedRouteNameFromRoute(route) ?? 'EventSayaList';
+          return {
+            title: 'Event Saya',
+            tabBarStyle: routeName !== 'EventSayaList' ? { display: 'none' } : undefined,
+          };
+        }} 
+      />
       <Tab.Screen name="Invoice" component={InvoiceScreen} />
-      <Tab.Screen name="Profil" component={ProfileStackNavigator} />
+      <Tab.Screen 
+        name="Profil" 
+        component={ProfileStackNavigator} 
+        options={({ route }) => {
+          const routeName = getFocusedRouteNameFromRoute(route) ?? 'ProfileMain';
+          return {
+            tabBarStyle: routeName !== 'ProfileMain' ? { display: 'none' } : undefined,
+          };
+        }} 
+      />
     </Tab.Navigator>
   );
 };

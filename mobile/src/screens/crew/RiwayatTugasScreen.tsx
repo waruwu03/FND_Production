@@ -4,7 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, ScrollView, TouchableOpacity, RefreshControl, TextInput, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated from 'react-native-reanimated';
+
 import { api, getAssetUrl } from '../../services/api';
 import { EmptyState, FndHeader, InfoRow, LoadingState, StatusBadge, TugasCardSkeleton } from '../../components/FndUi';
 import { formatDate, getEventStatusMeta, getLocationParts, getEventImage } from '../../utils/fnd';
@@ -124,7 +124,7 @@ export const RiwayatTugasScreen = ({ navigation }: any) => {
 
         {/* Dropdown overlay */}
         {showFilter ? (
-          <View className="mt-2.5 overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-lg" style={{ elevation: 5 }}>
+          <View className="mt-2.5 overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900" style={{ elevation: 5, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 12 }}>
             {FILTER_OPTIONS.map((option) => (
               <TouchableOpacity
                 key={option}
@@ -143,7 +143,7 @@ export const RiwayatTugasScreen = ({ navigation }: any) => {
 
       {/* Filter Quick Chips */}
       <View className="flex-row gap-2 px-4 py-2.5 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
-        <View className="bg-crewAccent px-3 py-1.5 rounded-full shadow-sm shadow-crewAccent/25">
+        <View className="bg-crewAccent px-3 py-1.5 rounded-full" style={{ shadowColor: '#F97316', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.25, shadowRadius: 2, elevation: 2 }}>
           <Text className="text-[9px] font-black text-white">Rating Badge</Text>
         </View>
         <View className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-full">
@@ -188,13 +188,12 @@ export const RiwayatTugasScreen = ({ navigation }: any) => {
               >
                 {/* Left Thumbnail Section */}
                 <View className="w-20 bg-slate-800 items-center justify-center relative">
-                  <Animated.Image 
-                    {...({ sharedTransitionTag: `event-hero-${task.id}` } as any)}
-                    source={{ uri: imageUrl }} 
-                    className="absolute inset-0 h-full w-full" 
-                    resizeMode="cover" 
+                  <Image
+                    source={{ uri: imageUrl }}
+                    style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%' }}
+                    resizeMode="cover"
                   />
-                  <View className="absolute inset-0 bg-black/40" />
+                  <View className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }} />
                 </View>
 
                 {/* Right Body Section */}

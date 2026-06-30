@@ -614,3 +614,52 @@ export async function deleteUser(req, res) {
     connection.release()
   }
 }
+
+export async function deleteSelf(req, res) {
+  const userId = req.user.id;
+  const connection = await pool.getConnection()
+  try {
+    await connection.beginTransaction()
+
+    const [userRows] = await connection.query('SELECT role, avatar_url FROM users WHERE id = ?', [userId])
+    const user = userRows[0]
+    if (!user) {
+      await connection.rollback()
+      return res.status(404).json({ success: false, error: 'User not found' })
+    }
+
+    if (user.role === 'crew') {
+      const [crewRows] = await connection.query('SELECT id FROM crew WHERE user_id = ?', [userId])
+      if (crewRows.length > 0) {
+        const crewId = crewRows[0].id
+        const [activeAssignments] = await connection.query(
+          `SELECT ec.id FROM event_crew ec
+           JOIN events e ON ec.event_id = e.id
+           WHERE ec.crew_id = ? AND e.status NOT IN ('selesai', 'cancel')`,
+          [crewId]
+        )
+        if (activeAssignments.length > 0) {
+          await connection.rollback()
+          return res.status(400).json({
+            success: false,
+            error: `Gagal menghapus akun. Anda masih ditugaskan di ${activeAssignments.length} event aktif.`
+          })
+        }
+        await connection.query('DELETE FROM crew WHERE id = ?', [crewId])
+      }
+    }
+
+    await revokeUserRefreshTokens(userId)
+    removeLocalUpload(user.avatar_url)
+    await connection.query('DELETE FROM users WHERE id = ?', [userId])
+
+    await connection.commit()
+    res.json({ success: true, message: 'Akun berhasil dihapus' })
+  } catch (error) {
+    await connection.rollback()
+    console.error('deleteSelf error:', error)
+    res.status(500).json({ success: false, error: 'Gagal menghapus akun' })
+  } finally {
+    connection.release()
+  }
+}

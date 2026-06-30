@@ -1,11 +1,5 @@
-import React from 'react';
-import { Pressable, PressableProps, StyleSheet } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated';
+import React, { useRef } from 'react';
+import { Pressable, PressableProps, Animated, StyleSheet } from 'react-native';
 import * as Haptics from 'expo-haptics';
 
 interface AnimatedButtonProps extends Omit<PressableProps, 'style'> {
@@ -21,27 +15,27 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   style,
   onPress,
   disabled,
+  className,
   ...props
 }) => {
-  const scale = useSharedValue(1);
-  const opacity = useSharedValue(1);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    opacity: opacity.value,
-  }));
+  const scale = useRef(new Animated.Value(1)).current;
+  const opacity = useRef(new Animated.Value(1)).current;
 
   const handlePressIn = () => {
     if (disabled) return;
-    scale.value = withSpring(scaleTo, { damping: 15, stiffness: 250 });
-    opacity.value = withTiming(0.8, { duration: 150 });
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    Animated.parallel([
+      Animated.spring(scale, { toValue: scaleTo, damping: 15, stiffness: 250, useNativeDriver: true }),
+      Animated.timing(opacity, { toValue: 0.8, duration: 100, useNativeDriver: true }),
+    ]).start();
   };
 
   const handlePressOut = () => {
     if (disabled) return;
-    scale.value = withSpring(1, { damping: 15, stiffness: 250 });
-    opacity.value = withTiming(1, { duration: 150 });
+    Animated.parallel([
+      Animated.spring(scale, { toValue: 1, damping: 15, stiffness: 250, useNativeDriver: true }),
+      Animated.timing(opacity, { toValue: 1, duration: 100, useNativeDriver: true }),
+    ]).start();
   };
 
   return (
@@ -52,7 +46,10 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
       disabled={disabled}
       {...props}
     >
-      <Animated.View style={[animatedStyle, style, disabled && styles.disabled]}>
+      <Animated.View
+        className={className}
+        style={[{ transform: [{ scale }], opacity }, style, disabled && styles.disabled]}
+      >
         {children}
       </Animated.View>
     </Pressable>

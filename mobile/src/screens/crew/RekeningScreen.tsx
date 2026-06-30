@@ -117,8 +117,8 @@ export const RekeningScreen = ({ navigation }: any) => {
           <View className="mx-0 mt-4 rounded-2xl bg-primary p-5">
             <Text className="text-xs font-semibold text-slate-300">Rekening Aktif</Text>
             <Text className="mt-2 text-lg font-black text-white">{bankName}</Text>
-            <Text className="mt-1 text-sm text-white/70">{accountNumber}</Text>
-            <Text className="mt-1 text-xs text-white/50">a.n. {accountHolder || '-'}</Text>
+            <Text className="mt-1 text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>{accountNumber}</Text>
+            <Text className="mt-1 text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>a.n. {accountHolder || '-'}</Text>
           </View>
         )}
 

@@ -122,11 +122,11 @@ export const NotifikasiCrewScreen = ({ navigation }: any) => {
     <View className="flex-1 bg-crewBg">
       <View style={{ paddingTop: insets.top + 10 }} className="bg-primary px-5 pb-5">
         <View className="mb-4 flex-row items-center justify-between">
-          <TouchableOpacity onPress={() => navigation.getParent()?.openDrawer()} className="h-9 w-9 items-center justify-center rounded-full bg-white/10">
+          <TouchableOpacity onPress={() => navigation.getParent()?.openDrawer()} className="h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
             <Ionicons name="menu-outline" size={22} color="#FFFFFF" />
           </TouchableOpacity>
           <Text className="text-base font-extrabold text-white">Notifikasi</Text>
-          <View className="h-9 w-9 items-center justify-center rounded-full bg-white/10 relative">
+          <View className="h-9 w-9 items-center justify-center rounded-full relative" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
             <Ionicons name="notifications" size={18} color="#F97316" />
             {unreadCount > 0 && (
               <View className="absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-red-500 border border-primary" />
@@ -134,7 +134,7 @@ export const NotifikasiCrewScreen = ({ navigation }: any) => {
           </View>
         </View>
 
-        <View className="flex-row items-center bg-white/10 border border-white/10 rounded-xl px-3.5 py-2">
+        <View className="flex-row items-center rounded-xl px-3.5 py-2" style={{ backgroundColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
           <Ionicons name="search-outline" size={16} color="rgba(255,255,255,0.5)" />
           <TextInput
             placeholder="Cari notifikasi..."
@@ -147,14 +147,15 @@ export const NotifikasiCrewScreen = ({ navigation }: any) => {
       </View>
 
       <View className="bg-primary pb-3 px-4 flex-row justify-between items-center">
-        <View className="flex-row rounded-[14px] bg-black/20 p-1 border border-white/5 w-2/3">
+        <View className="flex-row rounded-[14px] p-1 w-2/3" style={{ backgroundColor: 'rgba(0,0,0,0.2)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.05)' }}>
           {FILTERS.map((tab) => (
             <TouchableOpacity
               key={tab}
               onPress={() => setFilter(tab)}
-              className={`flex-1 items-center rounded-[10px] py-2 ${filter === tab ? 'bg-white shadow-sm' : ''}`}
+              className={`flex-1 items-center rounded-[10px] py-2 ${filter === tab ? 'bg-white' : ''}`}
+              style={filter === tab ? { shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 } : undefined}
             >
-              <Text className={`text-[11px] font-bold ${filter === tab ? 'text-primary' : 'text-white/60'}`}>{tab}</Text>
+              <Text className={`text-[11px] font-bold ${filter === tab ? 'text-primary' : ''}`} style={filter !== tab ? { color: 'rgba(255,255,255,0.6)' } : undefined}>{tab}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -177,8 +178,8 @@ export const NotifikasiCrewScreen = ({ navigation }: any) => {
           filtered.map((notif: any) => (
             <AnimatedButton
               key={notif.id}
-              className={`mb-3 flex-row items-center rounded-2xl border ${!notif.isRead ? 'border-crewAccent/30 bg-orange-50/50' : 'border-slate-100 bg-white'} p-4`}
-              style={{ elevation: !notif.isRead ? 2 : 1, shadowColor: '#0F172A', shadowOpacity: 0.05, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }}
+              className={`mb-3 flex-row items-center rounded-2xl border ${!notif.isRead ? 'bg-orange-50' : 'border-slate-100 bg-white'} p-4`}
+              style={{ elevation: !notif.isRead ? 2 : 1, shadowColor: '#0F172A', shadowOpacity: 0.05, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, ...(!notif.isRead ? { borderColor: 'rgba(249,115,22,0.3)' } : {}) }}
               onPress={() => {
                 markAsRead(notif.id);
                 if (notif.event) navigation.navigate('DetailTugas', { taskId: notif.event.id, event: notif.event });

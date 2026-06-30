@@ -58,7 +58,7 @@ export const ProfileCrewScreen = ({ navigation }: any) => {
         <View style={{ alignItems: 'center', zIndex: 10, marginBottom: -48 }}>
           <TouchableOpacity onPress={() => setIsAvatarModalVisible(true)} className="relative">
             {avatarUrl ? (
-              <Image key={avatarUrl} source={{ uri: avatarUrl }} className="h-24 w-24 rounded-full border-[4px] border-white bg-slate-100 shadow-sm" />
+              <Image key={avatarUrl} source={{ uri: avatarUrl }} className="h-24 w-24 rounded-full border-[4px] border-white bg-slate-100" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }} />
             ) : (
               <View className="h-24 w-24 items-center justify-center rounded-full border-[4px] border-white bg-slate-200">
                 <Text className="text-2xl font-bold text-primary">{initials(user?.name)}</Text>
@@ -137,9 +137,9 @@ export const ProfileCrewScreen = ({ navigation }: any) => {
         animationType="fade"
         onRequestClose={() => setIsAvatarModalVisible(false)}
       >
-        <View className="flex-1 bg-black/90 items-center justify-center">
+        <View className="flex-1 items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.9)' }}>
           <TouchableOpacity 
-            className="absolute top-12 right-6 h-10 w-10 items-center justify-center rounded-full bg-white/10" 
+            className="absolute top-12 right-6 h-10 w-10 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
             onPress={() => setIsAvatarModalVisible(false)}
           >
             <Ionicons name="close" size={24} color="#FFFFFF" />

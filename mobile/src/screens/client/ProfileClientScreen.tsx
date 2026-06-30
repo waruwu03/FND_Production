@@ -69,7 +69,7 @@ export const ProfileClientScreen = ({ navigation }: any) => {
         {/* Avatar container outside of the card to prevent clipping */}
         <View style={{ alignItems: 'center', zIndex: 10, marginBottom: -48 }}>
           <TouchableOpacity onPress={() => setIsAvatarModalVisible(true)} className="relative">
-            <View className="h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-sm">
+            <View className="h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-slate-100" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}>
               {avatarUrl ? <Image key={avatarUrl} source={{ uri: avatarUrl }} className="h-full w-full" /> : <Text className="text-xl font-bold text-primary">{initials(user?.name)}</Text>}
             </View>
           </TouchableOpacity>
@@ -99,7 +99,7 @@ export const ProfileClientScreen = ({ navigation }: any) => {
           {MENU.map((item, index) => (
             <TouchableOpacity
               key={item.label}
-              onPress={() => (item.screen ? navigation.navigate(item.screen) : Alert.alert('Info', 'Fitur sedang dalam pengembangan'))}
+              onPress={() => navigation.navigate(item.screen)}
               className={`flex-row items-center px-4 py-4 ${index < MENU.length - 1 ? 'border-b border-slate-100' : ''}`}
             >
               <Ionicons name={item.icon as any} size={20} color="#64748B" />
@@ -138,9 +138,9 @@ export const ProfileClientScreen = ({ navigation }: any) => {
         animationType="fade"
         onRequestClose={() => setIsAvatarModalVisible(false)}
       >
-        <View className="flex-1 bg-black/90 items-center justify-center">
+        <View className="flex-1 items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.9)' }}>
           <TouchableOpacity 
-            className="absolute top-12 right-6 h-10 w-10 items-center justify-center rounded-full bg-white/10" 
+            className="absolute top-12 right-6 h-10 w-10 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
             onPress={() => setIsAvatarModalVisible(false)}
           >
             <Ionicons name="close" size={24} color="#FFFFFF" />

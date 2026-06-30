@@ -11,7 +11,10 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.fndproduction.app"
+      "bundleIdentifier": "com.fndproduction.app",
+      "config": {
+        "googleMapsApiKey": "AIzaSyDqVu3frq4668fb1A_H9TWEweH9URfrcho"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -19,6 +22,11 @@
         "foregroundImage": "./assets/icon.png"
       },
       "package": "com.fndproduction.app",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDqVu3frq4668fb1A_H9TWEweH9URfrcho"
+        }
+      },
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",

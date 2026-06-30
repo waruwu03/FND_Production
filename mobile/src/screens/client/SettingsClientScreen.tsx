@@ -37,8 +37,16 @@ export const SettingsClientScreen = ({ navigation }: any) => {
           text: 'Hapus',
           style: 'destructive',
           onPress: async () => {
-            // Note: Implementing real delete account requires endpoint. Assuming it exists.
-            Alert.alert('Info', 'Fitur hapus akun dalam tahap pengembangan backend.');
+            try {
+              const response = await api.delete('/auth/profile');
+              if (response.data?.success) {
+                Alert.alert('Berhasil', 'Akun Anda telah berhasil dihapus.');
+                await AsyncStorage.removeItem('refreshToken');
+                dispatch(logout());
+              }
+            } catch (error: any) {
+              Alert.alert('Gagal', error.response?.data?.error || error.message || 'Gagal menghapus akun');
+            }
           }
         }
       ]
@@ -49,7 +57,7 @@ export const SettingsClientScreen = ({ navigation }: any) => {
     <View className="flex-1 bg-white">
       <View className="bg-primary px-5 pb-5 pt-14">
         <View className="flex-row items-center">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 h-10 w-10 items-center justify-center rounded-full bg-white/10">
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 h-10 w-10 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
             <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
           <Text className="text-lg font-bold text-white">Pengaturan</Text>
@@ -57,8 +65,8 @@ export const SettingsClientScreen = ({ navigation }: any) => {
       </View>
 
       <View className="flex-1 p-5">
-        <View className="mb-6 rounded-xl border border-slate-100 bg-white p-4 shadow-sm">
-          <View className="flex-row items-center justify-between border-b border-slate-100 pb-4">
+        <View className="mb-6 rounded-xl border border-slate-100 bg-white p-4" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}>
+          <View className="flex-row items-center justify-between">
             <View className="flex-row items-center">
               <View className="mr-3 h-10 w-10 items-center justify-center rounded-full bg-blue-50">
                 <Ionicons name="notifications-outline" size={20} color="#3B82F6" />
@@ -73,15 +81,7 @@ export const SettingsClientScreen = ({ navigation }: any) => {
             />
           </View>
           
-          <TouchableOpacity className="flex-row items-center justify-between pt-4">
-            <View className="flex-row items-center">
-              <View className="mr-3 h-10 w-10 items-center justify-center rounded-full bg-slate-100">
-                <Ionicons name="document-text-outline" size={20} color="#64748B" />
-              </View>
-              <Text className="font-semibold text-slate-800">Syarat & Ketentuan</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
-          </TouchableOpacity>
+
         </View>
 
         <TouchableOpacity 

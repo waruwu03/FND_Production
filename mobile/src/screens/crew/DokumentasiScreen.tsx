@@ -134,7 +134,7 @@ export const DokumentasiScreen = ({ route, navigation }: any) => {
       {/* Header bar */}
       <View style={{ paddingTop: insets.top + 10 }} className="bg-primary px-5 pb-4">
         <View className="h-11 flex-row items-center justify-between">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="h-9 w-9 items-center justify-center rounded-full bg-white/10">
+          <TouchableOpacity onPress={() => navigation.goBack()} className="h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
             <Ionicons name="chevron-back" size={22} color="#FFFFFF" />
           </TouchableOpacity>
           <Text className="text-base font-extrabold text-white">Dokumentasi Event</Text>
@@ -212,7 +212,7 @@ export const DokumentasiScreen = ({ route, navigation }: any) => {
           <TouchableOpacity
             onPress={uploadPhoto}
             disabled={uploading || activeTab !== 'Foto'}
-            className="flex-col items-center justify-center rounded-2xl bg-orange-50/20 py-7 px-4"
+            className="flex-col items-center justify-center rounded-2xl py-7 px-4"
             style={{
               borderStyle: 'dashed',
               borderWidth: 1.5,
@@ -230,7 +230,7 @@ export const DokumentasiScreen = ({ route, navigation }: any) => {
             <Text className="mt-1 text-[9px] text-slate-400">Maks. 8MB / foto</Text>
           </TouchableOpacity>
 
-          <View className="mt-5 flex-row rounded-2xl border border-blue-50 bg-blue-50/40 p-4">
+          <View className="mt-5 flex-row rounded-2xl border border-blue-50 bg-blue-50 p-4">
             <Ionicons name="information-circle-outline" size={18} color="#3B82F6" style={{ marginTop: 1 }} />
             <Text className="ml-3 flex-1 text-[10px] leading-4 text-slate-500">
               Foto dokumentasi yang Anda unggah akan disimpan ke server dan disinkronisasikan ke dasbor admin FND Production.

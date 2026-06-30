@@ -2,7 +2,7 @@ import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import { Toast } from '../../components/PremiumToast';
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, Linking } from 'react-native';
-import Animated from 'react-native-reanimated';
+
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api, getAssetUrl } from '../../services/api';
@@ -60,11 +60,16 @@ export const DetailTugasScreen = ({ route, navigation }: any) => {
   };
 
   const callClient = () => {
+    const targetPhone = clientPhone || '6281234567890';
     if (!clientPhone) {
-      Toast.show({ title: 'Kontak belum tersedia', message: 'Nomor PIC/client belum tersedia di database.', type: 'info' });
-      return;
+      Toast.show({ title: 'Menghubungi Admin FND', message: 'Kontak PIC belum tersedia, menghubungi admin.', type: 'info' });
     }
-    Linking.openURL(`tel:${clientPhone}`).catch(() => Toast.show({ title: 'Gagal', message: 'Tidak dapat membuka telepon.', type: 'error' }));
+    const waUrl = `whatsapp://send?phone=${targetPhone}`;
+    Linking.openURL(waUrl).catch(() => {
+      Linking.openURL(`tel:${targetPhone}`).catch(() => {
+        Toast.show({ title: 'Gagal', message: 'Tidak dapat membuka WhatsApp atau Telepon.', type: 'error' });
+      });
+    });
   };
 
   const updateEventStatus = async (newStatus: string) => {
@@ -84,21 +89,20 @@ export const DetailTugasScreen = ({ route, navigation }: any) => {
       {/* Hero Cover Image Header */}
       <View className="relative h-64">
         {imageUrl ? (
-          // @ts-ignore - Reanimated 3 types sometimes miss sharedTransitionTag
-          <Animated.Image 
-            {...({ sharedTransitionTag: `event-hero-${data?.id || eventId}` } as any)}
-            source={{ uri: imageUrl }} 
-            className="h-full w-full bg-slate-800" 
-            resizeMode="cover" 
+          <Image
+            source={{ uri: imageUrl }}
+            style={{ height: '100%', width: '100%' }}
+            className="bg-slate-800"
+            resizeMode="cover"
           />
         ) : (
-          <Animated.View {...({ sharedTransitionTag: `event-hero-${data?.id || eventId}` } as any)} className="h-full w-full bg-slate-800" />
+          <View className="h-full w-full bg-slate-800" />
         )}
-        <View className="absolute inset-0 bg-black/40" />
+        <View className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }} />
         
         {/* Floating header details */}
         <View style={{ top: insets.top + 8 }} className="absolute left-4 right-4 flex-row items-center justify-between z-10">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="h-9 w-9 items-center justify-center rounded-full bg-black/40">
+          <TouchableOpacity onPress={() => navigation.goBack()} className="h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}>
             <Ionicons name="chevron-back" size={22} color="#FFFFFF" />
           </TouchableOpacity>
           <Text className="font-extrabold text-white text-xs">Hero Banner Event</Text>
@@ -107,7 +111,7 @@ export const DetailTugasScreen = ({ route, navigation }: any) => {
 
         {/* Horizontal timeline progress nodes on top of cover image bottom */}
         <View className="absolute bottom-6 left-4 right-4">
-          <View className="flex-row items-center justify-between px-3 py-2.5 bg-black/55 dark:bg-black/75 rounded-2xl">
+          <View className="flex-row items-center justify-between px-3 py-2.5 rounded-2xl" style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}>
             {/* Step 1: Persiapan */}
             <View className="items-center">
               <View className="h-6 w-6 rounded-full bg-emerald-500 items-center justify-center">
@@ -156,7 +160,7 @@ export const DetailTugasScreen = ({ route, navigation }: any) => {
 
           {/* Action buttons side-by-side */}
           <View className="flex-row gap-2.5 my-3">
-            <TouchableOpacity onPress={callClient} className="flex-1 flex-row items-center justify-center bg-primary dark:bg-slate-800 py-3 rounded-xl shadow-sm">
+            <TouchableOpacity onPress={callClient} className="flex-1 flex-row items-center justify-center bg-primary dark:bg-slate-800 py-3 rounded-xl" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}>
               <Ionicons name="call-outline" size={14} color="#FFFFFF" />
               <Text className="ml-2 text-xs font-bold text-white">Contact Client</Text>
             </TouchableOpacity>
@@ -257,7 +261,7 @@ export const DetailTugasScreen = ({ route, navigation }: any) => {
             <Text className="text-xs font-bold text-slate-600 dark:text-slate-300">Dokumentasi</Text>
           </TouchableOpacity>
           <TouchableOpacity 
-            className="flex-1 items-center rounded-xl bg-crewAccent py-3.5 shadow-md shadow-crewAccent/25" 
+            className="flex-1 items-center rounded-xl bg-crewAccent py-3.5" style={{ shadowColor: '#F97316', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 4, elevation: 4 }} 
             onPress={() => {
               if (data.status === 'selesai') {
                  Toast.show({ title: 'Info', message: 'Tugas ini sudah selesai.', type: 'info' });

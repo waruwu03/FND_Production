@@ -123,7 +123,7 @@ export const DetailEventClientScreen = ({ route, navigation }: any) => {
   const contactWhatsApp = () => {
     const phone = event.client_phone || '6281234567890';
     Linking.openURL(`https://wa.me/${String(phone).replace(/^0/, '62')}`).catch(() => {
-      Alert.alert('Gagal', 'Tidak dapat membuka WhatsApp.');
+      Alert.alert('Gagal', `Tidak dapat membuka WhatsApp. Silakan hubungi: +${String(phone).replace(/^0/, '62')}`);
     });
   };
 
@@ -151,7 +151,7 @@ export const DetailEventClientScreen = ({ route, navigation }: any) => {
         }}
       >
         <Image source={{ uri: imageUrl }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
-        <View style={{ ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(11,18,65,0.4)' }} />
+        <View style={{ ...StyleSheet.absoluteFill as object, backgroundColor: 'rgba(11,18,65,0.4)' }} />
       </Animated.View>
 
       {/* Top Bar (Fixed) */}

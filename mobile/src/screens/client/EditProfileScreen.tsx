@@ -102,7 +102,7 @@ export const EditProfileScreen = ({ navigation }: any) => {
           onPress={handleSubmit(onSubmit)} 
           isLoading={isLoading}
           disabled={isLoading}
-          className="mt-6 shadow-sm"
+          className="mt-6" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}
         />
       </ScrollView>
     </KeyboardAvoidingView>

@@ -182,6 +182,10 @@ export const InvoiceScreen = ({ navigation }: any) => {
                       <TouchableOpacity className="w-24 items-center rounded-md bg-slate-50 py-3">
                         <Ionicons name="download-outline" size={18} color="#0B1241" />
                       </TouchableOpacity>
+                    ) : !invoice.paymentId ? (
+                      <TouchableOpacity className="w-24 items-center rounded-md bg-slate-200 py-3" disabled={true}>
+                        <Text className="font-bold text-slate-500 text-[10px] text-center px-1">Menunggu Admin</Text>
+                      </TouchableOpacity>
                     ) : (
                       <TouchableOpacity className="w-24 items-center rounded-md bg-primary py-3" onPress={() => setSelectedInvoiceToPay(invoice)} disabled={uploadingId === invoice.id}>
                         <Text className="font-bold text-white">{uploadingId === invoice.id ? '...' : 'Bayar'}</Text>
@@ -196,7 +200,7 @@ export const InvoiceScreen = ({ navigation }: any) => {
 
       {/* Premium Payment Modal */}
       <Modal visible={!!selectedInvoiceToPay} animationType="slide" transparent={true} onRequestClose={() => setSelectedInvoiceToPay(null)}>
-        <View className="flex-1 justify-end bg-black/50">
+        <View className="flex-1 justify-end" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <View className="rounded-t-[32px] bg-white p-6 pb-10" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: -10 }, shadowOpacity: 0.1, shadowRadius: 20, elevation: 20 }}>
             
             {/* Modal Header */}
@@ -220,7 +224,7 @@ export const InvoiceScreen = ({ navigation }: any) => {
             <Text className="mb-3 text-sm font-bold text-slate-700">Pilih Rekening Tujuan</Text>
             
             <View className="mb-3 flex-row items-center rounded-2xl border border-slate-100 bg-slate-50 p-4">
-              <View className="h-10 w-16 items-center justify-center rounded-lg bg-white shadow-sm border border-slate-100 mr-4">
+              <View className="h-10 w-16 items-center justify-center rounded-lg bg-white border border-slate-100 mr-4" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}>
                 <Text className="font-black text-blue-800 italic">BCA</Text>
               </View>
               <View className="flex-1">
@@ -233,7 +237,7 @@ export const InvoiceScreen = ({ navigation }: any) => {
             </View>
 
             <View className="mb-8 flex-row items-center rounded-2xl border border-slate-100 bg-slate-50 p-4">
-              <View className="h-10 w-16 items-center justify-center rounded-lg bg-white shadow-sm border border-slate-100 mr-4">
+              <View className="h-10 w-16 items-center justify-center rounded-lg bg-white border border-slate-100 mr-4" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}>
                 <Text className="font-black text-yellow-600">Mandiri</Text>
               </View>
               <View className="flex-1">
@@ -248,7 +252,7 @@ export const InvoiceScreen = ({ navigation }: any) => {
             {/* Action Buttons */}
             <TouchableOpacity
               onPress={() => uploadProof(selectedInvoiceToPay)}
-              className="mb-3 flex-row items-center justify-center rounded-xl bg-primary py-4 shadow-lg shadow-orange-500/30"
+              className="mb-3 flex-row items-center justify-center rounded-xl bg-primary py-4" style={{ shadowColor: '#F97316', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 12, elevation: 8 }}
             >
               <Ionicons name="cloud-upload-outline" size={20} color="white" className="mr-2" />
               <Text className="ml-2 font-bold text-white text-base">Upload Bukti Transfer</Text>

@@ -201,23 +201,23 @@ export const CrewDashboardScreen = () => {
       {/* Header section with Dark Navy background */}
       <View style={{ paddingTop: insets.top + 10 }} className="px-5 pb-7">
         <View className="mb-6 flex-row items-center justify-between">
-          <TouchableOpacity onPress={openDrawer} className="h-9 w-9 items-center justify-center rounded-full bg-white/10">
+          <TouchableOpacity onPress={openDrawer} className="h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
             <Ionicons name="menu-outline" size={22} color="#FFFFFF" />
           </TouchableOpacity>
           <View className="items-center">
             <Text className="text-xs font-black tracking-widest text-white">FND PRODUCTION</Text>
             <Text className="text-[8px] font-semibold tracking-widest text-slate-400">CREW APP</Text>
           </View>
-          <TouchableOpacity onPress={openNotifications} className="h-9 w-9 items-center justify-center rounded-full bg-white/10">
+          <TouchableOpacity onPress={openNotifications} className="h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
             <Ionicons name="notifications-outline" size={20} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
 
         <TouchableOpacity className="flex-row items-center" onPress={openProfile}>
           {avatarUrl ? (
-            <Image key={avatarUrl} source={{ uri: avatarUrl }} className="h-11 w-11 rounded-full border border-white/20 bg-slate-800" />
+            <Image key={avatarUrl} source={{ uri: avatarUrl }} className="h-11 w-11 rounded-full bg-slate-800" style={{ borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' }} />
           ) : (
-            <View className="h-11 w-11 items-center justify-center rounded-full bg-white/10 border border-white/20">
+            <View className="h-11 w-11 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' }}>
               <Text className="font-bold text-white text-xs">{initials(user?.name)}</Text>
             </View>
           )}
@@ -259,7 +259,7 @@ export const CrewDashboardScreen = () => {
                       <Text className="text-xl font-black tracking-wide text-white" style={{ textShadowColor: 'rgba(0,0,0,0.3)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 4 }}>
                         {item.title}
                       </Text>
-                      <Text className="mt-2 text-xs font-medium leading-5 text-white/90">
+                      <Text className="mt-2 text-xs font-medium leading-5" style={{ color: 'rgba(255,255,255,0.9)' }}>
                         {item.subtitle}
                       </Text>
                     </View>
@@ -408,7 +408,7 @@ export const CrewDashboardScreen = () => {
           {activeTasks.slice(0, 1).map((task) => {
             const status = getEventStatusMeta(task.status);
             return (
-              <View key={`progress-${task.id}`} className="mb-4 rounded-[24px] bg-white p-4 border border-slate-100 shadow-sm">
+              <View key={`progress-${task.id}`} className="mb-4 rounded-[24px] bg-white p-4 border border-slate-100" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}>
                 <View className="mb-2 flex-row justify-between">
                   <Text className="text-[10px] font-bold text-slate-500">Progress event aktif</Text>
                   <Text className="text-[10px] font-extrabold text-crewAccent">{status.progress}%</Text>

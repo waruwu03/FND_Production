@@ -1,8 +1,10 @@
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, { useEffect, useRef } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Animated } from 'react-native';
+import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 
 // Screens
 import { CrewDashboardScreen } from '../screens/crew/CrewDashboardScreen';
@@ -62,42 +64,79 @@ const ProfileStack = () => (
   </Stack.Navigator>
 );
 
+const { width } = Dimensions.get('window');
+
+const CustomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
+  const TAB_BAR_WIDTH = width - 40;
+  const TAB_WIDTH = TAB_BAR_WIDTH / state.routes.length;
+  
+  const translateX = useRef(new Animated.Value(state.index * TAB_WIDTH)).current;
+
+  useEffect(() => {
+    Animated.spring(translateX, {
+      toValue: state.index * TAB_WIDTH,
+      damping: 20,
+      stiffness: 250,
+      useNativeDriver: true,
+    }).start();
+  }, [state.index]);
+
+  return (
+    <View style={styles.tabBarContainer}>
+      <Animated.View style={[styles.indicator, { width: TAB_WIDTH - 20, left: 10, transform: [{ translateX }] }]} />
+      {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        const label = options.title !== undefined ? options.title : (options.tabBarLabel !== undefined ? options.tabBarLabel : route.name);
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name, route.params);
+          }
+        };
+
+        const icons: { [key: string]: keyof typeof Ionicons.glyphMap } = {
+          Beranda: isFocused ? 'home' : 'home-outline',
+          Tugas: isFocused ? 'briefcase' : 'briefcase-outline',
+          CheckIn: isFocused ? 'location' : 'location-outline',
+          Notifikasi: isFocused ? 'notifications' : 'notifications-outline',
+          Profil: isFocused ? 'person' : 'person-outline',
+        };
+        const iconName = icons[route.name] ?? 'ellipse-outline';
+
+        return (
+          <TouchableOpacity
+            key={route.key}
+            accessibilityRole="button"
+            accessibilityState={isFocused ? { selected: true } : {}}
+            accessibilityLabel={options.tabBarAccessibilityLabel}
+            testID={options.tabBarButtonTestID}
+            onPress={onPress}
+            style={styles.tabItem}
+          >
+            <Ionicons name={iconName} size={22} color={isFocused ? '#F97316' : '#94A3B8'} />
+            <Text style={[styles.tabLabel, { color: isFocused ? '#F97316' : '#94A3B8' }]}>
+              {label as string}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+};
+
 const CrewTabs = () => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        headerShown: false,
-        tabBarShowLabel: true,
-        tabBarActiveTintColor: '#F97316',
-        tabBarInactiveTintColor: '#94A3B8',
-        tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopWidth: 1,
-          borderTopColor: '#F1F5F9',
-          height: 72,
-          paddingBottom: 10,
-          paddingTop: 8,
-          elevation: 12,
-          shadowColor: '#0D1B5E',
-          shadowOpacity: 0.08,
-          shadowRadius: 16,
-          shadowOffset: { width: 0, height: -4 },
-        },
-        tabBarLabelStyle: {
-          fontSize: 10,
-          fontWeight: '600',
-          marginTop: 2,
-        },
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName: any;
-          if (route.name === 'Beranda') iconName = focused ? 'home' : 'home-outline';
-          else if (route.name === 'Tugas') iconName = focused ? 'briefcase' : 'briefcase-outline';
-          else if (route.name === 'CheckIn') iconName = focused ? 'location' : 'location-outline';
-          else if (route.name === 'Notifikasi') iconName = focused ? 'notifications' : 'notifications-outline';
-          else if (route.name === 'Profil') iconName = focused ? 'person' : 'person-outline';
-          return <Ionicons name={iconName} size={22} color={color} />;
-        },
-      })}
+      screenOptions={{ headerShown: false }}
+      tabBar={(props) => <CustomTabBar {...props} />}
     >
       <Tab.Screen name="Beranda" component={DashboardStack} options={{ tabBarLabel: 'Beranda' }} />
       <Tab.Screen name="Tugas" component={TugasStack} options={{ tabBarLabel: 'Tugas' }} />
@@ -135,3 +174,44 @@ export const CrewNavigator = () => {
     </Drawer.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  tabBarContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    position: 'absolute',
+    bottom: 24,
+    left: 20,
+    right: 20,
+    height: 64,
+    borderRadius: 32,
+    elevation: 8,
+    shadowColor: '#0F172A',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    zIndex: 2,
+  },
+  tabLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    marginTop: 4,
+  },
+  indicator: {
+    position: 'absolute',
+    height: 48,
+    backgroundColor: '#FFF7ED',
+    borderRadius: 24,
+    zIndex: 1,
+    top: 8,
+  },
+});
+

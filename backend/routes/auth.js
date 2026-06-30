@@ -16,6 +16,7 @@ import {
   updateUser,
   uploadAvatar,
   uploadAvatarBase64,
+  deleteSelf,
 } from '../controllers/authController.js'
 import { authenticate, authorize } from '../middlewares/auth.js'
 import { validate } from '../middlewares/validate.js'
@@ -42,6 +43,7 @@ router.put('/profile/password', authenticate, validate(changePasswordSchema), ch
 router.post('/profile/avatar', authenticate, avatarUpload.single('avatar'), uploadAvatar)
 router.post('/profile/avatar-base64', authenticate, uploadAvatarBase64)
 router.delete('/profile/avatar', authenticate, deleteAvatar)
+router.delete('/profile', authenticate, deleteSelf)
 router.get('/users', authenticate, authorize('admin'), getUsers)
 router.post('/users', authenticate, authorize('admin'), validate(adminUserSchema), createUser)
 router.put('/users/:id', authenticate, authorize('admin'), validate(updateAdminUserSchema), updateUser)

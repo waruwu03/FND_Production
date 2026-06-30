@@ -37,9 +37,9 @@ export const BantuanScreen = ({ navigation }: any) => {
   const openWhatsApp = () => {
     const phone = '6281234567890';
     const message = 'Halo Admin FND Production, saya membutuhkan bantuan terkait aplikasi Crew App.';
-    const url = `whatsapp://send?phone=${phone}&text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     Linking.openURL(url).catch(() => {
-      Alert.alert('Error', 'WhatsApp tidak terinstall di perangkat ini.');
+      Alert.alert('Error', `WhatsApp tidak dapat dibuka. Silakan hubungi: +${phone}`);
     });
   };
 
@@ -48,21 +48,11 @@ export const BantuanScreen = ({ navigation }: any) => {
     const subject = 'Bantuan - FND Production Crew App';
     const body = 'Halo Admin,\n\nSaya membutuhkan bantuan terkait:\n\n[Jelaskan masalah Anda di sini]\n\nTerima kasih.';
     Linking.openURL(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`).catch(() => {
-      Alert.alert('Error', 'Tidak dapat membuka aplikasi email.');
+      Alert.alert('Error', `Tidak dapat membuka aplikasi email. Kirim email ke: ${email}`);
     });
   };
 
-  const openLiveChat = () => {
-    Alert.alert(
-      'Live Chat',
-      'Fitur live chat akan segera tersedia. Saat ini silakan hubungi admin melalui WhatsApp atau email.',
-      [
-        { text: 'WhatsApp', onPress: openWhatsApp },
-        { text: 'Email', onPress: openEmail },
-        { text: 'Tutup', style: 'cancel' },
-      ],
-    );
-  };
+
 
   return (
     <View className="flex-1 bg-background">
@@ -108,7 +98,7 @@ export const BantuanScreen = ({ navigation }: any) => {
               <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
             </TouchableOpacity>
 
-            <TouchableOpacity className="flex-row items-center border-b border-slate-100 px-5 py-4" onPress={openEmail}>
+            <TouchableOpacity className="flex-row items-center px-5 py-4" onPress={openEmail}>
               <View className="mr-3 h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
                 <Ionicons name="mail-outline" size={22} color="#2563EB" />
               </View>
@@ -119,16 +109,7 @@ export const BantuanScreen = ({ navigation }: any) => {
               <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
             </TouchableOpacity>
 
-            <TouchableOpacity className="flex-row items-center px-5 py-4" onPress={openLiveChat}>
-              <View className="mr-3 h-10 w-10 items-center justify-center rounded-xl bg-purple-50">
-                <Ionicons name="chatbubbles-outline" size={22} color="#7C3AED" />
-              </View>
-              <View className="flex-1">
-                <Text className="font-bold text-primary">Live Chat</Text>
-                <Text className="mt-0.5 text-xs text-slate-400">Konsultasi real-time</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
-            </TouchableOpacity>
+
           </View>
         </View>
 

@@ -1,3 +1,4 @@
+import { PremiumAlert as Alert } from "../../components/PremiumAlert";
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,21 +21,28 @@ const FAQS = [
 export const HelpClientScreen = ({ navigation }: any) => {
 
   const handleWhatsApp = () => {
-    // Ganti dengan nomor WhatsApp Admin yang sebenarnya
     const adminPhone = '6281234567890';
     const text = 'Halo Admin FND Production, saya butuh bantuan terkait aplikasi.';
-    Linking.openURL(`whatsapp://send?phone=${adminPhone}&text=${encodeURIComponent(text)}`)
+    Linking.openURL(`https://wa.me/${adminPhone}?text=${encodeURIComponent(text)}`)
       .catch(() => {
-        // Fallback jika WA tidak terinstall
-        Linking.openURL(`https://wa.me/${adminPhone}?text=${encodeURIComponent(text)}`);
+        Alert.alert('Error', `WhatsApp tidak dapat dibuka. Silakan hubungi: +${adminPhone}`);
       });
+  };
+
+  const handleEmail = () => {
+    const email = 'admin@fndproduction.com';
+    const subject = 'Bantuan - FND Production Client App';
+    const body = 'Halo Admin,\n\nSaya membutuhkan bantuan terkait:\n\n[Jelaskan masalah Anda di sini]\n\nTerima kasih.';
+    Linking.openURL(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`).catch(() => {
+      Alert.alert('Error', `Tidak dapat membuka aplikasi email. Kirim email ke: ${email}`);
+    });
   };
 
   return (
     <View className="flex-1 bg-white">
       <View className="bg-primary px-5 pb-5 pt-14">
         <View className="flex-row items-center">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 h-10 w-10 items-center justify-center rounded-full bg-white/10">
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 h-10 w-10 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
             <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
           <Text className="text-lg font-bold text-white">Bantuan</Text>
@@ -53,11 +61,19 @@ export const HelpClientScreen = ({ navigation }: any) => {
 
         <Text className="mb-4 mt-6 text-lg font-bold text-slate-800">Hubungi Customer Service</Text>
         <TouchableOpacity 
-          className="flex-row items-center justify-center rounded-xl bg-green-500 py-4 shadow-sm"
+          className="mb-3 flex-row items-center justify-center rounded-xl bg-green-500 py-4" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}
           onPress={handleWhatsApp}
         >
           <Ionicons name="logo-whatsapp" size={24} color="#FFFFFF" />
           <Text className="ml-3 font-bold text-white">Chat via WhatsApp</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          className="flex-row items-center justify-center rounded-xl bg-blue-500 py-4" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}
+          onPress={handleEmail}
+        >
+          <Ionicons name="mail-outline" size={24} color="#FFFFFF" />
+          <Text className="ml-3 font-bold text-white">Kirim Email</Text>
         </TouchableOpacity>
         
         <View className="h-10" />

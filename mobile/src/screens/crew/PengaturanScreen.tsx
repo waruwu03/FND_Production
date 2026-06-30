@@ -85,8 +85,17 @@ export const PengaturanScreen = ({ navigation }: any) => {
         {
           text: 'Hapus',
           style: 'destructive',
-          onPress: () => {
-            Toast.show({ title: 'Info', message: 'Untuk menghapus akun, silakan hubungi administrator FND Production.', type: 'info' });
+          onPress: async () => {
+            try {
+              const response = await api.delete('/auth/profile');
+              if (response.data?.success) {
+                Alert.alert('Berhasil', 'Akun Anda telah berhasil dihapus.');
+                await AsyncStorage.removeItem('refreshToken');
+                dispatch(logout());
+              }
+            } catch (error: any) {
+              Alert.alert('Gagal', error.response?.data?.error || error.message || 'Gagal menghapus akun');
+            }
           },
         },
       ]
@@ -155,7 +164,7 @@ export const PengaturanScreen = ({ navigation }: any) => {
         <Text className="mt-6 mb-3 text-xs font-bold uppercase tracking-widest text-slate-400">Keamanan</Text>
         <View className="rounded-2xl border border-slate-100 bg-white overflow-hidden" style={{ elevation: 2 }}>
           <TouchableOpacity
-            className="flex-row items-center px-4 py-4 border-b border-slate-100"
+            className="flex-row items-center px-4 py-4"
             onPress={handleGantiPassword}
             disabled={saving}
           >
@@ -167,19 +176,6 @@ export const PengaturanScreen = ({ navigation }: any) => {
               <Text className="text-xs text-slate-400 mt-0.5">Perbarui kata sandi akun Anda</Text>
             </View>
             <Ionicons name="chevron-forward" size={16} color="#CBD5E1" />
-          </TouchableOpacity>
-
-          <TouchableOpacity className="flex-row items-center px-4 py-4" onPress={() => Toast.show({ title: 'Info', message: 'Fitur autentikasi dua faktor akan segera tersedia.', type: 'info' })}>
-            <View className="mr-3 h-9 w-9 items-center justify-center rounded-xl bg-green-50">
-              <Ionicons name="shield-checkmark-outline" size={18} color="#059669" />
-            </View>
-            <View className="flex-1">
-              <Text className="font-semibold text-primary">Autentikasi Dua Faktor</Text>
-              <Text className="text-xs text-slate-400 mt-0.5">Segera tersedia</Text>
-            </View>
-            <View className="rounded-full bg-slate-100 px-2 py-0.5">
-              <Text className="text-[10px] font-bold text-slate-400">SOON</Text>
-            </View>
           </TouchableOpacity>
         </View>
 
@@ -223,27 +219,6 @@ export const PengaturanScreen = ({ navigation }: any) => {
           </View>
         </View>
 
-        {/* Tampilan */}
-        <Text className="mt-6 mb-3 text-xs font-bold uppercase tracking-widest text-slate-400">Tampilan</Text>
-        <View className="rounded-2xl border border-slate-100 bg-white overflow-hidden" style={{ elevation: 2 }}>
-          <View className="flex-row items-center justify-between px-4 py-4">
-            <View className="flex-row items-center flex-1">
-              <View className="mr-3 h-9 w-9 items-center justify-center rounded-xl bg-slate-100">
-                <Ionicons name="moon-outline" size={18} color="#475569" />
-              </View>
-              <View>
-                <Text className="font-semibold text-primary">Mode Gelap</Text>
-                <Text className="text-xs text-slate-400 mt-0.5">Tema gelap (segera tersedia)</Text>
-              </View>
-            </View>
-            <Switch
-              value={darkMode}
-              onValueChange={(val) => { setDarkMode(val); updatePreference('dark_mode', val); }}
-              trackColor={{ false: '#E2E8F0', true: '#0D1B5E' }}
-              thumbColor="#FFFFFF"
-            />
-          </View>
-        </View>
 
         {/* Tentang Aplikasi */}
         <Text className="mt-6 mb-3 text-xs font-bold uppercase tracking-widest text-slate-400">Tentang</Text>

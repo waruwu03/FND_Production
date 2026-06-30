@@ -56,7 +56,7 @@ export const ChangePasswordClientScreen = ({ navigation }: any) => {
     <View className="flex-1 bg-white">
       <View className="bg-primary px-5 pb-5 pt-14">
         <View className="flex-row items-center">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 h-10 w-10 items-center justify-center rounded-full bg-white/10">
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 h-10 w-10 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
             <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
           <Text className="text-lg font-bold text-white">Ubah Password</Text>

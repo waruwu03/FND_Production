@@ -101,7 +101,7 @@ export const PremiumAlertProvider = ({ children }: { children: React.ReactNode }
       {visible && config && (
         <Modal transparent visible={visible} animationType="none" statusBarTranslucent>
           <Animated.View style={{ flex: 1, opacity: fadeAnim }} className="justify-center items-center px-6">
-            <View className="absolute inset-0 bg-black/60" />
+            <View className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.6)' }} />
             
             <Animated.View 
               style={{ transform: [{ scale: scaleAnim }] }}

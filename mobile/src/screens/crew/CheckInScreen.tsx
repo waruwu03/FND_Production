@@ -54,6 +54,7 @@ export const CheckInScreen = ({ navigation }: any) => {
     [tasks],
   );
 
+
   const [eventCoords, setEventCoords] = useState<{ latitude: number, longitude: number }>({
     latitude: -6.2088,
     longitude: 106.8456,
@@ -357,22 +358,22 @@ export const CheckInScreen = ({ navigation }: any) => {
       {/* Floating Header Actions */}
       <TouchableOpacity
         onPress={() => navigation.navigate('Beranda')}
-        className="absolute left-5 h-11 w-11 items-center justify-center rounded-full bg-white dark:bg-slate-800 z-20 shadow-md"
-        style={[{ top: insets.top + 12 }]}
+        className="absolute left-5 h-11 w-11 items-center justify-center rounded-full bg-white dark:bg-slate-800 z-20"
+        style={[{ top: insets.top + 12, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 4 }]}
       >
         <Ionicons name="chevron-back" size={24} color="#94A3B8" />
       </TouchableOpacity>
 
       <View className="absolute right-5 items-center z-20" style={[{ top: insets.top + 12 }]}>
-        <TouchableOpacity className="h-11 w-11 items-center justify-center rounded-full bg-white dark:bg-slate-800 mb-2.5 shadow-md">
+        <TouchableOpacity className="h-11 w-11 items-center justify-center rounded-full bg-white dark:bg-slate-800 mb-2.5" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 4 }}>
           <Ionicons name="compass" size={20} color="#94A3B8" />
         </TouchableOpacity>
-        <TouchableOpacity className="h-11 w-11 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md">
+        <TouchableOpacity className="h-11 w-11 items-center justify-center rounded-full bg-white dark:bg-slate-800" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 4 }}>
           <Ionicons name="navigate" size={18} color="#94A3B8" style={{ transform: [{ rotate: '45deg' }] }} />
         </TouchableOpacity>
       </View>
 
-      <View className="absolute self-center flex-row items-center bg-white dark:bg-slate-800 rounded-full px-4 py-2 z-20 shadow-sm" style={[{ top: insets.top + 12 }]}>
+      <View className="absolute self-center flex-row items-center bg-white dark:bg-slate-800 rounded-full px-4 py-2 z-20" style={[{ top: insets.top + 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }]}>
         <View className="w-2 h-2 rounded-full bg-orange-500 mr-1.5" />
         <Text className="text-[10px] font-black text-primary dark:text-slate-100">Geofence</Text>
       </View>
@@ -380,14 +381,14 @@ export const CheckInScreen = ({ navigation }: any) => {
 
 
       {/* Bottom Floating Container */}
-      <View style={[styles.bottomContainer, { bottom: insets.bottom + 16 }]}>
+      <View style={[styles.bottomContainer, { bottom: insets.bottom + 90 }]}>
         {/* Floating status row */}
         <View className="flex-row justify-between mb-2.5">
-          <View className="flex-row items-center bg-white dark:bg-slate-800 rounded-xl px-3 py-2 border border-slate-100 dark:border-slate-700 shadow-sm">
+          <View className="flex-row items-center bg-white dark:bg-slate-800 rounded-xl px-3 py-2 border border-slate-100 dark:border-slate-700" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}>
             <Ionicons name="location" size={14} color="#94A3B8" />
             <Text className="ml-1 text-[9px] font-black text-primary dark:text-slate-100">Geofence</Text>
           </View>
-          <View className="flex-row items-center bg-white dark:bg-slate-800 rounded-xl px-3 py-2 border border-slate-100 dark:border-slate-700 shadow-sm">
+          <View className="flex-row items-center bg-white dark:bg-slate-800 rounded-xl px-3 py-2 border border-slate-100 dark:border-slate-700" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}>
             <Ionicons
               name={isWithinGeofence ? 'checkmark-circle' : 'close-circle'}
               size={14}
@@ -400,7 +401,7 @@ export const CheckInScreen = ({ navigation }: any) => {
         </View>
 
         {/* Bottom White Card */}
-        <View className="bg-white dark:bg-slate-900 rounded-[24px] p-4 shadow-lg shadow-black/10" style={{ elevation: 8 }}>
+        <View className="bg-white dark:bg-slate-900 rounded-[24px] p-4" style={{ elevation: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 12 }}>
           <View className="flex-row items-center mb-4">
             <Image source={{ uri: eventImageUrl || 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=300&q=80' }} className="w-16 h-16 rounded-xl bg-slate-200 dark:bg-slate-800" resizeMode="cover" />
             <View className="ml-3 flex-1">
@@ -448,7 +449,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F5F9',
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill as object,
   },
   backButton: {
     position: 'absolute',

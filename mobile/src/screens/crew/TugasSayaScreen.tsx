@@ -4,7 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, ScrollView, TouchableOpacity, RefreshControl, TextInput, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated from 'react-native-reanimated';
+
 import { api, getAssetUrl } from '../../services/api';
 import { EmptyState, InfoRow, LoadingState, ProgressBar, StatusBadge, TugasCardSkeleton } from '../../components/FndUi';
 import { formatDate, getEventStatusMeta, getLocationParts, getEventImage } from '../../utils/fnd';
@@ -102,16 +102,16 @@ export const TugasSayaScreen = ({ navigation }: any) => {
       {/* Dark Navy Header Section with Search Bar */}
       <View style={{ paddingTop: insets.top + 10 }} className="bg-primary px-5 pb-5">
         <View className="mb-4 flex-row items-center justify-between">
-          <TouchableOpacity onPress={() => navigation.getParent()?.openDrawer()} className="h-9 w-9 items-center justify-center rounded-full bg-white/10">
+          <TouchableOpacity onPress={() => navigation.getParent()?.openDrawer()} className="h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
             <Ionicons name="menu-outline" size={22} color="#FFFFFF" />
           </TouchableOpacity>
           <Text className="text-base font-extrabold text-white">Daftar Tugas</Text>
-          <TouchableOpacity onPress={() => navigation.getParent()?.navigate('Notifikasi')} className="h-9 w-9 items-center justify-center rounded-full bg-white/10">
+          <TouchableOpacity onPress={() => navigation.getParent()?.navigate('Notifikasi')} className="h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
             <Ionicons name="notifications-outline" size={20} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
 
-        <View className="flex-row items-center bg-white/10 border border-white/10 rounded-xl px-3.5 py-2">
+        <View className="flex-row items-center rounded-xl px-3.5 py-2" style={{ backgroundColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
           <Ionicons name="search-outline" size={16} color="rgba(255,255,255,0.5)" />
           <TextInput
             placeholder="Search"
@@ -125,14 +125,15 @@ export const TugasSayaScreen = ({ navigation }: any) => {
 
       {/* Pill tabs Segmented Control */}
       <View className="bg-primary pb-3 px-4">
-        <View className="flex-row rounded-[14px] bg-black/20 p-1 border border-white/5">
+        <View className="flex-row rounded-[14px] p-1" style={{ backgroundColor: 'rgba(0,0,0,0.2)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.05)' }}>
           {TABS.map((tab) => (
             <TouchableOpacity
               key={tab}
               onPress={() => setActiveTab(tab)}
-              className={`flex-1 items-center rounded-[10px] py-2.5 ${activeTab === tab ? 'bg-white shadow-sm' : ''}`}
+              className={`flex-1 items-center rounded-[10px] py-2.5 ${activeTab === tab ? 'bg-white' : ''}`}
+              style={activeTab === tab ? { shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 } : undefined}
             >
-              <Text className={`text-[11px] font-bold ${activeTab === tab ? 'text-primary' : 'text-white/60'}`}>{tab}</Text>
+              <Text className={`text-[11px] font-bold ${activeTab === tab ? 'text-primary' : ''}`} style={activeTab !== tab ? { color: 'rgba(255,255,255,0.6)' } : undefined}>{tab}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -174,13 +175,12 @@ export const TugasSayaScreen = ({ navigation }: any) => {
               >
                 {/* Visual Thumbnail Banner */}
                 <View className="h-16 relative items-center justify-center bg-slate-800">
-                  <Animated.Image 
-                    {...({ sharedTransitionTag: `event-hero-${task.id}` } as any)}
-                    source={{ uri: imageUrl }} 
-                    className="absolute inset-0 h-full w-full" 
-                    resizeMode="cover" 
+                  <Image
+                    source={{ uri: imageUrl }}
+                    style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%' }}
+                    resizeMode="cover"
                   />
-                  <View className="absolute inset-0 bg-black/40" />
+                  <View className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }} />
                   <View className="absolute bottom-2.5 left-3">
                     <StatusBadge 
                       label={status.label} 
