@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { ActivityIndicator, Animated, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Animated, Modal, Text, TouchableOpacity, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -209,48 +209,53 @@ export function PremiumModal({ visible, onClose, title, children, maxHeight = '7
 
   return (
     <Modal visible={visible} transparent animationType="none" onRequestClose={onClose}>
-      <Animated.View
-        style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(15,23,42,0.6)', opacity: fadeAnim }}
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+        style={{ flex: 1 }}
       >
-        <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={onClose} />
         <Animated.View
-          className="bg-white dark:bg-slate-900"
-          style={[
-            {
-              borderTopLeftRadius: 28,
-              borderTopRightRadius: 28,
-              maxHeight: maxHeight as any,
-              paddingBottom: 28,
-              transform: [{ translateY: slideAnim }],
-            },
-          ]}
+          style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(15,23,42,0.6)', opacity: fadeAnim }}
         >
-          {/* Drag handle */}
-          <View style={{ alignItems: 'center', paddingTop: 12, paddingBottom: 4 }}>
-            <View
-              style={{
-                width: 40,
-                height: 4,
-                borderRadius: 2,
-                backgroundColor: '#CBD5E1',
-              }}
-            />
-          </View>
-          {/* Header */}
-          <View
-            className="flex-row items-center justify-between px-5 py-3 border-b border-slate-100 dark:border-slate-800"
+          <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={onClose} />
+          <Animated.View
+            className="bg-white dark:bg-slate-900"
+            style={[
+              {
+                borderTopLeftRadius: 28,
+                borderTopRightRadius: 28,
+                maxHeight: maxHeight as any,
+                paddingBottom: 28,
+                transform: [{ translateY: slideAnim }],
+              },
+            ]}
           >
-            <Text className="text-[17px] font-extrabold text-[#0B1241] dark:text-slate-100">{title}</Text>
-            <TouchableOpacity
-              onPress={onClose}
-              className="h-8 w-8 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800"
+            {/* Drag handle */}
+            <View style={{ alignItems: 'center', paddingTop: 12, paddingBottom: 4 }}>
+              <View
+                style={{
+                  width: 40,
+                  height: 4,
+                  borderRadius: 2,
+                  backgroundColor: '#CBD5E1',
+                }}
+              />
+            </View>
+            {/* Header */}
+            <View
+              className="flex-row items-center justify-between px-5 py-3 border-b border-slate-100 dark:border-slate-800"
             >
-              <Ionicons name="close" size={18} color="#64748B" />
-            </TouchableOpacity>
-          </View>
-          {children}
+              <Text className="text-[17px] font-extrabold text-[#0B1241] dark:text-slate-100">{title}</Text>
+              <TouchableOpacity
+                onPress={onClose}
+                className="h-8 w-8 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800"
+              >
+                <Ionicons name="close" size={18} color="#64748B" />
+              </TouchableOpacity>
+            </View>
+            {children}
+          </Animated.View>
         </Animated.View>
-      </Animated.View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
