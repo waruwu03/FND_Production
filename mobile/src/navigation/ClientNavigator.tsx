@@ -67,6 +67,26 @@ const CustomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => 
     return null;
   }
 
+  // Fallback to guarantee hiding TabBar on specific nested screens
+  const getNestedRouteName = (routeState: any): string => {
+    if (!routeState || !routeState.routes || typeof routeState.index !== 'number') return '';
+    const activeRoute = routeState.routes[routeState.index];
+    if (activeRoute.state) return getNestedRouteName(activeRoute.state);
+    return activeRoute.name;
+  };
+
+  let activeRouteName = focusedRoute.name;
+  if (focusedRoute.state) {
+    activeRouteName = getNestedRouteName(focusedRoute.state) || focusedRoute.name;
+  } else if (focusedRoute.params && (focusedRoute.params as any).screen) {
+    activeRouteName = (focusedRoute.params as any).screen;
+  }
+
+  const hideOnScreens = ['DetailEventClient', 'Layanan', 'Notifikasi', 'EditProfile', 'ChangePassword', 'Settings', 'Help'];
+  if (hideOnScreens.includes(activeRouteName)) {
+    return null;
+  }
+
   const TAB_BAR_WIDTH = width - 40;
   const TAB_WIDTH = TAB_BAR_WIDTH / state.routes.length;
   
